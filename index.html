@@ -328,6 +328,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
     <button class="ctl" id="t10" title="10x speed">10&times;</button>
     <button class="ctl" id="t100" title="100x speed">100&times;</button>
   </div>
+  <button class="ctl" id="skyBtn" title="The constellations, as seen from Earth">&#10038; Night sky</button>
   <button class="ctl" id="luckyBtn" title="Fly somewhere unexplored">&#10022; Surprise me</button>
   <button class="ctl on" id="lblBtn" title="Toggle labels">Labels</button>
   <button class="ctl" id="zoomOut" title="Zoom out">&minus;</button>
@@ -341,7 +342,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   <div id="welcomeBox">
     <div class="k">You are here &middot; Orion Spur</div>
     <h1>Milky Way Atlas</h1>
-    <p>A hand-drawn survey of our galaxy. Pan the plane, dive into the Solar System, and open any marker to read its field notes.</p>
+    <p>A hand-drawn survey of our galaxy. Pan the plane, dive into the Solar System, read the constellations from Earth, and open any marker to read its field notes.</p>
     <div class="hints">
       <div class="hint"><b>drag</b><span>pan</span></div>
       <div class="hint"><b>scroll / pinch</b><span>zoom</span></div>
@@ -634,6 +635,179 @@ const CAT = [
   facts:['Its computer has ~70 kB of memory; your phone has millions of times more.','The Golden Record includes a heartbeat, whale song, Bach and Chuck Berry.','In ~40,000 years it will pass within 1.6 ly of another star — long after its radio falls silent, it will still be an emissary.'] },
 ];
 
+/* ============ NIGHT SKY EXTENSION · catalog ============
+   Constellations live on the celestial sphere, not the galactic plane —
+   they only exist as seen from Earth, so they get their own chart scene.
+   Star tuples: [RA hours, Dec degrees, magnitude, name?, redGiant?] */
+
+TYPE_COLORS.constellation = '#b8cfe8';
+TYPE_COLORS.comet = '#9fd8e8';
+
+const SKY_EXT = [
+{ id:'c-orion', name:'Orion', kicker:'Constellation · the Hunter',
+  sub:'The winter hunter — the sky’s great signpost',
+  stars:[[5.919,7.407,0.5,'Betelgeuse',1],[5.418,6.35,1.64,'Bellatrix'],[5.586,9.93,3.39],
+    [5.679,-1.943,1.77,'Alnitak'],[5.604,-1.202,1.69,'Alnilam'],[5.533,-0.299,2.23,'Mintaka'],
+    [5.796,-9.67,2.09,'Saiph'],[5.242,-8.202,0.13,'Rigel']],
+  lines:[[0,1],[2,0],[2,1],[0,3],[1,5],[5,4],[4,3],[3,6],[5,7],[7,6]],
+  marks:[{ra:5.583,dec:-5.39,kind:'nebula',label:'M42'}],
+  stats:[['Brightest star','Rigel — 860 ly'],['Best seen','Dec – Feb, both hemispheres'],['Signpost','Belt points to Sirius & Aldebaran'],['Resident','Orion Nebula, in the sword']],
+  blurb:'The most recognisable figure in the sky: two bright shoulders, two bright feet, and three belt stars in a perfect row. In Greek myth Orion was the boastful hunter; the scorpion that killed him was hung on the opposite side of the sky so the two can never meet.',
+  facts:['Compare the shoulders and feet with your naked eye: Betelgeuse burns orange-red, Rigel blue-white — a dying star and a young one.','The middle “star” of the sword is no star at all: it is the Orion Nebula, a stellar nursery 1,344 ly away.','Follow the belt line down-left to find Sirius, up-right to find Aldebaran.'] },
+
+{ id:'c-uma', name:'Ursa Major', kicker:'Constellation · the Great Bear',
+  sub:'Home of the Big Dipper — the northern sky’s key ring',
+  stars:[[11.062,61.75,1.79,'Dubhe'],[11.031,56.38,2.37,'Merak'],[11.897,53.69,2.44],
+    [12.257,57.03,3.31],[12.900,55.96,1.77],[13.399,54.93,2.27,'Mizar'],[13.792,49.31,1.86,'Alkaid']],
+  lines:[[0,1],[1,2],[2,3],[3,0],[3,4],[4,5],[5,6]],
+  stats:[['Brightest star','Alioth'],['Best seen','All year from northern latitudes'],['The trick','Pointer stars lead to Polaris'],['Eye test','Mizar & Alcor — a naked-eye double']],
+  blurb:'The Dipper is only the tail and haunches of a much larger bear, but it is the key that unlocks the whole northern sky: the two stars at the front of the bowl point straight to Polaris, the North Star.',
+  facts:['Look closely at Mizar, the bend of the handle — a second star, Alcor, sits beside it. Spotting it was an ancient eyesight test.','Most of the Dipper’s stars were born together and still drift through space as a family.','As the “Drinking Gourd”, it guided people escaping slavery north along the Underground Railroad.'] },
+
+{ id:'c-cas', name:'Cassiopeia', kicker:'Constellation · the Queen',
+  sub:'The bright W wheeling opposite the Dipper',
+  stars:[[0.153,59.15,2.28,'Caph'],[0.675,56.54,2.24,'Schedar'],[0.945,60.72,2.47],
+    [1.430,60.24,2.68],[1.907,63.67,3.38]],
+  lines:[[0,1],[1,2],[2,3],[3,4]],
+  stats:[['Shape','A “W” — or an “M”, half the year'],['Best seen','All year from northern latitudes'],['Sits in','The Milky Way’s band'],['Find it','Opposite Polaris from the Dipper']],
+  blurb:'Queen Cassiopeia boasted that she outshone the sea nymphs, and was chained to her throne in the sky, condemned to wheel around the pole forever — spending half of each night upside down.',
+  facts:['In 1572 a “new star” blazed here brighter than Venus — Tycho Brahe’s supernova, which cracked the belief that the heavens never change.','Its wreckage, Cassiopeia A, is the loudest radio source in the sky after the Sun.'] },
+
+{ id:'c-sco', name:'Scorpius', kicker:'Constellation · the Scorpion',
+  sub:'A red heart and a fishhook tail in the southern summer sky',
+  stars:[[16.490,-26.43,1.06,'Antares',1],[16.006,-22.62,2.29],[16.091,-19.81,2.56],
+    [15.981,-26.11,2.89],[16.598,-28.22,2.82],[16.836,-34.29,2.29],[16.864,-38.05,3.0],
+    [16.910,-42.36,3.6],[17.202,-43.24,3.33],[17.622,-43.00,1.86,'Sargas'],[17.513,-37.30,2.70],[17.560,-37.10,1.62,'Shaula']],
+  lines:[[2,1],[1,3],[1,0],[0,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11]],
+  stats:[['Brightest star','Antares — “rival of Mars”'],['Best seen','Jun – Aug, low in the south'],['Points to','The galactic centre region'],['Rare honesty','Actually looks like its name']],
+  blurb:'One of the few constellations that resembles its namesake: a curl of bright stars with a red heart and a raised stinger. This is the scorpion that slew Orion — which is why the hunter sets in the west just as the scorpion rises in the east.',
+  facts:['Antares is a red supergiant 700 times the Sun’s width; swap it for our star and it would swallow Mars.','In Polynesian tradition this same curve is Maui’s fishhook, which hauled islands out of the sea.','Just past the stinger lies the richest, brightest stretch of the Milky Way — you are looking toward the galaxy’s heart.'] },
+
+{ id:'c-cyg', name:'Cygnus', kicker:'Constellation · the Swan',
+  sub:'The Northern Cross, flying down the Milky Way',
+  stars:[[20.690,45.28,1.25,'Deneb'],[20.371,40.26,2.23,'Sadr'],[20.770,33.97,2.48],
+    [19.749,45.13,2.87],[19.512,27.96,3.18,'Albireo']],
+  lines:[[0,1],[1,4],[3,1],[1,2]],
+  stats:[['Brightest star','Deneb — a beacon from ~2,600 ly'],['Best seen','Jul – Oct, high overhead (north)'],['Asterism','Summer Triangle, with Vega & Altair'],['Treasure','Albireo — a gold & sapphire double']],
+  blurb:'A swan gliding south along the band of the Milky Way, wings outstretched — or, tilted, the Northern Cross. Deneb marks the tail: one of the most luminous stars we can see, shining across two and a half thousand light-years.',
+  facts:['Point a small telescope at Albireo, the swan’s beak: it splits into a golden star and a sapphire one, the sky’s favourite double.','NASA’s Kepler telescope stared at a patch of Cygnus for four years and found thousands of exoplanets there.','Cygnus X-1 — the first black hole ever confirmed — lurks along the swan’s neck.'] },
+
+{ id:'c-lyr', name:'Lyra', kicker:'Constellation · the Lyre',
+  sub:'Orpheus’ harp, carrying summer’s brightest jewel',
+  stars:[[18.616,38.78,0.03,'Vega'],[18.746,37.60,4.34],[18.909,36.90,4.30],
+    [18.834,33.36,3.52],[18.982,32.69,3.24]],
+  lines:[[0,1],[1,3],[3,4],[4,2],[2,1]],
+  marks:[{ra:18.885,dec:33.03,kind:'nebula',label:'M57'}],
+  stats:[['Brightest star','Vega — 25 ly, 0.03 mag'],['Best seen','Jun – Oct, near the zenith (north)'],['Resident','Ring Nebula (M57)'],['Shape','A small parallelogram + one jewel']],
+  blurb:'The lyre of Orpheus, whose music charmed even the lord of the underworld. Tiny, but impossible to miss: Vega is the fifth-brightest star in the sky and the anchor of the Summer Triangle.',
+  facts:['Between the parallelogram’s bottom two stars hides the Ring Nebula — a dying star’s smoke ring, and a preview of our Sun’s fate.','Vega was the first star ever photographed (1850) and Earth’s pole star 14,000 years ago — precession will make it so again.'] },
+
+{ id:'c-tau', name:'Taurus', kicker:'Constellation · the Bull',
+  sub:'A V-shaped face, long horns, and two famous star families',
+  stars:[[4.599,16.51,0.86,'Aldebaran',1],[4.330,15.63,3.65],[4.382,17.54,3.77],
+    [4.477,19.18,3.53],[4.478,15.87,3.41],[5.438,28.61,1.68,'Elnath'],[5.627,21.14,3.03]],
+  lines:[[1,2],[2,3],[3,5],[1,4],[4,0],[0,6]],
+  marks:[{ra:3.79,dec:24.11,kind:'cluster',label:'Pleiades'},{ra:5.575,dec:22.01,kind:'nebula',label:'M1'}],
+  stats:[['Brightest star','Aldebaran — the bull’s eye'],['Best seen','Nov – Feb'],['Clusters','Hyades (face) & Pleiades (back)'],['At the horn-tip','The Crab Nebula']],
+  blurb:'One of the oldest constellations of all — a charging bull that may already appear in 17,000-year-old cave paintings at Lascaux. Its V-shaped face is the Hyades cluster, with orange Aldebaran glaring as the eye.',
+  facts:['Aldebaran is a photobomber: it sits at 65 ly, less than half the distance of the Hyades stars behind it.','The Pleiades ride on the bull’s shoulder — count the sisters with your naked eye.','At the tip of the lower horn sits the Crab Nebula, wreckage of the supernova of 1054.'] },
+
+{ id:'c-gem', name:'Gemini', kicker:'Constellation · the Twins',
+  sub:'Castor and Pollux, standing hand in hand above Orion',
+  stars:[[7.577,31.89,1.58,'Castor'],[7.755,28.03,1.14,'Pollux'],[6.732,25.13,3.06],
+    [6.383,22.51,2.87],[7.335,21.98,3.53],[6.629,16.40,1.93,'Alhena']],
+  lines:[[0,1],[0,2],[2,3],[1,4],[4,5],[4,2]],
+  stats:[['Brightest star','Pollux — hosts a known exoplanet'],['Best seen','Dec – Mar'],['Meteor shower','Geminids, mid-December'],['Surprise','Castor is really six stars']],
+  blurb:'The inseparable twins of Greek myth — one mortal, one divine. When Castor was killed, Pollux gave up half his immortality so they could stay together, alternating between Olympus and the underworld. The sky got them side by side, forever.',
+  facts:['Castor looks like one star but is a gravitational ballet of six.','The Geminid meteors — the year’s most reliable shower — appear to stream out of this constellation every December.'] },
+
+{ id:'c-leo', name:'Leo', kicker:'Constellation · the Lion',
+  sub:'A backwards question mark: the sickle and the little king',
+  stars:[[10.139,11.97,1.40,'Regulus'],[10.122,16.76,3.52],[10.333,19.84,2.28,'Algieba'],
+    [10.278,23.42,3.44],[9.879,26.01,3.88],[9.764,23.77,2.98],
+    [11.235,20.52,2.56],[11.237,15.43,3.32],[11.818,14.57,2.14,'Denebola']],
+  lines:[[0,1],[1,2],[2,3],[3,4],[4,5],[2,6],[6,8],[8,7],[7,6],[7,0]],
+  stats:[['Brightest star','Regulus — “the little king”'],['Best seen','Feb – May'],['Shape','Sickle mane + triangle haunches'],['Meteor shower','Leonids, November']],
+  blurb:'The Nemean lion of the Hercules myths, and one of the few constellations that genuinely suggests its animal: a great sickle — a backwards question mark — for the mane and chest, a triangle for the haunches.',
+  facts:['Regulus spins so fast (a day lasts 16 hours) that the star is visibly squashed at the poles.','In November 1833 the Leonid shower turned into a storm of ~100,000 meteors an hour — witnesses thought the sky was falling.'] },
+
+{ id:'c-cma', name:'Canis Major', kicker:'Constellation · the Greater Dog',
+  sub:'Orion’s hound, led by the brightest star of all',
+  stars:[[6.752,-16.72,-1.46,'Sirius'],[6.378,-17.96,1.98,'Mirzam'],[7.140,-26.39,1.84,'Wezen'],
+    [6.977,-28.97,1.50,'Adhara'],[7.401,-29.30,2.45]],
+  lines:[[0,1],[0,2],[2,3],[2,4]],
+  stats:[['Brightest star','Sirius — brightest in the night sky'],['Best seen','Dec – Mar'],['Find it','Follow Orion’s belt down-left'],['Deep cut','Adhara, brightest ultraviolet star in our sky']],
+  blurb:'The big hunting dog trotting at Orion’s heel, with the Dog Star blazing at its collar. Sirius is so bright mostly because it is so close — a next-door neighbour at 8.6 light-years.',
+  facts:['The Romans blamed Sirius rising with the Sun for the sweltering “dog days” of summer.','Sirius drags a dead star around with it: the Pup, a white dwarf the size of Earth with the Sun’s mass.'] },
+
+{ id:'c-cru', name:'Crux', kicker:'Constellation · the Southern Cross',
+  sub:'The smallest constellation — and five nations’ flags',
+  stars:[[12.443,-63.10,0.76,'Acrux'],[12.795,-59.69,1.25,'Mimosa'],[12.519,-57.11,1.64,'Gacrux',1],
+    [12.252,-58.75,2.79]],
+  lines:[[0,2],[1,3]],
+  stats:[['Brightest star','Acrux'],['Best seen','Southern hemisphere, year-round'],['Size','Smallest of all 88 constellations'],['The trick','Its long axis points to the south pole']],
+  blurb:'The south has no pole star, so sailors steer by this compact cross instead: extend its long beam four and a half times and you are looking at the south celestial pole. It appears on the flags of Australia, New Zealand, Brazil, Samoa and Papua New Guinea.',
+  facts:['Beside the cross lies the Coalsack — a hole of darkness in the Milky Way, a dust cloud blotting out the stars behind it.','In Inca astronomy such dark clouds, not the stars, formed the constellations.'] },
+
+{ id:'c-and', name:'Andromeda', kicker:'Constellation · the Chained Princess',
+  sub:'The star-hop to another galaxy',
+  stars:[[0.140,29.09,2.06,'Alpheratz'],[0.656,30.86,3.27],[1.162,35.62,2.05,'Mirach',1],
+    [2.065,42.33,2.26,'Almach'],[0.946,38.50,3.87]],
+  lines:[[0,1],[1,2],[2,3]],
+  marks:[{ra:0.712,dec:41.27,kind:'galaxy',label:'M31'}],
+  hops:[[2,4],[4,-1]],
+  stats:[['Brightest stars','Mirach & Alpheratz'],['Best seen','Sep – Dec'],['Treasure','M31, the Andromeda Galaxy'],['The hop','Mirach → μ And → faint smudge']],
+  blurb:'Princess Andromeda was chained to a rock to pay for her mother Cassiopeia’s boasting. Her constellation is a modest chain of stars — famous because two hops off Mirach lands your eye on another galaxy.',
+  facts:['That faint oval smudge is 2.5 million light-years away — the most distant thing visible to the naked eye.','The photons hitting your retina left M31 before humans existed.'] },
+
+{ id:'c-sgr', name:'Sagittarius', kicker:'Constellation · the Archer',
+  sub:'The Teapot, pouring steam over the galaxy’s heart',
+  stars:[[18.096,-30.42,2.98,'Alnasl'],[18.350,-29.83,2.72],[18.403,-34.38,1.85,'Kaus Australis'],
+    [18.466,-25.42,2.82],[18.761,-26.99,3.17],[18.921,-26.30,2.05,'Nunki'],
+    [19.043,-29.88,2.60],[19.115,-27.67,3.32]],
+  lines:[[0,1],[1,3],[3,4],[4,1],[1,2],[2,6],[6,4],[4,5],[5,7],[7,6]],
+  stats:[['Brightest star','Kaus Australis'],['Best seen','Jul – Sep, low in the south'],['Aim','The spout points at the galactic centre'],['Backdrop','The richest star clouds in the sky']],
+  blurb:'Officially a centaur archer; to every modern stargazer, a teapot. The “steam” rising from its spout is real — it is the glowing star clouds of the galactic core, 26,000 light-years behind it.',
+  facts:['Sagittarius A*, the Milky Way’s central black hole, sits just above the spout.','Scan this region with binoculars on a dark night: nebulae and star clusters crowd in like nowhere else in the sky.'] },
+];
+
+for (const c of SKY_EXT) {
+  c.scene = 'sky'; c.group = 'The night sky'; c.type = 'constellation';
+  c.mark = 5; c.plate = 'const';
+}
+CAT.push(...SKY_EXT);
+
+/* --- extensions to the existing scenes --- */
+CAT.push(
+{ id:'vega', scene:'galaxy', group:'Stars & other suns', type:'star', name:'Vega',
+  kicker:'α Lyrae · A0V star', sub:'The northern sky’s blue-white beacon',
+  pos:s(18,-17), mark:4, minLabelZoom:.15, plate:'star:#cfe0ff',
+  stats:[['Distance','25 ly'],['Luminosity','40× the Sun'],['Age','~450 million yrs'],['Claim to fame','First star ever photographed (1850)']],
+  blurb:'The fifth-brightest star in our sky and the calibration standard astronomers built the magnitude scale around. It spins once every 12.5 hours and is surrounded by a debris disk — possibly a planetary system under construction.',
+  facts:['Thanks to Earth’s slow axial wobble, Vega was the pole star 14,000 years ago and will be again around the year 13,700.','In the film Contact, the alien signal comes from Vega.'] },
+
+{ id:'polaris', scene:'galaxy', group:'Stars & other suns', type:'star', name:'Polaris',
+  kicker:'α UMi · the North Star', sub:'The pivot the northern sky turns on',
+  pos:s(160,-400), mark:4, plate:'star:#fff2d8',
+  stats:[['Distance','~433 ly'],['Type','Cepheid variable supergiant'],['System','Triple star'],['Brightness rank','Only ~48th in the sky']],
+  blurb:'Not remotely the brightest star — just the one that happens to sit almost exactly above Earth’s north pole, so the whole sky appears to wheel around it while it stands still. Find it and you know which way is north, and your latitude too.',
+  facts:['Its altitude above the horizon equals your latitude — celestial navigation in one measurement.','It pulses in brightness every four days: a Cepheid, the kind of star used to measure the universe.','Thanks to precession it is a temporary appointment: Vega gets the job in ~12,000 years.'] },
+
+{ id:'m31', scene:'galaxy', group:'Clusters & neighbours', type:'galaxy', name:'Andromeda Galaxy',
+  kicker:'M31 · spiral galaxy', sub:'Our giant neighbour — and future dance partner',
+  pos:[-42000,-52000], mark:6, plate:'satgal',
+  stats:[['True distance','2.5 million ly (drawn far nearer)'],['Stars','~1 trillion'],['Diameter','~220,000 ly — twice ours'],['Closing speed','110 km/s, toward us'],['Merger due','~4.5 billion yrs']],
+  blurb:'The nearest giant spiral galaxy, and the most distant object human eyes can see unaided. It is falling toward the Milky Way; in about 4.5 billion years the two will merge into one giant elliptical galaxy — informally, “Milkomeda”.',
+  facts:['In 1923 Edwin Hubble found a pulsing star here and proved the “Andromeda Nebula” was another galaxy — the universe grew a millionfold overnight.','When the galaxies merge, stellar collisions will be virtually nil: stars are just too far apart.','It really lies 2.5 million ly away — far off this plate — and is drawn closer for navigation.'] },
+
+{ id:'halley', scene:'solar', group:'The Solar System', type:'comet', name:'Halley’s Comet',
+  kicker:'1P/Halley · periodic comet', sub:'The once-in-a-lifetime visitor',
+  kepler:{a:352.5,e:0.7305,periodDays:27740,phase:2.6,rot:-0.55,dir:-1}, size:3.5, mark:5, plate:'comet',
+  stats:[['Period','~76 years'],['Last visit','1986'],['Next visit','Mid-2061'],['Nucleus','15 × 8 km, darker than coal'],['Orbit','Retrograde — against the planets'],['Recorded since','240 BC']],
+  blurb:'The comet that taught humanity comets return. Edmond Halley noticed the visitors of 1531, 1607 and 1682 shared an orbit and predicted a 1758 return — it appeared, sixteen years after his death, and carries his name forever.',
+  facts:['It rides its stretched orbit backwards — opposite to every planet — from inside Venus’s orbit out past Neptune’s.','Every year Earth crosses its debris trail twice, giving the Eta Aquariid (May) and Orionid (October) meteor showers.','Mark Twain was born at its 1835 visit and predicted he would “go out with it” — he died the day after its 1910 perihelion.'] }
+);
+
 /* ============ ENGINE · scene, camera, galaxy renderer ============ */
 const canvas = document.getElementById('sky');
 const ctx = canvas.getContext('2d');
@@ -801,6 +975,7 @@ function s2w(sx, sy) {
           (sy - state.H / 2) / state.cam.z + state.cam.y];
 }
 function zoomLimits() {
+  if (state.scene === 'sky') return [skyFitZ() * 0.9, 30];
   return state.scene === 'galaxy'
     ? [state.fitZ * 0.75, 9]
     : [Math.min(state.W, state.H) / 1550, 26];
@@ -820,6 +995,17 @@ function stepCam(dt) {
 /* ---------------- body positions (solar) ---------------- */
 function bodyPos(o) {
   if (o.fixed) return o.fixed;
+  if (o.kepler) {
+    const k = o.kepler;
+    const M = k.phase + (k.dir || 1) * state.simDays / k.periodDays * 6.2832;
+    let E = M;
+    for (let i = 0; i < 6; i++) E -= (E - k.e * Math.sin(E) - M) / (1 - k.e * Math.cos(E));
+    const nu = 2 * Math.atan2(Math.sqrt(1 + k.e) * Math.sin(E / 2), Math.sqrt(1 - k.e) * Math.cos(E / 2));
+    const r = k.a * (1 - k.e * Math.cos(E));
+    const ca = Math.cos(k.rot), sa = Math.sin(k.rot);
+    const ox = r * Math.cos(nu), oy = r * Math.sin(nu);
+    return [ox * ca - oy * sa, ox * sa + oy * ca];
+  }
   if (!o.orbit || o.orbit.r === 0) return [0, 0];
   const a = o.orbit.phase + state.simDays / o.orbit.periodDays * 6.2832;
   let [px_, py_] = [Math.cos(a) * o.orbit.r, Math.sin(a) * o.orbit.r];
@@ -983,6 +1169,16 @@ function drawSolar(dt) {
     ctx.strokeStyle = state.selected === o.id ? 'rgba(240,167,92,.4)' : 'rgba(148,163,184,.13)';
     ctx.beginPath(); ctx.arc(0, 0, o.orbit.r, 0, 6.283); ctx.stroke();
   }
+  // Halley's stretched, retrograde orbit
+  const hk = SOLAR_OBJS.find(b => b.id === 'halley');
+  if (hk) {
+    const k = hk.kepler, b2 = k.a * Math.sqrt(1 - k.e * k.e), c2 = k.a * k.e;
+    ctx.save(); ctx.rotate(k.rot);
+    ctx.strokeStyle = state.selected === 'halley' ? 'rgba(240,167,92,.45)' : 'rgba(159,216,232,.18)';
+    ctx.setLineDash([3 / z, 4 / z]);
+    ctx.beginPath(); ctx.ellipse(-c2, 0, k.a, b2, 0, 0, 6.283); ctx.stroke();
+    ctx.setLineDash([]); ctx.restore();
+  }
   // asteroid + Kuiper swarms
   ctx.fillStyle = '#b8a98f';
   for (const a of asteroids) {
@@ -1036,6 +1232,30 @@ function drawBody(o) {
     ctx.fillStyle = TYPE_COLORS.belt; ctx.globalAlpha = .9;
     const s = 4.5 / Math.sqrt(state.cam.z);
     ctx.fillRect(-s / 2, -s / 2, s, s); ctx.restore(); ctx.globalAlpha = 1;
+    return;
+  }
+  if (o.kepler) {   // comet: nucleus + anti-sunward tail
+    const rr = Math.hypot(x, y) || 1;
+    const ux = x / rr, uy = y / rr;
+    const L = Math.min(150, 15000 / rr);
+    ctx.save(); ctx.translate(x, y);
+    if (L > 8) {
+      const tg = ctx.createLinearGradient(0, 0, ux * L, uy * L);
+      tg.addColorStop(0, 'rgba(159,216,232,.8)'); tg.addColorStop(1, 'rgba(159,216,232,0)');
+      ctx.strokeStyle = tg; ctx.lineCap = 'round';
+      ctx.lineWidth = 3 / Math.sqrt(state.cam.z);
+      ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(ux * L, uy * L); ctx.stroke();
+      ctx.globalAlpha = .3; ctx.lineWidth = 6.5 / Math.sqrt(state.cam.z);
+      ctx.beginPath(); ctx.moveTo(0, 0);
+      ctx.lineTo(ux * L * .72 - uy * L * .14, uy * L * .72 + ux * L * .14);
+      ctx.stroke(); ctx.globalAlpha = 1;
+    }
+    const s2 = 2.6 / Math.sqrt(state.cam.z);
+    const gg = ctx.createRadialGradient(0, 0, 0, 0, 0, s2 * 3);
+    gg.addColorStop(0, 'rgba(216,240,248,.9)'); gg.addColorStop(1, 'rgba(216,240,248,0)');
+    ctx.fillStyle = gg; ctx.beginPath(); ctx.arc(0, 0, s2 * 3, 0, 6.283); ctx.fill();
+    ctx.fillStyle = '#e8f4fa'; ctx.beginPath(); ctx.arc(0, 0, s2, 0, 6.283); ctx.fill();
+    ctx.restore();
     return;
   }
   if (o.id === 'voyager') {
@@ -1263,6 +1483,43 @@ function drawPlate(o) {
     g.strokeStyle = '#f0a75c'; g.lineWidth = 2;
     g.beginPath(); g.arc(30, 26, 15, 0, 6.283); g.stroke();           // golden record
     g.beginPath(); g.arc(30, 26, 7, 0, 6.283); g.stroke();
+  } else if (kind === 'const') {
+    const sc = Math.min(260 / o.ext, 14);
+    g.save(); g.translate(-o.pos[0] * sc, -o.pos[1] * sc);
+    g.strokeStyle = 'rgba(148,163,184,.55)'; g.lineWidth = 2;
+    g.beginPath();
+    for (const [a2, b2] of o.lines) {
+      g.moveTo(o.pts[a2].x * sc, o.pts[a2].y * sc);
+      g.lineTo(o.pts[b2].x * sc, o.pts[b2].y * sc);
+    }
+    g.stroke();
+    if (o.marks) for (const m of o.marks) glowBlob(g, m.x * sc, m.y * sc, 16, 'rgba(232,143,184,.9)', .9);
+    for (const p2 of o.pts) {
+      const r2 = starR(p2.mag) * 2.1;
+      if (p2.mag < 1.5) glowBlob(g, p2.x * sc, p2.y * sc, r2 * 4, p2.red ? 'rgba(255,157,107,.6)' : 'rgba(207,224,255,.6)', .9);
+      g.fillStyle = p2.red ? '#ffb490' : '#eef4ff';
+      g.beginPath(); g.arc(p2.x * sc, p2.y * sc, r2, 0, 6.283); g.fill();
+      if (p2.name) {
+        g.font = '13px ui-monospace, Menlo, monospace'; g.textAlign = 'center';
+        g.fillStyle = 'rgba(148,163,184,.85)';
+        g.fillText(p2.name.toUpperCase(), p2.x * sc, p2.y * sc - r2 - 8);
+      }
+    }
+    g.restore();
+  } else if (kind === 'comet') {
+    glowBlob(g, -290, 120, 50, 'rgba(255,200,120,.9)', .9);
+    g.save(); g.rotate(-.36);
+    const tg = g.createLinearGradient(0, 0, 330, -60);
+    tg.addColorStop(0, 'rgba(159,216,232,.85)'); tg.addColorStop(1, 'rgba(159,216,232,0)');
+    g.strokeStyle = tg; g.lineWidth = 20; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(0, 0); g.lineTo(330, -60); g.stroke();
+    const dg = g.createLinearGradient(0, 0, 300, 20);
+    dg.addColorStop(0, 'rgba(232,214,190,.5)'); dg.addColorStop(1, 'rgba(232,214,190,0)');
+    g.strokeStyle = dg; g.lineWidth = 34;
+    g.beginPath(); g.moveTo(0, 0); g.lineTo(300, 30); g.stroke();
+    g.restore(); g.lineCap = 'butt';
+    glowBlob(g, 0, 0, 46, 'rgba(216,240,248,.95)', 1);
+    shadeBall(g, 12, '#f0f8ff', '#b8ccd8', '#485058');
   } else if (kind.startsWith('p') && PLANET_PAINTERS[spec[1]]) {
     const painter = PLANET_PAINTERS[spec[1]];
     g.save(); g.scale(5.4, 5.4);
@@ -1288,6 +1545,7 @@ function shadeBall2(g, x, y, r, top, mid, low) {
 const card = $('card');
 function openCard(o) {
   state.selected = o.id;
+  state.hover = null; tip.style.opacity = 0; canvas.classList.remove('hovering');
   const col = TYPE_COLORS[o.type] || '#9fc4ef';
   $('cardKickerTxt').textContent = o.kicker;
   $('cardKickerTxt').style.color = col;
@@ -1326,7 +1584,7 @@ $('cardClose').onclick = closeCard;
 
 /* ---------- atlas index ---------- */
 const GROUP_ORDER = ['Home', 'Heart of the galaxy', 'Spiral arms', 'Star nurseries & remnants',
-  'Clusters & neighbours', 'Stars & other suns', 'The Solar System'];
+  'Clusters & neighbours', 'Stars & other suns', 'The night sky', 'The Solar System'];
 function buildAtlas() {
   const list = $('atlasList'); list.innerHTML = '';
   for (const grp of GROUP_ORDER) {
@@ -1363,6 +1621,7 @@ $('atlasToggle').onclick = () => toggleAtlas();
 
 /* ---------- scene switching ---------- */
 function fadeTo(cb) {
+  state.hover = null; tip.style.opacity = 0; canvas.classList.remove('hovering');
   if (REDUCED) { cb(); return; }
   state.fadeDir = 1; state.fadeCb = cb;
 }
@@ -1389,29 +1648,33 @@ function exitSolar() {
   });
 }
 function syncSceneUI() {
-  const solar = state.scene === 'solar';
-  $('backBtn').classList.toggle('show', solar);
+  const solar = state.scene === 'solar', sky = state.scene === 'sky';
+  $('backBtn').classList.toggle('show', solar || sky);
   $('timeCtls').classList.toggle('show', solar);
-  $('crumbTxt').textContent = solar
-    ? 'Sol system · Orion Spur'
+  $('skyBtn').classList.toggle('on', sky);
+  $('crumbTxt').textContent = sky ? 'Night sky · seen from Earth'
+    : solar ? 'Sol system · Orion Spur'
     : 'Galactic plane · 105,000 ly';
-  $('note').textContent = solar
+  $('note').textContent = sky
+    ? 'Flat chart of the celestial sphere · poles stretched · 13 of 88 figures drawn'
+    : solar
     ? 'Orbit spacing compressed · sizes not to scale · speeds proportional to reality'
     : 'Positions approximate · sizes & distances not to scale · drawn for navigation, not measurement';
 }
-$('backBtn').onclick = exitSolar;
+$('backBtn').onclick = () => { state.scene === 'sky' ? exitSky() : exitSolar(); };
 
 function goTo(o) {
   const arrive = () => {
     const p = objWorldPos(o);
     flyTo(p[0], p[1], targetZoom(o));
-    if (o.scene === 'solar' && o.orbit && o.orbit.r > 0) state.follow = o.id; else state.follow = null;
+    state.follow = (o.scene === 'solar' && ((o.orbit && o.orbit.r > 0) || o.kepler)) ? o.id : null;
     openCard(o);
   };
   if (o.scene !== state.scene) {
     fadeTo(() => {
       state.scene = o.scene;
       if (o.scene === 'solar') { state.cam = { x: 0, y: 0, z: Math.min(state.W, state.H) / 1500 }; }
+      else if (o.scene === 'sky') { state.cam = { x: o.pos[0], y: o.pos[1], z: skyFitZ() * 1.4 }; }
       else { state.cam = { x: 0, y: 9000, z: state.fitZ }; }
       state.tgt = { ...state.cam };
       syncSceneUI(); arrive();
@@ -1419,8 +1682,10 @@ function goTo(o) {
   } else arrive();
 }
 function targetZoom(o) {
+  if (o.scene === 'sky') return Math.min(Math.min(state.W, state.H) / (o.ext * 2.4), 14);
   if (o.scene === 'solar') {
     if (o.id === 'sol') return 2.2;
+    if (o.kepler) return 2.2;
     if (o.ring || o.id === 'voyager') return Math.min(state.W, state.H) / 1500;
     if (o.parent) return 6;
     return o.orbit.r > 300 ? 2.4 : 3.2;
@@ -1482,8 +1747,17 @@ function zoomAt(sx, sy, factor) {
   if (Math.abs(real - 1) > .0001) state.follow = null;
 }
 
-function sceneObjects() { return state.scene === 'galaxy' ? GALAXY_OBJS : SOLAR_OBJS; }
+function sceneObjects() { return state.scene === 'galaxy' ? GALAXY_OBJS : state.scene === 'solar' ? SOLAR_OBJS : SKY_OBJS; }
 function pickAt(sx, sy) {
+  if (state.scene === 'sky') {
+    let best = null, bd = 1e9;
+    for (const c of SKY_OBJS) for (const p of c.pts) {
+      const [px2, py2] = w2s(p.x, p.y);
+      const d = Math.hypot(sx - px2, sy - py2);
+      if (d < bd) { bd = d; best = c; }
+    }
+    return bd < 26 ? best : null;
+  }
   let best = null, bd = 1e9;
   for (const o of sceneObjects()) {
     const [x, y] = w2s(...objWorldPos(o));
@@ -1515,6 +1789,7 @@ $('zoomOut').onclick = () => zoomAt(state.W / 2, state.H / 2, 1 / 1.45);
 $('resetBtn').onclick = () => {
   closeCard();
   if (state.scene === 'solar') flyTo(0, 0, Math.min(state.W, state.H) / 1500);
+  else if (state.scene === 'sky') flyTo(0, -6, skyFitZ());
   else flyTo(0, 9000, state.fitZ);
 };
 $('lblBtn').onclick = () => {
@@ -1538,6 +1813,7 @@ addEventListener('keydown', e => {
     if (card.classList.contains('open')) closeCard();
     else if (atlasOpen) toggleAtlas(false);
     else if (state.scene === 'solar') exitSolar();
+    else if (state.scene === 'sky') exitSky();
   }
   if (e.key === '+' || e.key === '=') zoomAt(state.W / 2, state.H / 2, 1.3);
   if (e.key === '-') zoomAt(state.W / 2, state.H / 2, 1 / 1.3);
@@ -1550,6 +1826,15 @@ addEventListener('keydown', e => {
 
 /* ---------- scale bar ---------- */
 function updateScalebar() {
+  if (state.scene === 'sky') {
+    const raw = 110 / state.cam.z;
+    const opts = [1, 2, 5, 10, 20, 45, 90];
+    let nice = opts[0];
+    for (const o of opts) if (o <= raw) nice = o;
+    $('scalebarBar').style.width = (nice * state.cam.z).toFixed(0) + 'px';
+    $('scalebarLbl').textContent = nice + '° of sky' + (nice === 10 ? ' — about one fist at arm’s length' : '');
+    return;
+  }
   if (state.scene === 'solar') {
     $('scalebarLbl').textContent = state.timeScale === 0 ? 'orbits paused'
       : `1 s ≈ ${DAYS_PER_SEC * state.timeScale} days`;
@@ -1581,7 +1866,7 @@ function frame(now) {
   stepCam(dt);
 
   drawBackdrop();
-  if (state.scene === 'galaxy') drawGalaxy(); else drawSolar(dt);
+  if (state.scene === 'galaxy') drawGalaxy(); else if (state.scene === 'solar') drawSolar(dt); else drawSky();
 
   // scene-change fade
   if (state.fadeDir !== 0) {
@@ -1597,11 +1882,197 @@ function frame(now) {
   requestAnimationFrame(frame);
 }
 
+/* ============ NIGHT SKY EXTENSION · engine ============
+   Chart world units are degrees: x = (12h − RA) · 15, y = −Dec.
+   An equirectangular plate — poles stretched, like a printed star atlas. */
+const SKY_OBJS = CAT.filter(o => o.scene === 'sky');
+const skyXY = (ra, dec) => [(12 - ra) * 15, -dec];
+for (const c of SKY_OBJS) {
+  c.pts = c.stars.map(st => {
+    const [x, y] = skyXY(st[0], st[1]);
+    return { x, y, mag: st[2], name: st[3] || null, red: st[4] === 1 };
+  });
+  if (c.marks) for (const m of c.marks) { const [x, y] = skyXY(m.ra, m.dec); m.x = x; m.y = y; }
+  const xs = c.pts.map(p => p.x), ys = c.pts.map(p => p.y);
+  const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+  c.pos = [(x0 + x1) / 2, (y0 + y1) / 2];
+  c.ext = Math.max(x1 - x0, y1 - y0, 8);
+}
+
+const SKY_SPRITE = document.createElement('canvas');
+function buildSkySprite() {
+  const SW = 2048, SH = 1024;                 // world x ∈ ±200°, y ∈ ±100°
+  SKY_SPRITE.width = SW; SKY_SPRITE.height = SH;
+  const g = SKY_SPRITE.getContext('2d');
+  const K = SW / 400;
+  const px = (wx, wy) => [SW / 2 + wx * K, SH / 2 + wy * K];
+  const rnd = mulberry(2718);
+  // the Milky Way's band across the celestial sphere (approx. galactic equator)
+  const band = [[17.76,-29,26],[18.8,-3,20],[19.8,22,19],[20.7,42,17],[21.9,51,15],[23,59,14],
+    [0.4,62,15],[1.8,61,15],[3.3,55,15],[4.5,45,15],[5.76,29,17],[6.5,12,17],[7.1,-5,16],
+    [7.9,-25,16],[8.8,-40,15],[9.5,-52,14],[11,-60,14],[12.44,-63,15],[14,-62,15],
+    [15.3,-57,16],[16.3,-50,18],[17,-40,21]];
+  g.globalCompositeOperation = 'lighter';
+  for (const [ra, dec, w] of band) {
+    const [bx, by] = px(...skyXY(ra, dec));
+    const warm = ra > 16 && ra < 19.5;
+    for (let i = 0; i < 7; i++) {
+      const ox = gauss(rnd) * w * K * .8, oy = gauss(rnd) * w * K * .55;
+      const rad = (w * .8 + rnd() * w * .8) * K;
+      const gr = g.createRadialGradient(bx + ox, by + oy, 0, bx + ox, by + oy, rad);
+      gr.addColorStop(0, warm ? 'rgba(232,214,190,.05)' : 'rgba(200,212,234,.042)');
+      gr.addColorStop(1, 'rgba(0,0,0,0)');
+      g.fillStyle = gr;
+      g.beginPath(); g.arc(bx + ox, by + oy, rad, 0, 6.283); g.fill();
+    }
+    // dense band starlight
+    for (let i = 0; i < 130; i++) {
+      const sx = bx + gauss(rnd) * w * K * .9, sy = by + gauss(rnd) * w * K * .6;
+      g.globalAlpha = .1 + rnd() * .45; g.fillStyle = rnd() < .85 ? '#d4deee' : '#f0e4d0';
+      g.fillRect(sx, sy, 1, 1);
+    }
+    g.globalAlpha = 1;
+  }
+  g.globalCompositeOperation = 'source-over';
+  // field stars everywhere
+  for (let i = 0; i < 2100; i++) {
+    g.globalAlpha = .08 + rnd() * .5;
+    g.fillStyle = rnd() < .9 ? '#c8d4ea' : '#ffe9c9';
+    const s = rnd() < .06 ? 2 : 1;
+    g.fillRect(rnd() * SW, rnd() * SH, s, s);
+  }
+  g.globalAlpha = 1;
+}
+
+function starR(mag) { return Math.max(1.3, 5.4 - mag * 1.05); }
+
+function drawSky() {
+  ctx.save();
+  ctx.translate(state.W / 2, state.H / 2);
+  ctx.scale(state.cam.z, state.cam.z);
+  ctx.translate(-state.cam.x, -state.cam.y);
+  ctx.drawImage(SKY_SPRITE, -200, -100, 400, 200);
+  ctx.restore();
+  const z = state.cam.z;
+
+  for (const c of SKY_OBJS) {
+    const hot = state.hover === c.id || state.selected === c.id;
+    // figure lines
+    ctx.strokeStyle = hot ? 'rgba(240,167,92,.85)' : 'rgba(148,163,184,.34)';
+    ctx.lineWidth = hot ? 1.6 : 1.1;
+    ctx.beginPath();
+    for (const [a, b] of c.lines) {
+      const [ax, ay] = w2s(c.pts[a].x, c.pts[a].y), [bx, by] = w2s(c.pts[b].x, c.pts[b].y);
+      ctx.moveTo(ax, ay); ctx.lineTo(bx, by);
+    }
+    ctx.stroke();
+    if (c.hops) {           // dashed star-hop trails (e.g. Mirach to M31)
+      ctx.setLineDash([3, 4]);
+      ctx.strokeStyle = hot ? 'rgba(240,167,92,.7)' : 'rgba(148,163,184,.3)';
+      ctx.beginPath();
+      for (const hop of c.hops) {
+        const from = c.pts[hop[0]];
+        const to = hop[1] < 0 ? c.marks[-hop[1] - 1] : c.pts[hop[1]];
+        const [ax, ay] = w2s(from.x, from.y), [bx, by] = w2s(to.x, to.y);
+        ctx.moveTo(ax, ay); ctx.lineTo(bx, by);
+      }
+      ctx.stroke(); ctx.setLineDash([]);
+    }
+    // deep-sky marks
+    if (c.marks) for (const m of c.marks) {
+      const [mx, my] = w2s(m.x, m.y);
+      if (m.kind === 'galaxy') {
+        const gr = ctx.createRadialGradient(mx, my, 0, mx, my, 14);
+        gr.addColorStop(0, 'rgba(201,169,232,.8)'); gr.addColorStop(1, 'rgba(201,169,232,0)');
+        ctx.fillStyle = gr;
+        ctx.save(); ctx.translate(mx, my); ctx.rotate(-.5); ctx.scale(1, .45);
+        ctx.beginPath(); ctx.arc(0, 0, 14, 0, 6.283); ctx.fill(); ctx.restore();
+      } else if (m.kind === 'cluster') {
+        ctx.fillStyle = '#cfe0ff';
+        const rr = mulberry(7);
+        for (let i = 0; i < 7; i++) {
+          ctx.globalAlpha = .6 + rr() * .4;
+          ctx.fillRect(mx + (rr() - .5) * 10, my + (rr() - .5) * 8, 1.6, 1.6);
+        }
+        ctx.globalAlpha = 1;
+      } else {
+        const gr = ctx.createRadialGradient(mx, my, 0, mx, my, 7);
+        gr.addColorStop(0, 'rgba(232,143,184,.85)'); gr.addColorStop(1, 'rgba(232,143,184,0)');
+        ctx.fillStyle = gr;
+        ctx.beginPath(); ctx.arc(mx, my, 7, 0, 6.283); ctx.fill();
+      }
+      if (z > 3.4) {
+        ctx.font = '9.5px ui-monospace, Menlo, Consolas, monospace';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = m.kind === 'galaxy' ? 'rgba(201,169,232,.9)' : 'rgba(232,143,184,.85)';
+        ctx.fillText(m.label, mx, m.kind === 'galaxy' ? my + 18 : my - 10);
+      }
+    }
+    // member stars
+    for (const p of c.pts) {
+      const [sx, sy] = w2s(p.x, p.y);
+      const r = starR(p.mag);
+      if (p.mag < 1.5) {
+        const gr = ctx.createRadialGradient(sx, sy, 0, sx, sy, r * 3.4);
+        gr.addColorStop(0, p.red ? 'rgba(255,157,107,.5)' : 'rgba(207,224,255,.5)');
+        gr.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = gr;
+        ctx.beginPath(); ctx.arc(sx, sy, r * 3.4, 0, 6.283); ctx.fill();
+        ctx.strokeStyle = p.red ? 'rgba(255,180,140,.4)' : 'rgba(220,232,255,.4)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(sx - r * 2.6, sy); ctx.lineTo(sx + r * 2.6, sy);
+        ctx.moveTo(sx, sy - r * 2.6); ctx.lineTo(sx, sy + r * 2.6);
+        ctx.stroke();
+      }
+      ctx.fillStyle = p.red ? '#ffb490' : p.mag < 2 ? '#eef4ff' : '#c2d4ee';
+      ctx.beginPath(); ctx.arc(sx, sy, r, 0, 6.283); ctx.fill();
+      if (p.name && (z > 5.5 || hot) && state.labels) {
+        ctx.font = '9.5px ui-monospace, Menlo, Consolas, monospace';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = hot ? 'rgba(255,201,143,.9)' : 'rgba(148,163,184,.75)';
+        ctx.fillText(p.name.toUpperCase(), sx, sy - r - 6);
+      }
+    }
+    // constellation name
+    if (state.labels || hot) {
+      const [lx, ly] = w2s(c.pos[0], c.pos[1]);
+      ctx.font = '600 12.5px ui-monospace, Menlo, Consolas, monospace';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = hot ? '#ffc98f' : 'rgba(184,207,232,.6)';
+      ctx.fillText(c.name.toUpperCase(), lx, ly + (c.ext / 2) * z + 22);
+    }
+  }
+}
+
+function skyFitZ() { return Math.min(state.W / 420, state.H / 215); }
+function enterSky() {
+  closeCard();
+  fadeTo(() => {
+    state.scene = 'sky';
+    state.cam = { x: 80, y: -6, z: skyFitZ() * 1.7 };
+    state.tgt = { ...state.cam };
+    syncSceneUI();
+  });
+}
+function exitSky() {
+  closeCard();
+  fadeTo(() => {
+    state.scene = 'galaxy';
+    state.cam = { x: 0, y: 9000, z: state.fitZ * 1.25 };
+    state.tgt = { x: 0, y: 9000, z: state.fitZ };
+    if (REDUCED) state.cam = { ...state.tgt };
+    syncSceneUI();
+  });
+}
+$('skyBtn').onclick = () => { state.scene === 'sky' ? exitSky() : enterSky(); };
+
 /* ---------- boot ---------- */
 addEventListener('resize', resize);
 resize();
 ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
 buildGalaxySprite();
+buildSkySprite();
 buildAtlas();
 syncSceneUI();
 // gentle establishing shot: drift from wide to home
