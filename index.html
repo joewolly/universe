@@ -219,6 +219,27 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
 #timeCtls.show{display:flex}
 #luckyBtn{gap:7px;display:flex}
 
+/* ---------- grand tour bar ---------- */
+#tourbar{
+  position:fixed;left:50%;bottom:16px;z-index:33;
+  transform:translate(-50%,90px);opacity:0;pointer-events:none;
+  display:flex;align-items:center;gap:12px;
+  background:var(--panel);border:1px solid rgba(240,167,92,.4);border-radius:4px;
+  padding:8px 10px 8px 16px;backdrop-filter:blur(10px);
+  transition:transform .3s cubic-bezier(.2,.8,.25,1),opacity .25s;
+}
+#tourbar.show{transform:translate(-50%,0);opacity:1;pointer-events:auto}
+#tourbar .tk{font-family:var(--mono);font-size:10px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--ember);white-space:nowrap}
+#tourStep{font-family:var(--mono);font-size:11px;color:var(--haze);font-variant-numeric:tabular-nums}
+#tourName{font-family:var(--display);font-size:14.5px;letter-spacing:.04em;
+  max-width:190px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#tourbar button:disabled{opacity:.35;cursor:default}
+@media (max-width:720px){
+  #tourbar{bottom:auto;top:64px;width:calc(100vw - 24px);justify-content:space-between;padding:8px 10px}
+  #tourName{display:none}
+}
+
 /* ---------- hover tooltip ---------- */
 #tip{
   position:fixed;z-index:29;pointer-events:none;opacity:0;transition:opacity .12s;
@@ -328,12 +349,22 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
     <button class="ctl" id="t10" title="10x speed">10&times;</button>
     <button class="ctl" id="t100" title="100x speed">100&times;</button>
   </div>
+  <button class="ctl" id="tourBtn" title="A guided tour of the highlights">&#9672; Grand tour</button>
   <button class="ctl" id="skyBtn" title="The constellations, as seen from Earth">&#10038; Night sky</button>
   <button class="ctl" id="luckyBtn" title="Fly somewhere unexplored">&#10022; Surprise me</button>
   <button class="ctl on" id="lblBtn" title="Toggle labels">Labels</button>
   <button class="ctl" id="zoomOut" title="Zoom out">&minus;</button>
   <button class="ctl" id="zoomIn" title="Zoom in">+</button>
   <button class="ctl" id="resetBtn" title="Reset view">&#8634;</button>
+</div>
+
+<div id="tourbar">
+  <span class="tk">Grand tour</span>
+  <span id="tourStep"></span>
+  <span id="tourName"></span>
+  <button class="ctl" id="tourPrev" aria-label="Previous stop">&larr;</button>
+  <button class="ctl" id="tourNext">Next &rarr;</button>
+  <button class="ctl" id="tourEnd" aria-label="End tour">&times;</button>
 </div>
 
 <div id="tip" role="status"></div>
@@ -350,6 +381,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
       <div class="hint"><b>esc</b><span>close</span></div>
     </div>
     <button class="cardAction" id="beginBtn">Begin survey</button>
+    <button class="cardAction ghost" id="welcomeTour" style="margin-top:10px">Or take the grand tour &rarr;</button>
   </div>
 </div>
 
@@ -776,6 +808,38 @@ for (const c of SKY_EXT) {
   c.mark = 5; c.plate = 'const';
 }
 CAT.push(...SKY_EXT);
+
+/* --- meteor showers: radiants on the sky chart --- */
+TYPE_COLORS.shower = '#ffcf9e';
+const SHOWERS = [
+{ id:'shower-per', name:'Perseids', kicker:'Meteor shower · peaks Aug 12–13',
+  sub:'Summer’s beloved “old faithful” of shooting stars', radiant:[3.07,58],
+  stats:[['Peak','Aug 12–13, yearly'],['Rate','Up to ~100 meteors/hr'],['Parent','Comet Swift–Tuttle'],['Speed','59 km/s'],['Best','After midnight, dark sky']],
+  blurb:'Every August, Earth ploughs through the dust trail of comet Swift–Tuttle, and grains the size of sand burn up 90 km overhead as streaks of light. The meteors appear to fan out from this point near Perseus — the radiant — the way snowflakes seem to stream from one spot ahead of a moving car.',
+  facts:['A typical shooting star here is a fleck of comet dust smaller than a pea.','Swift–Tuttle is 26 km wide — the largest object that repeatedly passes near Earth. Next visit: 2126.','You need no equipment: lie back, face the radiant, give your eyes 20 minutes.'] },
+{ id:'shower-ori', name:'Orionids', kicker:'Meteor shower · peaks Oct 20–21',
+  sub:'Halley’s Comet, delivered to you in pieces', radiant:[6.35,15.6],
+  stats:[['Peak','Oct 20–21, yearly'],['Rate','~20 meteors/hr'],['Parent','1P/Halley'],['Speed','66 km/s — among the fastest'],['Best','Pre-dawn hours']],
+  blurb:'You do not have to wait until 2061 to see Halley’s Comet — every October, Earth crosses the trail of debris it has shed over millennia, and pieces of the comet streak out of Orion’s club. Each Orionid meteor is a crumb of the most famous comet in history.',
+  facts:['Earth crosses Halley’s debris twice a year: these, and May’s Eta Aquariids.','Orionids hit so fast they often leave glowing trains that hang in the sky for seconds.'] },
+{ id:'shower-leo', name:'Leonids', kicker:'Meteor shower · peaks Nov 16–17',
+  sub:'Usually modest — occasionally the sky falls', radiant:[10.15,21.6],
+  stats:[['Peak','Nov 16–17, yearly'],['Rate','~15/hr — storms every ~33 yrs'],['Parent','Comet Tempel–Tuttle'],['Speed','71 km/s — the fastest'],['Great storms','1833, 1866, 1966, 2001']],
+  blurb:'Most years the Leonids are a quiet drizzle. But when their parent comet has recently passed, the drizzle becomes a hurricane: in November 1833 the sky produced tens of thousands of meteors an hour, and much of North America woke convinced the world was ending — “the night the stars fell”.',
+  facts:['The 1833 storm helped launch meteor science: observers noticed all trails traced back to one point in Leo.','In 1966, watchers in the American southwest saw up to 40 meteors per second.'] },
+{ id:'shower-gem', name:'Geminids', kicker:'Meteor shower · peaks Dec 13–14',
+  sub:'The year’s strongest shower — born of an asteroid', radiant:[7.55,32.4],
+  stats:[['Peak','Dec 13–14, yearly'],['Rate','120–150 meteors/hr'],['Parent','3200 Phaethon — an asteroid'],['Speed','35 km/s — slow and bright'],['Colours','White, yellow, green, blue']],
+  blurb:'The most generous meteor shower of the year, and a scientific oddity: its parent is not an icy comet but the rocky asteroid Phaethon, which mysteriously sheds a dust trail anyway. Geminids fly slowly and burn brightly, often in colour.',
+  facts:['Phaethon swoops closer to the Sun than any other named asteroid — its surface cracks at 750 °C.','The shower has been strengthening every decade since its discovery in 1862.'] },
+{ id:'shower-eta', name:'Eta Aquariids', kicker:'Meteor shower · peaks May 5–6',
+  sub:'Halley’s other gift — best from the southern half of Earth', radiant:[22.47,-1.0],
+  stats:[['Peak','May 5–6, yearly'],['Rate','~50/hr (southern hemisphere)'],['Parent','1P/Halley'],['Speed','66 km/s'],['Best','The hour before dawn']],
+  blurb:'The second crossing of Halley’s debris trail each year. The radiant rises only just before the Sun, so these meteors are famous as “earthgrazers” — long, slow, dramatic streaks skimming the top of the atmosphere in the pre-dawn dark.',
+  facts:['From the southern tropics this is one of the finest showers of the year.','An earthgrazer can cross half the sky — the meteor enters the atmosphere at a shallow angle and skips like a stone.'] },
+];
+for (const sh of SHOWERS) { sh.scene = 'sky'; sh.group = 'Meteor showers'; sh.type = 'shower'; sh.mark = 4; sh.plate = 'shower'; }
+CAT.push(...SHOWERS);
 
 /* --- extensions to the existing scenes --- */
 CAT.push(
@@ -1506,6 +1570,21 @@ function drawPlate(o) {
       }
     }
     g.restore();
+  } else if (kind === 'shower') {
+    const rnd = mulberry(o.id.length * 19);
+    g.strokeStyle = 'rgba(255,207,158,.9)'; g.lineWidth = 1.6;
+    g.beginPath(); g.arc(0, 0, 7, 0, 6.283); g.stroke();
+    for (let i = 0; i < 16; i++) {
+      const a = rnd() * 6.283, r0 = 28 + rnd() * 120, len = 26 + rnd() * 60;
+      const gr2 = g.createLinearGradient(Math.cos(a) * r0, Math.sin(a) * r0,
+        Math.cos(a) * (r0 + len), Math.sin(a) * (r0 + len));
+      gr2.addColorStop(0, 'rgba(255,207,158,0)'); gr2.addColorStop(1, 'rgba(255,232,200,.9)');
+      g.strokeStyle = gr2; g.lineWidth = rnd() < .2 ? 3 : 2;
+      g.beginPath();
+      g.moveTo(Math.cos(a) * r0, Math.sin(a) * r0);
+      g.lineTo(Math.cos(a) * (r0 + len), Math.sin(a) * (r0 + len));
+      g.stroke();
+    }
   } else if (kind === 'comet') {
     glowBlob(g, -290, 120, 50, 'rgba(255,200,120,.9)', .9);
     g.save(); g.rotate(-.36);
@@ -1584,7 +1663,7 @@ $('cardClose').onclick = closeCard;
 
 /* ---------- atlas index ---------- */
 const GROUP_ORDER = ['Home', 'Heart of the galaxy', 'Spiral arms', 'Star nurseries & remnants',
-  'Clusters & neighbours', 'Stars & other suns', 'The night sky', 'The Solar System'];
+  'Clusters & neighbours', 'Stars & other suns', 'The night sky', 'Meteor showers', 'The Solar System'];
 function buildAtlas() {
   const list = $('atlasList'); list.innerHTML = '';
   for (const grp of GROUP_ORDER) {
@@ -1751,10 +1830,18 @@ function sceneObjects() { return state.scene === 'galaxy' ? GALAXY_OBJS : state.
 function pickAt(sx, sy) {
   if (state.scene === 'sky') {
     let best = null, bd = 1e9;
-    for (const c of SKY_OBJS) for (const p of c.pts) {
-      const [px2, py2] = w2s(p.x, p.y);
-      const d = Math.hypot(sx - px2, sy - py2);
-      if (d < bd) { bd = d; best = c; }
+    for (const c of SKY_OBJS) {
+      if (c.pts) {
+        for (const p of c.pts) {
+          const [px2, py2] = w2s(p.x, p.y);
+          const d = Math.hypot(sx - px2, sy - py2);
+          if (d < bd) { bd = d; best = c; }
+        }
+      } else {
+        const [px2, py2] = w2s(c.pos[0], c.pos[1]);
+        const d = Math.hypot(sx - px2, sy - py2);
+        if (d < bd) { bd = d; best = c; }
+      }
     }
     return bd < 26 ? best : null;
   }
@@ -1888,6 +1975,11 @@ function frame(now) {
 const SKY_OBJS = CAT.filter(o => o.scene === 'sky');
 const skyXY = (ra, dec) => [(12 - ra) * 15, -dec];
 for (const c of SKY_OBJS) {
+  if (!c.stars) {                       // meteor-shower radiant, not a figure
+    c.pos = skyXY(c.radiant[0], c.radiant[1]);
+    c.ext = 34;
+    continue;
+  }
   c.pts = c.stars.map(st => {
     const [x, y] = skyXY(st[0], st[1]);
     return { x, y, mag: st[2], name: st[3] || null, red: st[4] === 1 };
@@ -1956,6 +2048,7 @@ function drawSky() {
   const z = state.cam.z;
 
   for (const c of SKY_OBJS) {
+    if (!c.pts) continue;
     const hot = state.hover === c.id || state.selected === c.id;
     // figure lines
     ctx.strokeStyle = hot ? 'rgba(240,167,92,.85)' : 'rgba(148,163,184,.34)';
@@ -2043,6 +2136,40 @@ function drawSky() {
       ctx.fillText(c.name.toUpperCase(), lx, ly + (c.ext / 2) * z + 22);
     }
   }
+  // meteor-shower radiants: a ring with streaks racing outward
+  for (const c of SKY_OBJS) {
+    if (!c.radiant) continue;
+    const [rx, ry] = w2s(c.pos[0], c.pos[1]);
+    if (rx < -90 || ry < -90 || rx > state.W + 90 || ry > state.H + 90) continue;
+    const hot = state.hover === c.id || state.selected === c.id;
+    const col = '255,207,158';
+    ctx.strokeStyle = `rgba(${col},${hot ? .95 : .6})`;
+    ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.arc(rx, ry, 5, 0, 6.283); ctx.stroke();
+    if (state.selected === c.id) {
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath(); ctx.arc(rx, ry, 11, 0, 6.283); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    const rr = mulberry(c.id.length * 23 + c.name.length);
+    for (let i = 0; i < 6; i++) {
+      const a = rr() * 6.283, ph = rr();
+      const t = REDUCED ? .45 : (tNow * .42 + ph) % 1;
+      const r0 = 13 + t * 52, len = 15;
+      const ax = Math.cos(a), ay = Math.sin(a);
+      ctx.strokeStyle = `rgba(${col},${(1 - t) * (hot ? .85 : .5)})`;
+      ctx.beginPath();
+      ctx.moveTo(rx + ax * r0, ry + ay * r0);
+      ctx.lineTo(rx + ax * (r0 + len), ry + ay * (r0 + len));
+      ctx.stroke();
+    }
+    if (state.labels || hot) {
+      ctx.font = '10.5px ui-monospace, Menlo, Consolas, monospace';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = hot ? '#ffc98f' : `rgba(${col},.6)`;
+      ctx.fillText(c.name.toUpperCase(), rx, ry + 82);
+    }
+  }
 }
 
 function skyFitZ() { return Math.min(state.W / 420, state.H / 215); }
@@ -2066,6 +2193,37 @@ function exitSky() {
   });
 }
 $('skyBtn').onclick = () => { state.scene === 'sky' ? exitSky() : enterSky(); };
+
+/* ---------- grand tour ---------- */
+const TOUR = ['sun-system','sgr-a','m42','betelgeuse','m31','c-orion','c-tau',
+  'shower-ori','sol','saturn','pluto','voyager','halley'];
+let tourIdx = -1;
+function tourGo() {
+  const o = CAT.find(x => x.id === TOUR[tourIdx]);
+  $('tourbar').classList.add('show');
+  $('tourBtn').classList.add('on');
+  $('tourStep').textContent = (tourIdx + 1) + ' / ' + TOUR.length;
+  $('tourName').textContent = o.name;
+  $('tourPrev').disabled = tourIdx === 0;
+  $('tourNext').innerHTML = tourIdx === TOUR.length - 1 ? 'Finish &#10003;' : 'Next &rarr;';
+  goTo(o);
+}
+function startTour() {
+  tourIdx = 0;
+  $('welcome').classList.add('hide');
+  store.set('mwa-welcomed', true);
+  tourGo();
+}
+function endTour() {
+  tourIdx = -1;
+  $('tourbar').classList.remove('show');
+  $('tourBtn').classList.remove('on');
+}
+$('tourNext').onclick = () => { if (tourIdx >= TOUR.length - 1) endTour(); else { tourIdx++; tourGo(); } };
+$('tourPrev').onclick = () => { if (tourIdx > 0) { tourIdx--; tourGo(); } };
+$('tourEnd').onclick = endTour;
+$('tourBtn').onclick = () => { tourIdx >= 0 ? endTour() : startTour(); };
+$('welcomeTour').onclick = startTour;
 
 /* ---------- boot ---------- */
 addEventListener('resize', resize);
