@@ -219,6 +219,43 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
 #timeCtls.show{display:flex}
 #luckyBtn{gap:7px;display:flex}
 
+/* ---------- field exam (quiz) ---------- */
+#quiz{
+  position:fixed;inset:0;z-index:46;display:flex;align-items:center;justify-content:center;
+  background:rgba(4,6,12,.74);backdrop-filter:blur(5px);padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+#quiz.open{opacity:1;pointer-events:auto}
+#quizBox{
+  position:relative;width:min(470px,100%);background:var(--panel);border:var(--hairline);
+  border-radius:5px;padding:28px 30px 24px;box-shadow:0 30px 80px rgba(0,0,0,.55);
+}
+#quizBox .k{font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--ember);margin-bottom:10px}
+#quizQ{font-family:var(--display);font-weight:400;font-size:21px;line-height:1.3;
+  margin-bottom:16px;text-wrap:balance}
+#quizOpts{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.qOpt{
+  text-align:left;font-size:13.5px;color:var(--starlight);
+  border:var(--hairline);border-radius:3px;padding:10px 13px;
+  transition:border-color .12s,background .12s;
+}
+.qOpt:hover:not(:disabled){border-color:rgba(240,167,92,.5);background:rgba(240,167,92,.06)}
+.qOpt:disabled{cursor:default;opacity:.55}
+.qOpt.right{border-color:#8fd8c9;background:rgba(143,216,201,.1);color:#c9f0e6;opacity:1}
+.qOpt.wrong{border-color:#e88f8f;background:rgba(232,143,143,.1);color:#f0c9c9;opacity:1}
+#quizWhy{font-size:12.5px;color:var(--haze);margin-bottom:14px;min-height:1em}
+#quizFoot{display:flex;align-items:center;justify-content:space-between;gap:10px}
+#quizScore{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--haze);
+  font-variant-numeric:tabular-nums}
+#quizFoot .btns{display:flex;gap:8px}
+#quizClose{
+  position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:3px;
+  display:flex;align-items:center;justify-content:center;color:var(--haze);
+  font-size:17px;border:var(--hairline);
+}
+#quizClose:hover{color:var(--starlight)}
+
 /* ---------- grand tour bar ---------- */
 #tourbar{
   position:fixed;left:50%;bottom:16px;z-index:33;
@@ -349,6 +386,8 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
     <button class="ctl" id="t10" title="10x speed">10&times;</button>
     <button class="ctl" id="t100" title="100x speed">100&times;</button>
   </div>
+  <button class="ctl" id="tonightBtn" style="display:none" title="Where is the Sun today — and what can you actually see?">&#9737; Tonight</button>
+  <button class="ctl" id="quizBtn" title="Test what you have learned">&#9998; Exam</button>
   <button class="ctl" id="tourBtn" title="A guided tour of the highlights">&#9672; Grand tour</button>
   <button class="ctl" id="skyBtn" title="The constellations, as seen from Earth">&#10038; Night sky</button>
   <button class="ctl" id="luckyBtn" title="Fly somewhere unexplored">&#10022; Surprise me</button>
@@ -356,6 +395,23 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   <button class="ctl" id="zoomOut" title="Zoom out">&minus;</button>
   <button class="ctl" id="zoomIn" title="Zoom in">+</button>
   <button class="ctl" id="resetBtn" title="Reset view">&#8634;</button>
+</div>
+
+<div id="quiz" role="dialog" aria-modal="true" aria-label="Field exam">
+  <div id="quizBox">
+    <button id="quizClose" aria-label="Close exam">&times;</button>
+    <div class="k" id="quizKicker">Field exam</div>
+    <h2 id="quizQ"></h2>
+    <div id="quizOpts"></div>
+    <p id="quizWhy"></p>
+    <div id="quizFoot">
+      <span id="quizScore"></span>
+      <div class="btns">
+        <button class="cardAction ghost" id="quizVisit" style="display:none;width:auto;margin-top:0;padding:9px 14px">Visit &rarr;</button>
+        <button class="cardAction" id="quizNext" style="display:none;width:auto;margin-top:0;padding:9px 18px">Next</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div id="tourbar">
@@ -1632,7 +1688,7 @@ function openCard(o) {
   card.querySelector('.k-dot').style.boxShadow = `0 0 8px ${col}`;
   $('cardName').textContent = o.name;
   $('cardSub').textContent = o.sub;
-  $('cardStats').innerHTML = o.stats.map(([l, v]) =>
+  $('cardStats').innerHTML = statsFor(o).map(([l, v]) =>
     `<div class="stat"><span class="l">${l}</span><span class="v">${v}</span></div>`).join('');
   $('cardBlurb').textContent = o.blurb;
   $('cardFacts').innerHTML = o.facts.map(f => `<li>${f}</li>`).join('');
@@ -1731,6 +1787,7 @@ function syncSceneUI() {
   $('backBtn').classList.toggle('show', solar || sky);
   $('timeCtls').classList.toggle('show', solar);
   $('skyBtn').classList.toggle('on', sky);
+  $('tonightBtn').style.display = sky ? 'flex' : 'none';
   $('crumbTxt').textContent = sky ? 'Night sky · seen from Earth'
     : solar ? 'Sol system · Orion Spur'
     : 'Galactic plane · 105,000 ly';
@@ -1897,7 +1954,8 @@ for (const [id, v] of speeds) {
 }
 addEventListener('keydown', e => {
   if (e.key === 'Escape') {
-    if (card.classList.contains('open')) closeCard();
+    if ($('quiz').classList.contains('open')) endQuiz();
+    else if (card.classList.contains('open')) closeCard();
     else if (atlasOpen) toggleAtlas(false);
     else if (state.scene === 'solar') exitSolar();
     else if (state.scene === 'sky') exitSky();
@@ -2132,8 +2190,9 @@ function drawSky() {
       const [lx, ly] = w2s(c.pos[0], c.pos[1]);
       ctx.font = '600 12.5px ui-monospace, Menlo, Consolas, monospace';
       ctx.textAlign = 'center';
-      ctx.fillStyle = hot ? '#ffc98f' : 'rgba(184,207,232,.6)';
-      ctx.fillText(c.name.toUpperCase(), lx, ly + (c.ext / 2) * z + 22);
+      const washed = state.tonight && inGlare(c);
+      ctx.fillStyle = hot ? '#ffc98f' : washed ? 'rgba(240,167,92,.45)' : 'rgba(184,207,232,.6)';
+      ctx.fillText(c.name.toUpperCase() + (washed ? ' · IN GLARE' : ''), lx, ly + (c.ext / 2) * z + 22);
     }
   }
   // meteor-shower radiants: a ring with streaks racing outward
@@ -2170,6 +2229,7 @@ function drawSky() {
       ctx.fillText(c.name.toUpperCase(), rx, ry + 82);
     }
   }
+  if (state.tonight) drawTonight();
 }
 
 function skyFitZ() { return Math.min(state.W / 420, state.H / 215); }
@@ -2193,6 +2253,176 @@ function exitSky() {
   });
 }
 $('skyBtn').onclick = () => { state.scene === 'sky' ? exitSky() : enterSky(); };
+
+/* ---------- tonight: the real Sun on the chart ---------- */
+state.tonight = false;
+function sunRaDec(date) {
+  const n = (date - Date.UTC(2000, 0, 1, 12)) / 86400000;
+  const L = 280.46 + 0.9856474 * n;
+  const g = (357.528 + 0.9856003 * n) * Math.PI / 180;
+  const lam = (L + 1.915 * Math.sin(g) + 0.02 * Math.sin(2 * g)) * Math.PI / 180;
+  const eps = 23.439 * Math.PI / 180;
+  let ra = Math.atan2(Math.cos(eps) * Math.sin(lam), Math.cos(lam));
+  if (ra < 0) ra += 2 * Math.PI;
+  return { ra: ra * 12 / Math.PI, dec: Math.asin(Math.sin(eps) * Math.sin(lam)) * 180 / Math.PI };
+}
+function sunNow() { return sunRaDec(Date.now()); }
+function raDiffH(a, b) { const d = Math.abs(a - b) % 24; return d > 12 ? 24 - d : d; }
+function objRa(o) { return ((12 - o.pos[0] / 15) % 24 + 24) % 24; }
+function inGlare(o) { return raDiffH(objRa(o), sunNow().ra) < 2.8; }
+function skyStatus(o) {
+  const raC = objRa(o), s = sunNow(), d = raDiffH(raC, s.ra);
+  if (d < 2.8) return 'Lost in the Sun’s glare this month';
+  const evening = ((raC - s.ra + 24) % 24) < 12;
+  if (d < 5.5) return evening ? 'Low in the west after dusk' : 'Low in the east before dawn';
+  return d > 10 ? 'Prime position — up nearly all night' : 'Well placed in tonight’s sky';
+}
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+function bestMonth(o) {
+  const target = (objRa(o) + 12) % 24;
+  let best = 0, bd = 99;
+  for (let m = 0; m < 12; m++) {
+    const d = raDiffH(sunRaDec(Date.UTC(2026, m, 15)).ra, target);
+    if (d < bd) { bd = d; best = m; }
+  }
+  return MONTHS[best];
+}
+function statsFor(o) {
+  if (o.scene !== 'sky') return o.stats;
+  return [...o.stats, ['Right now', skyStatus(o)], ['Prime evening month', bestMonth(o)]];
+}
+$('tonightBtn').onclick = () => {
+  state.tonight = !state.tonight;
+  $('tonightBtn').classList.toggle('on', state.tonight);
+};
+function drawTonight() {
+  const s = sunNow();
+  const [wx, wy] = skyXY(s.ra, s.dec);
+  // glare zone: the stretch of sky that never escapes daylight
+  ctx.save();
+  ctx.translate(state.W / 2, state.H / 2);
+  ctx.scale(state.cam.z, state.cam.z);
+  ctx.translate(-state.cam.x, -state.cam.y);
+  const half = 2.8 * 15;
+  const gr = ctx.createLinearGradient(wx - half, 0, wx + half, 0);
+  gr.addColorStop(0, 'rgba(240,167,92,0)');
+  gr.addColorStop(.5, 'rgba(240,167,92,.07)');
+  gr.addColorStop(1, 'rgba(240,167,92,0)');
+  ctx.fillStyle = gr;
+  ctx.fillRect(wx - half, -100, half * 2, 200);
+  ctx.restore();
+  // the Sun itself
+  const [sx, sy] = w2s(wx, wy);
+  const gg = ctx.createRadialGradient(sx, sy, 0, sx, sy, 34);
+  gg.addColorStop(0, 'rgba(255,190,110,.8)'); gg.addColorStop(1, 'rgba(255,150,60,0)');
+  ctx.fillStyle = gg; ctx.beginPath(); ctx.arc(sx, sy, 34, 0, 6.283); ctx.fill();
+  const gb = ctx.createRadialGradient(sx - 2, sy - 2, 1, sx, sy, 9);
+  gb.addColorStop(0, '#fff7e0'); gb.addColorStop(1, '#ffb45c');
+  ctx.fillStyle = gb; ctx.beginPath(); ctx.arc(sx, sy, 9, 0, 6.283); ctx.fill();
+  ctx.font = '10.5px ui-monospace, Menlo, Consolas, monospace';
+  ctx.textAlign = 'center'; ctx.fillStyle = '#ffc98f';
+  ctx.fillText('THE SUN · TODAY', sx, sy - 18);
+  ctx.fillStyle = 'rgba(240,167,92,.55)';
+  ctx.fillText('DAYLIGHT DROWNS THIS STRETCH', sx, sy + 44);
+}
+
+/* ---------- field exam ---------- */
+const QUIZ = [
+{ q:'How long does sunlight take to reach Earth?', c:['8 minutes 20 seconds','1.3 seconds','8 hours','A week'], a:0, ref:'sol', why:'You always see the Sun as it was eight minutes ago.' },
+{ q:'Which planet has the hottest surface?', c:['Venus','Mercury','Mars','Jupiter'], a:0, ref:'venus', why:'A runaway greenhouse keeps Venus at 465 °C — hotter than Mercury, though twice as far from the Sun.' },
+{ q:'Jupiter’s Great Red Spot is…', c:['A storm that has raged for centuries','A volcano','An ocean of lava','The shadow of a moon'], a:0, ref:'jupiter', why:'A storm wider than Earth, blowing for at least 190 years — and slowly shrinking.' },
+{ q:'Saturn’s rings are mostly made of…', c:['Water ice','Rock and iron','Gas','Dust from volcanoes'], a:0, ref:'saturn', why:'Nearly pure water ice, 280,000 km wide yet only about ten metres thick.' },
+{ q:'Which planet orbits tipped on its side?', c:['Uranus','Neptune','Saturn','Venus'], a:0, ref:'uranus', why:'A 98° tilt — each pole gets a 42-year day, then a 42-year night.' },
+{ q:'Neptune was discovered by…', c:['Mathematics, before any telescope saw it','Accident during an eclipse','Voyager 2','Ancient astronomers'], a:0, ref:'neptune', why:'Its gravity was tugging Uranus off course; the maths said where to look, and there it was.' },
+{ q:'Pluto’s famous “heart” is…', c:['A glacier of nitrogen ice','A crater','A dust storm','A shadow'], a:0, ref:'pluto', why:'Sputnik Planitia — a churning nitrogen-ice glacier the size of Texas.' },
+{ q:'What sits at the exact centre of the Milky Way?', c:['A supermassive black hole','A giant star','Nothing at all','The Solar System'], a:0, ref:'sgr-a', why:'Sagittarius A*, 4.3 million times the mass of the Sun. Every star in the galaxy orbits it.' },
+{ q:'How long does the Sun take to orbit the galaxy once?', c:['About 230 million years','One year','10,000 years','13.8 billion years'], a:0, ref:'sun-system', why:'One "galactic year". The last lap started when dinosaurs were young.' },
+{ q:'The farthest human-made object is…', c:['Voyager 1','The James Webb Space Telescope','The ISS','A Tesla Roadster'], a:0, ref:'voyager', why:'Launched 1977, now ~167 AU out, carrying the Golden Record into interstellar space.' },
+{ q:'The Crab Nebula is the wreckage of a supernova witnessed in…', c:['1054 AD','1986','44 BC','1900'], a:0, ref:'m1', why:'Chinese and Japanese astronomers logged a “guest star” visible in daylight for 23 days.' },
+{ q:'Which nearby star is expected to explode as a supernova?', c:['Betelgeuse','Sirius','Polaris','Vega'], a:0, ref:'betelgeuse', why:'Orion’s red shoulder — “soon” in astronomer-speak means within ~100,000 years.' },
+{ q:'The nearest star system to our Sun is…', c:['Alpha Centauri','Sirius','TRAPPIST-1','Betelgeuse'], a:0, ref:'alpha-cen', why:'4.37 light-years away — about 70,000 years of travel at Voyager speed.' },
+{ q:'TRAPPIST-1 is famous for having…', c:['Seven Earth-sized planets','The biggest star known','A double black hole','Rings like Saturn'], a:0, ref:'trappist', why:'Seven rocky worlds around a star barely bigger than Jupiter — all inside Mercury’s orbit.' },
+{ q:'In about 4.5 billion years the Milky Way will…', c:['Merge with the Andromeda Galaxy','Evaporate','Stop spinning','Collide with the Sun'], a:0, ref:'m31', why:'The two spirals are closing at 110 km/s. Stellar collisions? Essentially none — space is too empty.' },
+{ q:'Follow Orion’s belt down and left, and you reach…', c:['Sirius, the brightest night star','Polaris','Mars','The Moon'], a:0, ref:'c-cma', why:'The belt is the sky’s best signpost: down-left to Sirius, up-right to Aldebaran.' },
+{ q:'The Big Dipper’s two “pointer stars” lead to…', c:['Polaris, the North Star','Venus','The galactic centre','Vega'], a:0, ref:'c-uma', why:'Dubhe and Merak, at the front of the bowl, point straight at Polaris.' },
+{ q:'Which constellation was placed opposite Orion, so the two never share the sky?', c:['Scorpius','Leo','Cassiopeia','Gemini'], a:0, ref:'c-sco', why:'The scorpion that killed the hunter — one rises as the other sets.' },
+{ q:'The most distant thing visible to the naked eye is…', c:['The Andromeda Galaxy','Pluto','The Orion Nebula','Halley’s Comet'], a:0, ref:'m31', why:'2.5 million light-years. The photons that hit your eye left before humans existed.' },
+{ q:'Halley’s Comet returns roughly every…', c:['76 years','7 years','760 years','It never returns'], a:0, ref:'halley', why:'Last seen 1986; next show mid-2061. Mark your calendar.' },
+{ q:'The Geminid meteor shower is odd because its parent is…', c:['An asteroid, not a comet','The Moon','Jupiter','A black hole'], a:0, ref:'shower-gem', why:'3200 Phaethon — a rocky asteroid that mysteriously sheds a dust trail anyway.' },
+{ q:'Orionid meteors are crumbs of…', c:['Halley’s Comet','The asteroid belt','Mars','The Orion Nebula'], a:0, ref:'shower-ori', why:'Earth crosses Halley’s debris trail every October — and again each May.' },
+{ q:'Titan, Saturn’s largest moon, has rivers and seas of…', c:['Liquid methane','Water','Lava','Mercury'], a:0, ref:'saturn', why:'Rain, rivers and seas — at −179 °C, of methane instead of water.' },
+{ q:'Europa is a top target in the search for life because…', c:['It hides a saltwater ocean under its ice','It has oxygen air','It is warm','Plants were seen there'], a:0, ref:'jupiter', why:'Beneath the ice lies more liquid water than in all of Earth’s seas.' },
+{ q:'A “planetary nebula” like the Ring Nebula is actually…', c:['A dying Sun-like star shedding its layers','A place where planets form','A planet exploding','A galaxy'], a:0, ref:'m57', why:'An 18th-century misnomer — it is a star’s gentle retirement, and our Sun’s own future.' },
+{ q:'Asteroids in the main belt are, on average, spaced about…', c:['A million kilometres apart','A few metres apart','Touching each other','One kilometre apart'], a:0, ref:'belt', why:'Forget the movies — probes fly through without even aiming.' },
+];
+let qRound = [], qIdx = 0, qScore = 0, qDone = false;
+function shuffle(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function startQuiz() {
+  qRound = shuffle(QUIZ).slice(0, 8);
+  qIdx = 0; qScore = 0;
+  $('quiz').classList.add('open');
+  renderQ();
+}
+function endQuiz() { $('quiz').classList.remove('open'); }
+function renderQ() {
+  qDone = false;
+  const item = qRound[qIdx];
+  $('quizKicker').textContent = 'Field exam';
+  $('quizQ').textContent = item.q;
+  $('quizWhy').textContent = '';
+  $('quizVisit').style.display = 'none';
+  $('quizNext').style.display = 'none';
+  $('quizScore').textContent = `Question ${qIdx + 1} / ${qRound.length} · Score ${qScore}`;
+  const order = shuffle(item.c.map((t, i) => [t, i]));
+  $('quizOpts').innerHTML = '';
+  for (const [txt, i] of order) {
+    const b = document.createElement('button');
+    b.className = 'qOpt'; b.textContent = txt;
+    b.onclick = () => answerQ(b, i, item);
+    $('quizOpts').appendChild(b);
+  }
+}
+function answerQ(btn, i, item) {
+  if (qDone) return;
+  qDone = true;
+  const right = i === item.a;
+  if (right) qScore++;
+  for (const b of $('quizOpts').children) {
+    b.disabled = true;
+    if (b === btn && !right) b.classList.add('wrong');
+    if (b.textContent === item.c[item.a]) b.classList.add('right');
+  }
+  $('quizWhy').textContent = item.why;
+  $('quizScore').textContent = `Question ${qIdx + 1} / ${qRound.length} · Score ${qScore}`;
+  const ref = CAT.find(o => o.id === item.ref);
+  if (ref) {
+    $('quizVisit').style.display = 'flex';
+    $('quizVisit').onclick = () => { endQuiz(); goTo(ref); };
+  }
+  $('quizNext').style.display = 'flex';
+  $('quizNext').textContent = qIdx === qRound.length - 1 ? 'See result' : 'Next';
+}
+function quizResult() {
+  const best = Math.max(store.get('mwa-best', 0), qScore);
+  store.set('mwa-best', best);
+  const rank = qScore === 8 ? 'Master Navigator' : qScore >= 6 ? 'Star Pilot'
+    : qScore >= 4 ? 'Cadet, second class' : 'Groundling — take the Grand Tour';
+  $('quizKicker').textContent = 'Exam complete';
+  $('quizQ').textContent = `${qScore} / ${qRound.length} — ${rank}`;
+  $('quizWhy').textContent = `Personal best: ${best} / 8. Every answer lives somewhere on this map.`;
+  $('quizOpts').innerHTML = '';
+  $('quizVisit').style.display = 'none';
+  $('quizNext').style.display = 'flex';
+  $('quizNext').textContent = 'Take it again';
+  $('quizScore').textContent = '';
+  qIdx = -1;
+}
+$('quizNext').onclick = () => {
+  if (qIdx === -1) { startQuiz(); return; }
+  if (qIdx === qRound.length - 1) quizResult(); else { qIdx++; renderQ(); }
+};
+$('quizClose').onclick = endQuiz;
+$('quizBtn').onclick = startQuiz;
 
 /* ---------- grand tour ---------- */
 const TOUR = ['sun-system','sgr-a','m42','betelgeuse','m31','c-orion','c-tau',
