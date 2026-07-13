@@ -34,7 +34,18 @@ An interactive, hand-drawn survey of our galaxy — a single self-contained
 - **Sit the Field Exam** — an 8-question quiz drawn from a 26-question
   bank covering the whole atlas, with explanations, a "visit the
   answer" jump, ranks, and a persistent personal best.
-- **Atlas index** — a grouped list of all 59 objects with a "surveyed"
+- **Dive into other worlds** — TRAPPIST-1 and Kepler-186 are enterable
+  mini-orreries: twelve exoplanets and their red-dwarf suns orbiting at
+  real periods, with the habitable zone shaded and a survey card for
+  every world.
+- **Get tonight's field briefing** — a live card computed from today's
+  date: which constellations own the night, which are lost in the Sun's
+  glare, and the countdown to the next meteor shower, with a one-click
+  jump to tonight's best target.
+- **Turn on the instruments** — a fully synthesised soundscape (no audio
+  files): soft clicks, discovery chimes, scene-tuned ambient drone, and
+  quiz feedback tones. Off by default.
+- **Atlas index** — a grouped list of all 73 objects with a "surveyed"
   progress tracker (persisted locally).
 - **Surprise me** — flies you somewhere you haven't explored yet.
 
