@@ -132,7 +132,10 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
 #atlasList h3{
   font-family:var(--mono);font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;
   color:var(--haze-dim);padding:14px 16px 5px;font-weight:400;
+  display:flex;align-items:baseline;justify-content:space-between;gap:8px;
 }
+#atlasList h3 .gc{letter-spacing:.08em;font-variant-numeric:tabular-nums;flex:none}
+#atlasList h3.done .gc{color:var(--ember)}
 .atlasItem{
   width:100%;display:flex;align-items:center;gap:10px;text-align:left;
   padding:7px 16px;color:var(--haze);font-size:13px;
@@ -773,12 +776,40 @@ const CAT = [
   blurb:'Two and a half times the mass of every other planet combined, Jupiter is a failed star’s shadow — mostly hydrogen, crushed to metallic liquid inside. Its gravity shepherds the asteroid belt and has both shielded and bombarded Earth for eons.',
   facts:['The Great Red Spot is a storm wider than Earth that has raged for at least 190 years — and is slowly shrinking.','Its moon Europa hides a saltwater ocean with more water than all Earth’s seas — a prime target in the search for life.','Jupiter spins so fast its day is under 10 hours, visibly flattening the planet.'] },
 
+{ id:'io', scene:'solar', group:'The Solar System', type:'moon', name:'Io',
+  kicker:'Jupiter I · volcano world', sub:'The most volcanically active body anywhere',
+  parent:'jupiter', orbit:{r:27,periodDays:6,phase:0.9}, size:2.1, mark:4, plate:'p:io',
+  stats:[['Diameter','3,643 km — a hair bigger than our Moon'],['Distance','421,700 km from Jupiter'],['Orbit','1.77 days (drawn slower here)'],['Active volcanoes','400+'],['Surface','−130 °C · lava +1,600 °C'],['Discovered','1610, by Galileo']],
+  blurb:'Caught in a gravitational tug-of-war between Jupiter and its sibling moons, Io is kneaded like dough — its solid ground rises and falls by dozens of metres every orbit. All that friction melts its insides, feeding hundreds of volcanoes that repaint the surface in sulphur yellows, oranges and reds.',
+  facts:['Voyager 1 caught a volcanic plume rising 300 km off its edge in 1979 — the first active volcanism ever seen beyond Earth.','Io has essentially no impact craters: eruptions bury them faster than space can make them.','Its eruptions feed a doughnut of charged particles wrapped around Jupiter’s orbit — the Io plasma torus.'] },
+
+{ id:'europa', scene:'solar', group:'The Solar System', type:'moon', name:'Europa',
+  kicker:'Jupiter II · ocean world', sub:'A global sea sealed under a lid of ice',
+  parent:'jupiter', orbit:{r:34,periodDays:11,phase:3.7}, size:2, mark:4, plate:'p:europa',
+  stats:[['Diameter','3,122 km'],['Ocean','~60–150 km deep, global'],['Water','About twice all Earth’s seas'],['Ice shell','~15–25 km thick'],['Orbit','3.6 days (drawn slower here)'],['Next visitor','Europa Clipper, ~2030']],
+  blurb:'Beneath a cracked white shell of ice, Europa hides a saltwater ocean holding roughly twice the water of every sea on Earth — kept liquid for four billion years by the same tidal kneading that torments Io. Where there is water, energy and time, there may be chemistry. It is the Solar System’s most tantalising place to look for life.',
+  facts:['The brown cracks webbing its surface are seams where the shell pulls apart and briny water wells up and freezes.','Europa is the smoothest solid body known — almost nothing sticks up more than a few hundred metres.','NASA’s Europa Clipper, launched in 2024, will make ~50 close flybys to sound the ocean through the ice.'] },
+
 { id:'saturn', scene:'solar', group:'The Solar System', type:'planet', name:'Saturn',
   kicker:'Planet VI · gas giant', sub:'The ringed jewel — and moon-hoarding champion',
   orbit:{r:378,periodDays:10759,phase:3.8}, size:18, mark:7, plate:'p:saturn',
   stats:[['Diameter','116,460 km'],['Distance','9.5 AU · 1.43B km'],['Year','29.4 Earth yrs'],['Day','10.7 hours'],['Moons','146 — the record'],['Density','0.69 — would float']],
   blurb:'The rings span 280,000 km — three-quarters of the way from Earth to the Moon — yet are mostly just ten metres thick: countless shards of nearly pure water ice, from dust grains to houses. Saturn itself is so light it would float in a big enough bathtub.',
   facts:['Titan, its largest moon, has rain, rivers and seas — of liquid methane at −179 °C.','Enceladus vents geysers from a buried saltwater ocean; Cassini flew through the spray and tasted organics.','The rings are young (possibly < 100 million yrs) and slowly raining into the planet — enjoy them while they last.'] },
+
+{ id:'enceladus', scene:'solar', group:'The Solar System', type:'moon', name:'Enceladus',
+  kicker:'Saturn II · geyser moon', sub:'A small snowball venting its ocean into space',
+  parent:'saturn', orbit:{r:26,periodDays:5,phase:1.8}, size:1.6, mark:4, plate:'p:enceladus',
+  stats:[['Diameter','504 km — would fit inside the UK'],['Orbit','1.37 days (drawn slower here)'],['Reflects','~90 % of sunlight — brightest body known'],['Geysers','100+ jets at the south pole'],['Hides','A global saltwater ocean'],['Feeds','Saturn’s E ring']],
+  blurb:'A moon barely 500 km wide should be a dead ball of ice — yet Enceladus vents curtains of water vapour from cracks at its south pole, spraying its buried ocean straight into space. The spray freezes and falls back as snow, keeping the surface so fresh it reflects almost every ray of sunlight that touches it.',
+  facts:['Cassini flew directly through the plumes and tasted salt, silica and organic molecules — free samples of an alien ocean.','Saturn’s wispy E ring is Enceladus’s exhaust: the moon orbits inside a ring it makes itself.','The "tiger stripe" cracks at the south pole are warm to the touch of infrared instruments — heat leaking from the sea below.'] },
+
+{ id:'titan', scene:'solar', group:'The Solar System', type:'moon', name:'Titan',
+  kicker:'Saturn VI · the veiled moon', sub:'Rain, rivers and seas — of liquid methane',
+  parent:'saturn', orbit:{r:41,periodDays:24,phase:4.6}, size:2.4, mark:4, plate:'p:titan',
+  stats:[['Diameter','5,150 km — bigger than Mercury'],['Atmosphere','1.5× Earth’s surface pressure'],['Seas','Liquid methane at −179 °C'],['Orbit','16 days (drawn slower here)'],['Landed','Huygens probe, 2005'],['Next visitor','Dragonfly rotorcraft, 2030s']],
+  blurb:'The only moon with a real atmosphere — a nitrogen sky denser than Earth’s, hazed orange with hydrocarbon smog. Beneath it runs a complete weather cycle with methane playing the role of water: clouds, drizzle, rivers, deltas and polar seas. It is the most Earth-like landscape in the Solar System, built from entirely alien materials.',
+  facts:['The Huygens probe touched down in 2005 — still the most distant landing ever made — and photographed rounded pebbles of rock-hard water ice.','In the low gravity and thick air, a human could strap wings to their arms and fly.','NASA’s Dragonfly, a nuclear-powered eight-rotor drone, will hop across Titan’s dunes in the 2030s.'] },
 
 { id:'uranus', scene:'solar', group:'The Solar System', type:'planet', name:'Uranus',
   kicker:'Planet VII · ice giant', sub:'The sideways planet',
@@ -793,6 +824,13 @@ const CAT = [
   stats:[['Diameter','49,244 km'],['Distance','30.1 AU · 4.5B km'],['Year','165 Earth yrs'],['Day','16.1 hours'],['Winds','2,100 km/h — the fastest'],['Moons','16']],
   blurb:'Astronomers noticed Uranus being tugged off course, did the math, and told telescopes where to look: Neptune appeared within a degree of the prediction. The dimmest sunlight in the planetary system somehow drives its most violent winds.',
   facts:['It completed its first full orbit since discovery in 2011.','Its great moon Triton orbits backwards — a captured Kuiper Belt world with nitrogen geysers, doomed to one day shred into rings.'] },
+
+{ id:'triton', scene:'solar', group:'The Solar System', type:'moon', name:'Triton',
+  kicker:'Neptune I · captured wanderer', sub:'A stolen world, orbiting backwards on borrowed time',
+  parent:'neptune', orbit:{r:19,periodDays:-14,phase:2.4}, size:2, mark:4, plate:'p:triton',
+  stats:[['Diameter','2,707 km'],['Orbit','5.9 days — backwards'],['Surface','−235 °C, coldest ever measured'],['Origin','Captured from the Kuiper Belt'],['Geysers','Nitrogen gas, 8 km tall'],['Fate','Will be shredded into rings']],
+  blurb:'Every other large moon orbits the way its planet spins. Triton goes the other way — the giveaway that it was never born here. It is a captured Kuiper Belt world, a kidnapped sibling of Pluto, still geologically alive: Voyager 2 photographed geysers of nitrogen erupting through its pink ice.',
+  facts:['Its retrograde orbit is slowly decaying; in a few billion years Neptune’s tides will tear it apart into a ring system grander than Saturn’s.','The surface is frozen nitrogen over water ice, with a texture like the skin of a cantaloupe — seen nowhere else.','Voyager 2’s 1989 flyby remains our only close look; more than 60 % of Triton has never been photographed.'] },
 
 { id:'pluto', scene:'solar', group:'The Solar System', type:'planet', name:'Pluto',
   kicker:'Dwarf planet · Kuiper Belt', sub:'The little world with a glacier heart',
@@ -810,10 +848,38 @@ const CAT = [
 
 { id:'voyager', scene:'solar', group:'The Solar System', type:'craft', name:'Voyager 1',
   kicker:'Interstellar probe · est. 1977', sub:'The farthest thing human hands have made',
-  fixed:[665,-255], size:3, mark:5, plate:'craft',
+  fixed:[665,-255], traj:[760,-291], size:3, mark:5, plate:'craft',
   stats:[['Launched','5 Sept 1977'],['Distance','~167 AU and counting'],['Speed','61,000 km/h outbound'],['Signal delay','~23 hours one-way'],['Entered interstellar space','2012'],['Power left','A few more years']],
   blurb:'Launched when disco was new, Voyager 1 toured Jupiter and Saturn and just kept going. In 2012 it crossed into interstellar space. It carries the Golden Record — sounds and images of Earth, greetings in 55 languages — addressed to anyone who finds it.',
   facts:['Its computer has ~70 kB of memory; your phone has millions of times more.','The Golden Record includes a heartbeat, whale song, Bach and Chuck Berry.','In ~40,000 years it will pass within 1.6 ly of another star — long after its radio falls silent, it will still be an emissary.'] },
+
+{ id:'voyager2', scene:'solar', group:'The Solar System', type:'craft', name:'Voyager 2',
+  kicker:'Interstellar probe · est. 1977', sub:'The only spacecraft ever to visit all four giants',
+  fixed:[-400,430], traj:[-455,490], size:3, mark:5, plate:'craft',
+  stats:[['Launched','20 Aug 1977 — 16 days before Voyager 1'],['Distance','~140 AU and counting'],['Grand Tour','Jupiter, Saturn, Uranus, Neptune'],['Signal delay','~19 hours one-way'],['Entered interstellar space','2018'],['Heading','South, out of the planets’ plane']],
+  blurb:'Launched first but travelling the scenic route, Voyager 2 used a once-in-176-years planetary alignment to visit all four giant planets in a single flight. Everything textbooks say about Uranus and Neptune up close, this one spacecraft learned. It is still whispering home from beyond the Sun’s bubble.',
+  facts:['It remains the only spacecraft ever to visit Uranus or Neptune — every close-up image of those worlds is Voyager 2’s.','It carries its own copy of the Golden Record, identical to its twin’s.','It dove below the plane of the planets after Neptune, which is why it sits on the opposite side of this map.'] },
+
+{ id:'newhorizons', scene:'solar', group:'The Solar System', type:'craft', name:'New Horizons',
+  kicker:'Kuiper Belt probe · est. 2006', sub:'The piano-sized probe that unveiled Pluto',
+  fixed:[655,240], traj:[738,270], size:3, mark:5, plate:'craft',
+  stats:[['Launched','19 Jan 2006'],['Pluto flyby','14 July 2015'],['Launch speed','58,500 km/h — fastest departure ever'],['Second target','Arrokoth, 2019 — farthest world visited'],['Distance','~61 AU and counting'],['Status','Healthy, cruising the Kuiper Belt']],
+  blurb:'It left Earth faster than any spacecraft before it, crossed the Moon’s orbit in nine hours, and still needed nine and a half years to reach Pluto. The reward for the wait: mountains of water ice, a nitrogen-glacier heart, and a hazy blue sky where a "boring" dead rock had been expected.',
+  facts:['Its flyby data trickled home at dial-up speeds — the full Pluto download took 15 months.','In 2019 it flew past Arrokoth, a two-lobed snowman-shaped relic — the most distant and most primitive world ever visited.','It may yet be assigned one more Kuiper Belt target before its plutonium heart fades.'] },
+
+{ id:'parker', scene:'solar', group:'The Solar System', type:'craft', name:'Parker Solar Probe',
+  kicker:'Sun-grazer · est. 2018', sub:'The fastest thing humanity has ever built',
+  orbit:{r:52,periodDays:88,phase:5.3}, size:2.4, mark:4, plate:'craft',
+  stats:[['Launched','12 Aug 2018'],['Closest approach','6.1M km above the surface'],['Top speed','690,000 km/h'],['Heat shield face','~1,400 °C'],['Instruments behind it','Room temperature'],['Milestone','First craft to fly through the corona, 2021']],
+  blurb:'A spacecraft sent to touch the Sun. Parker dives through the corona — the Sun’s million-degree outer atmosphere — hiding behind a carbon shield while its instruments ride in the shade at room temperature. At closest approach it moves at 690,000 km/h: fast enough to cross the United States in about 20 seconds. Its true orbit is a long ellipse; the circle drawn here is simplified.',
+  facts:['It is the fastest human-made object in history — roughly 0.06 % of the speed of light.','It solved a 60-year puzzle by flying through the magnetic "switchbacks" that heat the corona.','It is the first NASA mission named for a living scientist: Eugene Parker, who predicted the solar wind in 1958 and watched the launch at 91.'] },
+
+{ id:'jwst', scene:'solar', group:'The Solar System', type:'craft', name:'James Webb Space Telescope',
+  kicker:'Infrared observatory · est. 2021', sub:'A golden eye parked in Earth’s shadow-free shadow',
+  parent:'earth', orbit:{r:20,periodDays:365.25,phase:4.1}, size:2.4, mark:4, plate:'jwst',
+  stats:[['Launched','25 Dec 2021'],['Station','L2 — 1.5M km anti-sunward of Earth'],['Mirror','6.5 m of gold-plated beryllium'],['Operating temp','−233 °C'],['Sunshield','The size of a tennis court'],['Sees back','13.5+ billion years']],
+  blurb:'Webb hangs at L2, the gravitational balance point where a spacecraft keeps pace with Earth while facing forever away from the Sun. Chilled to −233 °C behind a five-layer sunshield, its gold mirror gathers infrared light that left the first galaxies more than 13 billion years ago — a telescope that is also a time machine.',
+  facts:['It unfolded itself in space through 344 single points of failure. Every one worked.','L2 is why it sits just outside Earth on this map: Sun, Earth and Webb stay forever in a line.','Its deep fields have revealed galaxies shining less than 400 million years after the Big Bang — earlier than anyone expected to find them.'] },
 ];
 
 /* ============ NIGHT SKY EXTENSION · catalog ============
@@ -1550,6 +1616,13 @@ function drawSolar(dt) {
     ctx.strokeStyle = state.selected === o.id ? 'rgba(240,167,92,.4)' : 'rgba(148,163,184,.13)';
     ctx.beginPath(); ctx.arc(0, 0, o.orbit.r, 0, 6.283); ctx.stroke();
   }
+  // moon orbits: faint rings around the parent, once zoomed in enough to matter
+  if (z > 1.6) for (const o of SOLAR_OBJS) {
+    if (!o.parent || !o.orbit) continue;
+    const pp = bodyPos(SOLAR_OBJS.find(b => b.id === o.parent));
+    ctx.strokeStyle = state.selected === o.id ? 'rgba(240,167,92,.4)' : 'rgba(148,163,184,.1)';
+    ctx.beginPath(); ctx.arc(pp[0], pp[1], o.orbit.r, 0, 6.283); ctx.stroke();
+  }
   // Halley's stretched, retrograde orbit
   const hk = SOLAR_OBJS.find(b => b.id === 'halley');
   if (hk) {
@@ -1575,9 +1648,12 @@ function drawSolar(dt) {
   }
   ctx.globalAlpha = 1;
 
-  // Voyager trajectory
+  // escape trajectories of the outbound craft
   ctx.strokeStyle = 'rgba(240,167,92,.3)'; ctx.setLineDash([4 / z, 5 / z]); ctx.lineWidth = 1 / z;
-  ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(760, -291); ctx.stroke();
+  for (const o of SOLAR_OBJS) {
+    if (!o.traj) continue;
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(o.traj[0], o.traj[1]); ctx.stroke();
+  }
   ctx.setLineDash([]);
 
   // bodies
@@ -1639,7 +1715,7 @@ function drawBody(o) {
     ctx.restore();
     return;
   }
-  if (o.id === 'voyager') {
+  if (o.type === 'craft') {
     ctx.save(); ctx.translate(x, y);
     const s = 5 / Math.sqrt(state.cam.z);
     ctx.strokeStyle = '#f0a75c'; ctx.lineWidth = 1.2 / state.cam.z;
@@ -1650,7 +1726,7 @@ function drawBody(o) {
   ctx.save(); ctx.translate(x, y);
   if (painter) painter(ctx, o.size);
   // terminator: shade the side facing away from the Sun
-  if (!o.parent || o.id === 'luna') {
+  if (!o.parent || o.type === 'moon') {
     const ang = Math.atan2(y, x);
     const gx = Math.cos(ang) * o.size * .55, gy = Math.sin(ang) * o.size * .55;
     const g = ctx.createRadialGradient(-gx, -gy, o.size * .1, 0, 0, o.size * 1.45);
@@ -1733,6 +1809,37 @@ const PLANET_PAINTERS = {
   neptune: (c, r) => { shadeBall(c, r, '#7aa8f0', '#3660c8', '#122a70');
     c.fillStyle = 'rgba(20,40,110,.7)';
     c.beginPath(); c.ellipse(-r * .25, -r * .2, r * .3, r * .17, .3, 0, 6.283); c.fill(); },
+  io:      (c, r) => { shadeBall(c, r, '#f0e2a0', '#d8b862', '#8a6428');
+    c.fillStyle = 'rgba(200,90,40,.7)';   // sulphur volcano splotches
+    c.beginPath(); c.arc(-r * .3, -r * .2, r * .22, 0, 6.283); c.fill();
+    c.beginPath(); c.arc(r * .35, r * .25, r * .16, 0, 6.283); c.fill();
+    c.fillStyle = 'rgba(60,30,15,.6)';
+    c.beginPath(); c.arc(r * .1, -r * .45, r * .1, 0, 6.283); c.fill(); },
+  europa:  (c, r) => { shadeBall(c, r, '#f2f0ea', '#cfc8bd', '#6e6a62');
+    c.save(); c.beginPath(); c.arc(0, 0, r, 0, 6.283); c.clip();
+    c.strokeStyle = 'rgba(160,100,70,.55)'; c.lineWidth = r * .07;   // lineae
+    c.beginPath(); c.moveTo(-r, -r * .3); c.quadraticCurveTo(0, r * .1, r, -r * .4); c.stroke();
+    c.beginPath(); c.moveTo(-r, r * .45); c.quadraticCurveTo(r * .2, r * .2, r, r * .6); c.stroke();
+    c.beginPath(); c.moveTo(-r * .5, -r); c.quadraticCurveTo(-r * .1, 0, -r * .4, r); c.stroke();
+    c.restore(); },
+  enceladus: (c, r) => { shadeBall(c, r, '#ffffff', '#e2e9f2', '#8a94a4');
+    c.strokeStyle = 'rgba(120,160,190,.6)'; c.lineWidth = r * .08;   // tiger stripes
+    c.beginPath(); c.moveTo(-r * .4, r * .55); c.lineTo(r * .1, r * .75); c.stroke();
+    c.beginPath(); c.moveTo(-r * .1, r * .5); c.lineTo(r * .4, r * .65); c.stroke(); },
+  titan:   (c, r) => { shadeBall(c, r, '#f2d8a0', '#dda85a', '#7a5220');
+    c.save(); c.beginPath(); c.arc(0, 0, r, 0, 6.283); c.clip();
+    c.fillStyle = 'rgba(255,235,190,.35)';   // featureless haze
+    c.beginPath(); c.ellipse(0, -r * .3, r * .9, r * .35, 0, 0, 6.283); c.fill();
+    c.restore();
+    c.strokeStyle = 'rgba(242,216,160,.3)'; c.lineWidth = r * .12;   // haze rim
+    c.beginPath(); c.arc(0, 0, r * 1.12, 0, 6.283); c.stroke(); },
+  triton:  (c, r) => { shadeBall(c, r, '#f0e4e0', '#c9b2ac', '#655450');
+    c.save(); c.beginPath(); c.arc(0, 0, r, 0, 6.283); c.clip();
+    c.fillStyle = 'rgba(220,190,200,.5)';   // pink south-polar cap
+    c.beginPath(); c.ellipse(0, r * .6, r * .85, r * .4, 0, 0, 6.283); c.fill();
+    c.fillStyle = 'rgba(90,80,90,.35)';     // cantaloupe terrain
+    for (let i = 0; i < 5; i++) { c.beginPath(); c.arc(-r * .5 + i * r * .25, -r * .35 + (i % 2) * r * .2, r * .09, 0, 6.283); c.fill(); }
+    c.restore(); },
   pluto:   (c, r) => { shadeBall(c, r, '#e8d8c4', '#c4a888', '#6a5544');
     c.fillStyle = 'rgba(250,240,225,.8)';   // the heart, Sputnik Planitia
     c.beginPath();
@@ -1864,6 +1971,22 @@ function drawPlate(o) {
     g.strokeStyle = '#f0a75c'; g.lineWidth = 2;
     g.beginPath(); g.arc(30, 26, 15, 0, 6.283); g.stroke();           // golden record
     g.beginPath(); g.arc(30, 26, 7, 0, 6.283); g.stroke();
+  } else if (kind === 'jwst') {
+    glowBlob(g, -240, -110, 46, 'rgba(255,200,120,.9)', .8);
+    g.save(); g.rotate(-.12);
+    g.fillStyle = 'rgba(200,160,220,.25)'; g.strokeStyle = 'rgba(220,190,240,.5)'; g.lineWidth = 2;
+    g.beginPath(); g.moveTo(-150, 60); g.lineTo(0, 96); g.lineTo(150, 60); g.lineTo(0, 30);
+    g.closePath(); g.fill(); g.stroke();                              // kite sunshield
+    const hex = (x, y, r) => { g.beginPath();
+      for (let i = 0; i < 6; i++) { const a = i * 1.0472 + .5236;
+        g[i ? 'lineTo' : 'moveTo'](x + Math.cos(a) * r, y + Math.sin(a) * r); }
+      g.closePath(); g.fill(); g.stroke(); };
+    g.fillStyle = 'rgba(240,190,90,.85)'; g.strokeStyle = 'rgba(120,80,20,.9)'; g.lineWidth = 1.5;
+    const R = 21, dx = R * 1.732;
+    hex(0, -34, R);                                                    // gold segmented mirror
+    for (let i = 0; i < 6; i++) { const a = i * 1.0472;
+      hex(Math.cos(a) * dx, -34 + Math.sin(a) * dx, R); }
+    g.restore();
   } else if (kind === 'const') {
     const sc = Math.min(260 / o.ext, 14);
     g.save(); g.translate(-o.pos[0] * sc, -o.pos[1] * sc);
@@ -2030,7 +2153,9 @@ function buildAtlas() {
   for (const grp of GROUP_ORDER) {
     const objs = CAT.filter(o => o.group === grp);
     if (!objs.length) continue;
-    const h = document.createElement('h3'); h.textContent = grp; list.appendChild(h);
+    const h = document.createElement('h3'); h.textContent = grp; h.dataset.grp = grp;
+    const gc = document.createElement('span'); gc.className = 'gc'; h.appendChild(gc);
+    list.appendChild(h);
     for (const o of objs) {
       const b = document.createElement('button');
       b.className = 'atlasItem'; b.dataset.id = o.id;
@@ -2050,6 +2175,12 @@ function refreshAtlas() {
   document.querySelectorAll('.atlasItem').forEach(el => {
     el.classList.toggle('visited', state.visited.has(el.dataset.id));
     el.classList.toggle('active', state.selected === el.dataset.id);
+  });
+  document.querySelectorAll('#atlasList h3[data-grp]').forEach(h => {
+    const objs = CAT.filter(o => o.group === h.dataset.grp);
+    const seen = objs.filter(o => state.visited.has(o.id)).length;
+    h.querySelector('.gc').textContent = seen ? `${seen}/${objs.length}` : objs.length;
+    h.classList.toggle('done', seen === objs.length);
   });
 }
 let atlasOpen = false;
@@ -2169,7 +2300,7 @@ function targetZoom(o) {
   if (o.scene === 'solar') {
     if (o.id === 'sol') return 2.2;
     if (o.kepler) return 2.2;
-    if (o.ring || o.id === 'voyager') return Math.min(state.W, state.H) / 1500;
+    if (o.ring || (o.type === 'craft' && o.fixed)) return Math.min(state.W, state.H) / 1500;
     if (o.parent) return 6;
     return o.orbit.r > 300 ? 2.4 : 3.2;
   }
@@ -2996,6 +3127,13 @@ const QUIZ = [
 { q:'What sits at the exact centre of the Milky Way?', c:['A supermassive black hole','A giant star','Nothing at all','The Solar System'], a:0, ref:'sgr-a', why:'Sagittarius A*, 4.3 million times the mass of the Sun. Every star in the galaxy orbits it.' },
 { q:'How long does the Sun take to orbit the galaxy once?', c:['About 230 million years','One year','10,000 years','13.8 billion years'], a:0, ref:'sun-system', why:'One "galactic year". The last lap started when dinosaurs were young.' },
 { q:'The farthest human-made object is…', c:['Voyager 1','The James Webb Space Telescope','The ISS','A Tesla Roadster'], a:0, ref:'voyager', why:'Launched 1977, now ~167 AU out, carrying the Golden Record into interstellar space.' },
+{ q:'Which moon hides an ocean with more water than all of Earth’s seas?', c:['Europa','Our Moon','Io','Phobos'], a:0, ref:'europa', why:'Roughly twice Earth’s ocean water, sealed under 15–25 km of ice — a prime target in the search for life.' },
+{ q:'The most volcanically active world in the Solar System is…', c:['Jupiter’s moon Io','Earth','Venus','Mars'], a:0, ref:'io', why:'Tidal kneading by Jupiter melts its insides — 400+ active volcanoes repaint it constantly.' },
+{ q:'Titan’s rain, rivers and seas are made of…', c:['Liquid methane','Water','Sulphuric acid','Molten rock'], a:0, ref:'titan', why:'A complete weather cycle at −179 °C, with methane playing the role of water.' },
+{ q:'Neptune’s big moon Triton is unusual because…', c:['It orbits backwards','It is the hottest moon known','It has a breathable atmosphere','It orbits two planets'], a:0, ref:'triton', why:'A captured Kuiper Belt world — the giveaway is its retrograde orbit, doomed to end as rings.' },
+{ q:'The fastest object humanity has ever built is…', c:['Parker Solar Probe','Voyager 1','A rifle bullet','The Apollo capsule'], a:0, ref:'parker', why:'690,000 km/h while skimming the Sun’s corona — fast enough to cross the USA in ~20 seconds.' },
+{ q:'Where does the James Webb Space Telescope live?', c:['1.5 million km beyond Earth, at L2','In low Earth orbit','On the far side of the Moon','Orbiting Jupiter'], a:0, ref:'jwst', why:'At L2 the Sun and Earth’s gravity balance, so Webb keeps pace with Earth while always facing away from the Sun.' },
+{ q:'Cassini flew through geysers of ocean water erupting from…', c:['Saturn’s moon Enceladus','Saturn’s rings','Titan','Mercury'], a:0, ref:'enceladus', why:'The spray tasted of salt and organics — free samples of a buried alien sea.' },
 { q:'The Crab Nebula is the wreckage of a supernova witnessed in…', c:['1054 AD','1986','44 BC','1900'], a:0, ref:'m1', why:'Chinese and Japanese astronomers logged a “guest star” visible in daylight for 23 days.' },
 { q:'Which nearby star is expected to explode as a supernova?', c:['Betelgeuse','Sirius','Polaris','Vega'], a:0, ref:'betelgeuse', why:'Orion’s red shoulder — “soon” in astronomer-speak means within ~100,000 years.' },
 { q:'The nearest star system to our Sun is…', c:['Alpha Centauri','Sirius','TRAPPIST-1','Betelgeuse'], a:0, ref:'alpha-cen', why:'4.37 light-years away — about 70,000 years of travel at Voyager speed.' },
