@@ -555,7 +555,8 @@ const s = (dx, dy) => [SUN[0] + dx, SUN[1] + dy];
 const TYPE_COLORS = {
   home: '#f0a75c', star: '#ffd98e', nebula: '#e88fb8', cluster: '#8fd8c9',
   blackhole: '#b39cff', region: '#7f95c9', exo: '#9fc4ef', galaxy: '#c9a9e8',
-  planet: '#9fc4ef', belt: '#b8a98f', craft: '#f0a75c', moon: '#cfd6e4'
+  planet: '#9fc4ef', belt: '#b8a98f', craft: '#f0a75c', moon: '#cfd6e4',
+  remnant: '#a8e4f0'
 };
 
 const CAT = [
@@ -649,6 +650,20 @@ const CAT = [
   blurb:'When a Sun-like star runs out of fuel it gently puffs its outer layers into space, leaving a white-hot ember to light the expanding shells like neon. This is not violence — it is retirement. Our Sun will do exactly this.',
   facts:['"Planetary nebula" is a misnomer from the 1780s — small telescopes made them look like planets.','The central white dwarf is Earth-sized but half the mass of the Sun.'] },
 
+{ id:'vela', scene:'galaxy', group:'Star nurseries & remnants', type:'remnant', name:'Vela Pulsar',
+  kicker:'PSR B0833−45 · neutron star', sub:'A city-sized lighthouse spinning 11 times a second',
+  pos:s(-950,150), mark:5, plate:'pulsar',
+  stats:[['Distance','~960 ly'],['Diameter','~20 km'],['Spin','11 rotations per second'],['Density','A sugar-cube weighs a billion tonnes'],['Born','Supernova, ~11,000 yrs ago'],['Discovered','1968']],
+  blurb:'When a giant star explodes, its core survives — crushed into a ball of nearly pure neutrons the size of a city but heavier than the Sun. This one spins eleven times every second, sweeping beams of radiation across the galaxy like a lighthouse. Each time a beam crosses Earth, our telescopes register a pulse: the heartbeat of a dead star.',
+  facts:['The supernova that made it would have blazed in Earth’s ice-age skies brighter than the full Moon.','Its clock-steady pulses occasionally "glitch" — starquakes on the neutron star, cracking a crust a hundred billion times stronger than steel.','Pulsars keep such perfect time that the first one found was briefly nicknamed LGM-1: "little green men".'] },
+
+{ id:'sgr1806', scene:'galaxy', group:'Star nurseries & remnants', type:'remnant', name:'SGR 1806−20',
+  kicker:'Magnetar · hyper-magnetic star', sub:'The dead star whose tantrum reached across the galaxy',
+  pos:s(5200,-29500), mark:5, plate:'pulsar',
+  stats:[['Distance','~30,000 ly — beyond the core'],['Type','Magnetar — a neutron star'],['Magnetic field','~1,000 trillion × Earth’s'],['Great flare','27 Dec 2004'],['That flash','More energy in 0.2 s than the Sun emits in 100,000+ yrs'],['Felt on Earth','Yes — it rang our upper atmosphere']],
+  blurb:'A magnetar is a neutron star with the strongest magnetic field known — strong enough, up close, to pull the atoms of your body apart. In December 2004 this one’s crust snapped, and the resulting flash crossed thirty thousand light-years and still ionised Earth’s upper atmosphere, briefly out-shining everything in the galaxy. It sits on the far side of the core, which is why it lies past the centre of this map.',
+  facts:['The 2004 flare was the brightest event ever recorded from beyond the Solar System — several satellites were blinded.','Its field is so intense it would wipe a credit card from halfway to the Moon.','Magnetars burn out fast: after ~10,000 years the field decays and the tantrums stop.'] },
+
 { id:'pleiades', scene:'galaxy', group:'Clusters & neighbours', type:'cluster', name:'The Pleiades',
   kicker:'M45 · open cluster', sub:'The Seven Sisters — newborn stars in a sapphire veil',
   pos:s(-140,430), mark:5, plate:'cluster',
@@ -676,6 +691,13 @@ const CAT = [
   stats:[['True distance','200,000 ly (drawn nearer to fit)'],['Stars','~3 billion'],['Status','Tidally stretched by the Milky Way']],
   blurb:'The smaller of the two Magellanic Clouds is being pulled apart by the Milky Way’s gravity, leaving a 600,000 light-year ribbon of gas — the Magellanic Stream — trailing behind it like smoke.',
   facts:['Henrietta Leavitt’s 1912 study of its pulsing stars gave astronomy its first cosmic measuring tape.'] },
+
+{ id:'sgr-dwarf', scene:'galaxy', group:'Clusters & neighbours', type:'galaxy', name:'Sagittarius Dwarf',
+  kicker:'Satellite galaxy · being devoured', sub:'A galaxy in the middle of being eaten',
+  pos:[3500,-45000], mark:4, plate:'satgal',
+  stats:[['True distance','~70,000 ly (flattened onto this map)'],['Position','Far side of the galactic core'],['Status','Being tidally shredded'],['Its stars','Wrap the whole Milky Way in a stream'],['Discovered','1994 — hidden behind the core'],['Disk crossings','Several, over billions of years']],
+  blurb:'Galaxies grow by eating smaller ones, and here is dinner in progress: a dwarf galaxy caught on the far side of the core, stretched into ribbons by the Milky Way’s gravity. Its torn-out stars now wrap around our entire galaxy in a vast loop called the Sagittarius Stream — a crime scene you can map from Earth.',
+  facts:['It went undiscovered until 1994 because the dazzling galactic core sits directly between it and us.','Each time it punches through the Milky Way’s disk it rings it like a bell — those ripples may have helped trigger bursts of star formation, possibly including the Sun’s.','Several globular clusters in our halo, including bright M54, are its stolen luggage.'] },
 
 { id:'alpha-cen', scene:'galaxy', group:'Stars & other suns', type:'star', name:'Alpha Centauri',
   kicker:'Nearest star system', sub:'Three suns next door — 4.4 light-years away',
@@ -718,6 +740,13 @@ const CAT = [
   stats:[['Distance','7,200 ly'],['Mass','21 Suns'],['Companion','Blue supergiant, being eaten'],['Confirmed','1971 (X-ray source)']],
   blurb:'A collapsed star locked in orbit with a blue supergiant, tearing streams of gas from it. The stolen gas spirals in at millions of degrees, screaming in X-rays — the signal that first convinced astronomers black holes were real.',
   facts:['Stephen Hawking bet Kip Thorne it was NOT a black hole — and conceded in 1990.','Its event horizon spins at nearly the maximum rate physics allows.'] },
+
+{ id:'t-crb', scene:'galaxy', group:'Stars & other suns', type:'star', name:'T Coronae Borealis',
+  kicker:'Recurrent nova · the Blaze Star', sub:'A star that explodes on schedule — and is due',
+  pos:s(1800,-2000), mark:4, plate:'star:#ffb490',
+  stats:[['Distance','~3,000 ly'],['The pair','White dwarf + red giant'],['Erupted','1866 and 1946'],['Cycle','Roughly every 80 years'],['Normally','Needs binoculars (mag 10)'],['In outburst','Naked-eye bright for ~a week']],
+  blurb:'A dead white dwarf circles a bloated red giant, siphoning off its gas. The stolen hydrogen piles up on the dwarf’s surface for about eighty years — then detonates in a thermonuclear flash that briefly makes the system ten thousand times brighter. It last blew in 1946. Astronomers are watching it nightly, because the next eruption is due any year now.',
+  facts:['Unlike a supernova, the star survives: the same white dwarf has been erupting on schedule for centuries, and will keep doing it.','When it goes, an apparently new star will appear in the constellation Corona Borealis for several nights — check the news, then look up.','Records suggest earlier outbursts were spotted in 1217 and 1787.'] },
 
 /* ================= SOLAR SCENE ================= */
 { id:'sol', scene:'solar', group:'The Solar System', type:'star', name:'The Sun',
@@ -1154,6 +1183,13 @@ CAT.push(
   stats:[['True distance','2.5 million ly (drawn far nearer)'],['Stars','~1 trillion'],['Diameter','~220,000 ly — twice ours'],['Closing speed','110 km/s, toward us'],['Merger due','~4.5 billion yrs']],
   blurb:'The nearest giant spiral galaxy, and the most distant object human eyes can see unaided. It is falling toward the Milky Way; in about 4.5 billion years the two will merge into one giant elliptical galaxy — informally, “Milkomeda”.',
   facts:['In 1923 Edwin Hubble found a pulsing star here and proved the “Andromeda Nebula” was another galaxy — the universe grew a millionfold overnight.','When the galaxies merge, stellar collisions will be virtually nil: stars are just too far apart.','It really lies 2.5 million ly away — far off this plate — and is drawn closer for navigation.'] },
+
+{ id:'m33', scene:'galaxy', group:'Clusters & neighbours', type:'galaxy', name:'Triangulum Galaxy',
+  kicker:'M33 · spiral galaxy', sub:'The Local Group’s third and final spiral',
+  pos:[-56000,-39000], mark:5, plate:'satgal',
+  stats:[['True distance','2.7 million ly (drawn far nearer)'],['Stars','~40 billion'],['Local Group rank','No. 3, after Andromeda and us'],['Face-on','We see its spiral from directly above'],['Eye test','The faintest naked-eye object, on perfect nights'],['Resident','NGC 604 — a nursery 40× the Orion Nebula']],
+  blurb:'Our corner of the universe — the Local Group — has exactly three spiral galaxies: Andromeda, the Milky Way, and this modest third sibling near Andromeda’s side. We happen to see it face-on, its pinwheel arms laid out flat like a diagram of what our own galaxy would look like from outside.',
+  facts:['Under truly dark skies it is the most distant thing an unaided human eye can detect — a whisper of light from 2.7 million years ago.','It hosts NGC 604, one of the largest star nurseries known — the Orion Nebula would be a footnote inside it.','It may be a satellite of Andromeda, and will likely be swept up in the same merger that awaits the Milky Way.'] },
 
 { id:'halley', scene:'solar', group:'The Solar System', type:'comet', name:'Halley’s Comet',
   kicker:'1P/Halley · periodic comet', sub:'The once-in-a-lifetime visitor',
@@ -1896,6 +1932,21 @@ function drawPlate(o) {
     g.fillStyle = '#01020a'; g.beginPath(); g.arc(0, 0, 62, 0, 6.283); g.fill();
     g.strokeStyle = 'rgba(255,220,170,.95)'; g.lineWidth = 4;
     g.beginPath(); g.arc(0, 0, 66, 0, 6.283); g.stroke();
+  } else if (kind === 'pulsar') {
+    glowBlob(g, 0, 0, 130, 'rgba(168,228,240,.4)', .9);
+    g.save(); g.rotate(.55);
+    for (const dir of [1, -1]) {   // lighthouse beams along the spin-swept axis
+      const gr = g.createLinearGradient(0, 0, 0, dir * 210);
+      gr.addColorStop(0, 'rgba(220,240,255,.85)'); gr.addColorStop(1, 'rgba(220,240,255,0)');
+      g.fillStyle = gr; g.beginPath();
+      g.moveTo(-5, 0); g.lineTo(-32, dir * 210); g.lineTo(32, dir * 210); g.lineTo(5, 0);
+      g.closePath(); g.fill();
+    }
+    g.strokeStyle = 'rgba(179,156,255,.45)'; g.lineWidth = 1.5;   // field lines
+    for (const s of [2.2, 3.4, 4.8])
+      { g.beginPath(); g.ellipse(0, 0, 13 * s * .5, 13 * s, 0, 0, 6.283); g.stroke(); }
+    g.restore();
+    shadeBall(g, 15, '#ffffff', '#cfe8f0', '#5a7888');
   } else if (kind === 'nebula') {
     const c1 = spec[1] || '#e88fb8', c2 = spec[2] || '#8fb8e8';
     const rnd = mulberry(o.name.length * 77);
@@ -3134,6 +3185,11 @@ const QUIZ = [
 { q:'The fastest object humanity has ever built is…', c:['Parker Solar Probe','Voyager 1','A rifle bullet','The Apollo capsule'], a:0, ref:'parker', why:'690,000 km/h while skimming the Sun’s corona — fast enough to cross the USA in ~20 seconds.' },
 { q:'Where does the James Webb Space Telescope live?', c:['1.5 million km beyond Earth, at L2','In low Earth orbit','On the far side of the Moon','Orbiting Jupiter'], a:0, ref:'jwst', why:'At L2 the Sun and Earth’s gravity balance, so Webb keeps pace with Earth while always facing away from the Sun.' },
 { q:'Cassini flew through geysers of ocean water erupting from…', c:['Saturn’s moon Enceladus','Saturn’s rings','Titan','Mercury'], a:0, ref:'enceladus', why:'The spray tasted of salt and organics — free samples of a buried alien sea.' },
+{ q:'A pulsar is…', c:['A spinning dead star sweeping lighthouse beams','A newborn planet','A flickering comet','A kind of radio telescope'], a:0, ref:'vela', why:'A city-sized neutron star; each sweep of its beam past Earth registers as a clock-steady pulse.' },
+{ q:'In 2004 a flash from 30,000 ly away rattled Earth’s upper atmosphere. The culprit was…', c:['A magnetar’s crust snapping','A solar flare','A nearby supernova','A meteor storm'], a:0, ref:'sgr1806', why:'SGR 1806−20 released more energy in a fifth of a second than the Sun does in 100,000 years.' },
+{ q:'T Coronae Borealis, the “Blaze Star”, is famous for…', c:['Exploding roughly every 80 years','Being the coldest star known','Orbiting a planet','Changing colour monthly'], a:0, ref:'t-crb', why:'A white dwarf detonates its stolen hydrogen on a schedule — the next eruption is due any year now.' },
+{ q:'How many spiral galaxies does our Local Group contain?', c:['Three — Andromeda, the Milky Way and Triangulum','Exactly one','Dozens','None'], a:0, ref:'m33', why:'Everything else in the neighbourhood is a dwarf or an elliptical.' },
+{ q:'The Sagittarius Dwarf galaxy is currently…', c:['Being torn apart and eaten by the Milky Way','Colliding with Andromeda','Escaping the Local Group','Forming a new sun every second'], a:0, ref:'sgr-dwarf', why:'Its shredded stars wrap the whole Milky Way in the Sagittarius Stream. Galaxies grow by eating.' },
 { q:'The Crab Nebula is the wreckage of a supernova witnessed in…', c:['1054 AD','1986','44 BC','1900'], a:0, ref:'m1', why:'Chinese and Japanese astronomers logged a “guest star” visible in daylight for 23 days.' },
 { q:'Which nearby star is expected to explode as a supernova?', c:['Betelgeuse','Sirius','Polaris','Vega'], a:0, ref:'betelgeuse', why:'Orion’s red shoulder — “soon” in astronomer-speak means within ~100,000 years.' },
 { q:'The nearest star system to our Sun is…', c:['Alpha Centauri','Sirius','TRAPPIST-1','Betelgeuse'], a:0, ref:'alpha-cen', why:'4.37 light-years away — about 70,000 years of travel at Voyager speed.' },
