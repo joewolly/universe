@@ -386,6 +386,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
     <button class="ctl" id="t10" title="10x speed">10&times;</button>
     <button class="ctl" id="t100" title="100x speed">100&times;</button>
   </div>
+  <button class="ctl" id="soundBtn" title="Instrument audio — synthesised, gentle">&#9834; Sound</button>
   <button class="ctl" id="tonightBtn" style="display:none" title="Where is the Sun today — and what can you actually see?">&#9737; Tonight</button>
   <button class="ctl" id="quizBtn" title="Test what you have learned">&#9998; Exam</button>
   <button class="ctl" id="tourBtn" title="A guided tour of the highlights">&#9672; Grand tour</button>
@@ -438,6 +439,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
     </div>
     <button class="cardAction" id="beginBtn">Begin survey</button>
     <button class="cardAction ghost" id="welcomeTour" style="margin-top:10px">Or take the grand tour &rarr;</button>
+    <button class="cardAction ghost" id="welcomeTonight" style="margin-top:10px">What&rsquo;s up tonight? &#9737;</button>
   </div>
 </div>
 
@@ -604,14 +606,14 @@ const CAT = [
 
 { id:'trappist', scene:'galaxy', group:'Stars & other suns', type:'exo', name:'TRAPPIST-1',
   kicker:'Exoplanet system', sub:'Seven Earth-sized worlds around a tiny star',
-  pos:s(25,31), mark:5, minLabelZoom:.1, plate:'exo',
+  pos:s(25,31), mark:5, minLabelZoom:.1, plate:'exo', action:'enterExo', exoSystem:'trappist',
   stats:[['Distance','40 ly'],['Star','Ultra-cool red dwarf, jupiter-sized'],['Planets','7, all roughly Earth-sized'],['Temperate zone','3–4 of them'],['Year lengths','1.5 to 19 days']],
   blurb:'A star barely bigger than Jupiter, orbited by seven rocky, Earth-sized planets — all packed so tightly that the whole system would fit inside Mercury’s orbit. From any one planet, the others hang in the sky larger than our Moon.',
   facts:['JWST is currently sniffing these planets for atmospheres — among our best bets for finding habitable conditions.','The star is so cool and dim that "noon" on its planets looks like a perpetual salmon-pink sunset.'] },
 
 { id:'kepler186', scene:'galaxy', group:'Stars & other suns', type:'exo', name:'Kepler-186f',
   kicker:'Exoplanet · habitable zone', sub:'The first Earth-sized world found in a habitable zone',
-  pos:s(560,-140), mark:4, plate:'exo',
+  pos:s(560,-140), mark:4, plate:'exo', action:'enterExo', exoSystem:'kepler186',
   stats:[['Distance','~580 ly'],['Size','1.1× Earth'],['Year','130 days'],['Discovered','2014, Kepler telescope'],['Star','Red dwarf, half the Sun’s size']],
   blurb:'The planet that proved Earth-sized worlds orbit in habitable zones. If it holds water and air, its plant life — tuned to a red sun — might photosynthesise in shades of black and crimson rather than green.',
   facts:['The Kepler telescope found planets by watching for the wink of a star as a world crossed its face.','Statistically, the Milky Way holds billions of temperate, Earth-sized planets.'] },
@@ -928,6 +930,97 @@ CAT.push(
   facts:['It rides its stretched orbit backwards — opposite to every planet — from inside Venus’s orbit out past Neptune’s.','Every year Earth crosses its debris trail twice, giving the Eta Aquariid (May) and Orionid (October) meteor showers.','Mark Twain was born at its 1835 visit and predicted he would “go out with it” — he died the day after its 1910 perihelion.'] }
 );
 
+/* ============ OTHER WORLDS · enterable exoplanet systems ============
+   Two real systems rendered as mini-orreries. Orbit radii are map units
+   (compressed); periods are real, so the resonant clockwork is genuine. */
+
+TYPE_COLORS.exoplanet = '#9fc4ef';
+
+const EXO_SYSTEMS = {
+  trappist: { label: 'TRAPPIST-1 · seven worlds', starId: 'trappist-star', fit: 500,
+    starR: 13, starCol: ['#ffd0b0', '#e05535', '#5a1a0e'], glow: '255,120,80', hz: [100, 208] },
+  kepler186: { label: 'Kepler-186 · the first Earth cousin', starId: 'k186-star', fit: 540,
+    starR: 17, starCol: ['#ffe0bc', '#e8804d', '#6a2812'], glow: '255,150,90', hz: [188, 248] }
+};
+
+const EXO_EXT = [
+/* ---------------- TRAPPIST-1 ---------------- */
+{ id:'trappist-star', system:'trappist', type:'star', name:'TRAPPIST-1', kicker:'M8V · ultracool red dwarf',
+  sub:'A star barely bigger than Jupiter, warming seven worlds', orbit:{r:0,periodDays:1,phase:0}, size:13, plate:'star:#ff9d6b',
+  stats:[['Size','~12 % of the Sun — Jupiter-sized'],['Mass','9 % of the Sun'],['Surface','2,300 °C — cool enough for clouds of dust'],['Distance','40 ly'],['Lifespan','Trillions of years'],['Light','0.05 % of the Sun’s output']],
+  blurb:'The smallest class of true star: heavy enough to fuse hydrogen, but only just. It burns so frugally that it will still be shining when every Sun-like star in the universe has died — its planets have almost unlimited time for something interesting to happen.',
+  facts:['From planet e, this star hangs huge and salmon-pink in a sky of permanent sunset colours.','Discovered to have planets in 2016–2017 by a small Belgian telescope named after Trappist beer.'] },
+{ id:'tr-b', system:'trappist', type:'exoplanet', name:'TRAPPIST-1 b', kicker:'Planet b · scorched inner world',
+  sub:'A year lasts a day and a half', orbit:{r:48,periodDays:1.51,phase:0.4}, size:5.6, col:['#e8a888','#b05838','#4a1c0e'],
+  stats:[['Year','1.51 Earth days'],['Size','1.12 × Earth'],['Distance','0.011 AU'],['Verdict','Bare rock — JWST found no atmosphere']],
+  blurb:'The innermost of the seven, orbiting so close that its star fills the sky. In 2023 the James Webb Space Telescope measured its heat directly — around 230 °C on the dayside, with no sign of air.',
+  facts:['Its whole orbit would fit forty times inside Mercury’s.','Tidally locked: one face in eternal day, the other in eternal night.'] },
+{ id:'tr-c', system:'trappist', type:'exoplanet', name:'TRAPPIST-1 c', kicker:'Planet c · Venus’s cousin',
+  sub:'Hot, airless or nearly so', orbit:{r:74,periodDays:2.42,phase:2.1}, size:5.5, col:['#e8c9a0','#c08a58','#5a3820'],
+  stats:[['Year','2.42 Earth days'],['Size','1.10 × Earth'],['Distance','0.016 AU'],['Verdict','At most a whisper of atmosphere']],
+  blurb:'Slightly cooler than b, and another JWST target: if it ever had a thick Venus-style CO₂ blanket, the star’s youthful flares appear to have stripped it away long ago.',
+  facts:['Red dwarfs rage in their youth — surviving their flares is the great test for these planets’ atmospheres.'] },
+{ id:'tr-d', system:'trappist', type:'exoplanet', name:'TRAPPIST-1 d', kicker:'Planet d · the threshold',
+  sub:'Standing at the habitable zone’s door', orbit:{r:100,periodDays:4.05,phase:4.8}, size:4.4, col:['#e8d8c0','#b8a078','#584830'],
+  stats:[['Year','4.05 Earth days'],['Size','0.79 × Earth'],['Distance','0.022 AU'],['Verdict','Temperate if it holds air']],
+  blurb:'Smaller than Earth and poised at the inner edge of the temperate zone. With the right atmosphere it could hold liquid water; with the wrong one it is a small Venus. Nobody knows yet — which is exactly why telescopes keep looking.',
+  facts:['On the day side, the star would appear ten times wider than our Sun does from Earth.'] },
+{ id:'tr-e', system:'trappist', type:'exoplanet', name:'TRAPPIST-1 e', kicker:'Planet e · the best bet',
+  sub:'The most promising known world outside our system', orbit:{r:126,periodDays:6.10,phase:1.3}, size:5.0, col:['#a8d8c9','#4880a8','#183850'],
+  stats:[['Year','6.10 Earth days'],['Size','0.92 × Earth'],['Distance','0.029 AU'],['Density','Rocky, Earth-like'],['Verdict','Prime habitability candidate']],
+  blurb:'If you had to bet on one known exoplanet holding an ocean, many astronomers would put their money here: squarely in the habitable zone, almost exactly Earth-sized, dense enough to be rock and iron. JWST is spending precious hours on it.',
+  facts:['A transmission spectrum showing water vapour here would be one of the discoveries of the century.','Its neighbours hang in its sky like moons — some appearing twice the size of our full Moon.'] },
+{ id:'tr-f', system:'trappist', type:'exoplanet', name:'TRAPPIST-1 f', kicker:'Planet f · the water question',
+  sub:'Possibly an ocean wrapped in haze', orbit:{r:152,periodDays:9.21,phase:5.5}, size:5.3, col:['#c9dce8','#6890b8','#243c58'],
+  stats:[['Year','9.21 Earth days'],['Size','1.05 × Earth'],['Distance','0.038 AU'],['Verdict','Cool; may be water-rich']],
+  blurb:'Density measurements hint that f may carry far more water than Earth — possibly a deep global ocean under cloud or ice. A water world orbiting a dying ember of a star, eight billion years old.',
+  facts:['If its water were Earth-proportioned land would be impossible: the ocean could be hundreds of kilometres deep.'] },
+{ id:'tr-g', system:'trappist', type:'exoplanet', name:'TRAPPIST-1 g', kicker:'Planet g · the outer giant of the seven',
+  sub:'Largest of the family, at the cold edge', orbit:{r:178,periodDays:12.35,phase:3.0}, size:5.7, col:['#d0d8e0','#8898a8','#38404c'],
+  stats:[['Year','12.35 Earth days'],['Size','1.13 × Earth'],['Distance','0.047 AU'],['Verdict','Outer habitable zone — chilly']],
+  blurb:'The biggest of the seven sits at the habitable zone’s cold outer edge. A strong greenhouse atmosphere could keep it temperate; without one it is a world of ice sheets under a dim red sun.',
+  facts:['Even out here, its year is still shorter than two Earth weeks.'] },
+{ id:'tr-h', system:'trappist', type:'exoplanet', name:'TRAPPIST-1 h', kicker:'Planet h · the frozen outrider',
+  sub:'The small, cold end of the line', orbit:{r:204,periodDays:18.77,phase:0.9}, size:4.3, col:['#dce4ec','#98a8b8','#404a58'],
+  stats:[['Year','18.77 Earth days'],['Size','0.78 × Earth'],['Distance','0.062 AU'],['Verdict','Likely ice-bound']],
+  blurb:'Smallest and outermost, h likely wears a permanent shell of ice — though tidal squeezing from its resonant siblings may warm its interior, the way Jupiter warms Europa. Familiar story, new star.',
+  facts:['All seven planets form a resonance chain: their years lock into near-perfect musical ratios, 24:15:9:6:4:3:2.'] },
+
+/* ---------------- Kepler-186 ---------------- */
+{ id:'k186-star', system:'kepler186', type:'star', name:'Kepler-186', kicker:'M1V · red dwarf',
+  sub:'A quiet red sun, 580 light-years away', orbit:{r:0,periodDays:1,phase:0}, size:17, plate:'star:#ffb480',
+  stats:[['Size','52 % of the Sun'],['Mass','54 % of the Sun'],['Surface','~3,500 °C'],['Distance','~580 ly'],['Planets','5 known'],['Found by','Kepler space telescope']],
+  blurb:'A calm orange-red dwarf in Cygnus, unremarkable in every way but one: in 2014 its fifth planet became the first Earth-sized world ever confirmed inside a habitable zone — proof that worlds like ours are not a fluke.',
+  facts:['Kepler found its planets by watching the star blink as each world crossed its face.','Noon here delivers about a third of the light Earth gets — a permanent late afternoon.'] },
+{ id:'k186-b', system:'kepler186', type:'exoplanet', name:'Kepler-186 b', kicker:'Planet b · inner cinder',
+  sub:'Four-day year, scorched surface', orbit:{r:52,periodDays:3.89,phase:1.7}, size:5.3, col:['#e0a890','#a85840','#481c10'],
+  stats:[['Year','3.89 Earth days'],['Size','1.07 × Earth'],['Distance','0.038 AU'],['Verdict','Far too hot']],
+  blurb:'The innermost of the five, racing around its star every four days. Whatever atmosphere it began with has long been baked and blasted away.',
+  facts:['All four inner planets would fit comfortably inside Mercury’s orbit.'] },
+{ id:'k186-c', system:'kepler186', type:'exoplanet', name:'Kepler-186 c', kicker:'Planet c · rocky and roasting',
+  sub:'The largest of the inner four', orbit:{r:80,periodDays:7.27,phase:4.2}, size:6.2, col:['#e0c098','#b88858','#503418'],
+  stats:[['Year','7.27 Earth days'],['Size','1.25 × Earth'],['Distance','0.057 AU'],['Verdict','Hot super-Earth']],
+  blurb:'A quarter larger than Earth and still deep in the hot zone. Worlds like this are common across the galaxy — rocky planets with no counterpart in our own system.',
+  facts:['“Super-Earths” between Earth and Neptune in size are the galaxy’s most common planets — and we have none.'] },
+{ id:'k186-d', system:'kepler186', type:'exoplanet', name:'Kepler-186 d', kicker:'Planet d · the dusty middle child',
+  sub:'Two-week year under a red sun', orbit:{r:110,periodDays:13.34,phase:0.3}, size:6.7, col:['#d8a888','#a86848','#442418'],
+  stats:[['Year','13.34 Earth days'],['Size','1.40 × Earth'],['Distance','0.086 AU'],['Verdict','Likely a warm desert']],
+  blurb:'The biggest planet of the system. Too warm for comfort, but at 40 % larger than Earth its gravity could hold a thick atmosphere — a hazy, heavy-aired desert world.',
+  facts:['Standing here you would weigh roughly a third more than on Earth.'] },
+{ id:'k186-e', system:'kepler186', type:'exoplanet', name:'Kepler-186 e', kicker:'Planet e · almost',
+  sub:'Just inside the line where oceans boil', orbit:{r:142,periodDays:22.41,phase:2.9}, size:6.0, col:['#d8c8a0','#a89060','#484020'],
+  stats:[['Year','22.41 Earth days'],['Size','1.27 × Earth'],['Distance','0.11 AU'],['Verdict','A near miss — probably too warm']],
+  blurb:'So close to the habitable zone it hurts: e orbits just inside the boundary where a watery world tips into a runaway greenhouse. A few million kilometres further out and it would be famous.',
+  facts:['Habitable zones are not sharp lines — atmosphere, clouds and spin can rescue or doom a borderline world.'] },
+{ id:'k186-f', system:'kepler186', type:'exoplanet', name:'Kepler-186 f', kicker:'Planet f · the first Earth cousin',
+  sub:'Where the search for Earth 2.0 got real', orbit:{r:218,periodDays:129.9,phase:5.8}, size:5.6, col:['#a0c9b0','#508868','#1c3828'],
+  stats:[['Year','130 Earth days'],['Size','1.11 × Earth'],['Distance','0.43 AU'],['Discovered','17 April 2014'],['Verdict','In the habitable zone']],
+  blurb:'The planet that changed the question from “are there Earth-sized worlds in habitable zones?” to “how many?”. If it holds water and air, its noon light is a warm perpetual sunset — and any photosynthesis might favour black and crimson over green.',
+  facts:['It receives about a third of Earth’s sunlight — comparable to a bright winter afternoon.','Its discovery paper made the cover of Science; the atlas you are using marks it in the galaxy view, 580 ly from home.'] },
+];
+for (const e of EXO_EXT) { e.scene = 'exo'; e.group = 'Other worlds'; e.mark = 4; if (!e.plate) e.plate = 'exoball'; }
+CAT.push(...EXO_EXT);
+
 /* ============ ENGINE · scene, camera, galaxy renderer ============ */
 const canvas = document.getElementById('sky');
 const ctx = canvas.getContext('2d');
@@ -1095,6 +1188,7 @@ function s2w(sx, sy) {
           (sy - state.H / 2) / state.cam.z + state.cam.y];
 }
 function zoomLimits() {
+  if (state.scene === 'exo') return [fitExoZ() * 0.85, 30];
   if (state.scene === 'sky') return [skyFitZ() * 0.9, 30];
   return state.scene === 'galaxy'
     ? [state.fitZ * 0.75, 9]
@@ -1132,7 +1226,7 @@ function bodyPos(o) {
   if (o.parent) { const pp = bodyPos(SOLAR_OBJS.find(b => b.id === o.parent)); px_ += pp[0]; py_ += pp[1]; }
   return [px_, py_];
 }
-function objWorldPos(o) { return o.scene === 'solar' ? bodyPos(o) : o.pos; }
+function objWorldPos(o) { return (o.scene === 'solar' || o.scene === 'exo') ? bodyPos(o) : o.pos; }
 
 /* ============ ENGINE · frame rendering ============ */
 let tNow = 0;
@@ -1626,6 +1720,30 @@ function drawPlate(o) {
       }
     }
     g.restore();
+  } else if (kind === 'exoball') {
+    glowBlob(g, -260, -110, 70, 'rgba(255,120,80,.8)', .9);
+    g.save(); g.scale(5, 5);
+    shadeBall(g, 24, o.col[0], o.col[1], o.col[2]);
+    g.restore();
+    const gr3 = g.createRadialGradient(-90, -90, 40, 0, 0, 190);
+    gr3.addColorStop(0, 'rgba(0,0,0,0)'); gr3.addColorStop(.7, 'rgba(2,4,10,0)');
+    gr3.addColorStop(1, 'rgba(2,4,10,.9)');
+    g.fillStyle = gr3; g.beginPath(); g.arc(0, 0, 200, 0, 6.283); g.fill();
+  } else if (kind === 'tonight') {
+    const rnd = mulberry(31);
+    for (let i = 0; i < 95; i++) {
+      g.globalAlpha = .3 + rnd() * .7; g.fillStyle = '#e8f0ff';
+      g.fillRect((rnd() - .5) * 700, -180 + rnd() * 290, rnd() > .86 ? 2.5 : 1.5, 1.5);
+    }
+    g.globalAlpha = 1;
+    glowBlob(g, -170, -70, 30, 'rgba(207,224,255,.9)', 1);      // first star of the evening
+    const hg = g.createLinearGradient(0, 30, 0, 165);
+    hg.addColorStop(0, 'rgba(240,167,92,0)'); hg.addColorStop(1, 'rgba(240,120,60,.32)');
+    g.fillStyle = hg; g.fillRect(-372, 30, 744, 140);
+    g.fillStyle = '#04060c';
+    g.beginPath(); g.ellipse(0, 300, 540, 155, 0, 0, 6.283); g.fill();
+    g.strokeStyle = 'rgba(148,163,184,.4)'; g.lineWidth = 1.5;
+    g.beginPath(); g.ellipse(0, 300, 540, 155, 0, Math.PI, 2 * Math.PI); g.stroke();
   } else if (kind === 'shower') {
     const rnd = mulberry(o.id.length * 19);
     g.strokeStyle = 'rgba(255,207,158,.9)'; g.lineWidth = 1.6;
@@ -1693,22 +1811,25 @@ function openCard(o) {
   $('cardBlurb').textContent = o.blurb;
   $('cardFacts').innerHTML = o.facts.map(f => `<li>${f}</li>`).join('');
   const acts = $('cardActions'); acts.innerHTML = '';
-  if (o.action === 'enterSolar') {
+  const addAct = (label, fn) => {
     const b = document.createElement('button');
-    b.className = 'cardAction'; b.innerHTML = 'Enter the Solar System &rarr;';
-    b.onclick = () => enterSolar();
+    b.className = 'cardAction'; b.innerHTML = label; b.onclick = fn;
     acts.appendChild(b);
-  }
+  };
+  if (o.action === 'enterSolar') addAct('Enter the Solar System &rarr;', () => enterSolar());
+  if (o.action === 'enterExo') addAct('Enter the system &rarr;', () => enterExo(o.exoSystem));
+  if (o.action === 'showTonight') addAct('Show me tonight&rsquo;s best &rarr;', () => goTo(CAT.find(x => x.id === o.showId)));
   drawPlate(o);
   $('cardScroll').scrollTop = 0;
   card.classList.add('open');
-  if (!state.visited.has(o.id)) {
+  if (!o.transient && !state.visited.has(o.id)) {
     state.visited.add(o.id);
     store.set('mwa-visited', [...state.visited]);
-    refreshAtlas();
+    sfxDiscover();
   } else {
-    refreshAtlas();
+    sfxOpen();
   }
+  refreshAtlas();
 }
 function closeCard() {
   card.classList.remove('open');
@@ -1719,7 +1840,7 @@ $('cardClose').onclick = closeCard;
 
 /* ---------- atlas index ---------- */
 const GROUP_ORDER = ['Home', 'Heart of the galaxy', 'Spiral arms', 'Star nurseries & remnants',
-  'Clusters & neighbours', 'Stars & other suns', 'The night sky', 'Meteor showers', 'The Solar System'];
+  'Clusters & neighbours', 'Stars & other suns', 'The night sky', 'Meteor showers', 'The Solar System', 'Other worlds'];
 function buildAtlas() {
   const list = $('atlasList'); list.innerHTML = '';
   for (const grp of GROUP_ORDER) {
@@ -1756,6 +1877,7 @@ $('atlasToggle').onclick = () => toggleAtlas();
 
 /* ---------- scene switching ---------- */
 function fadeTo(cb) {
+  sfxWhoosh();
   state.hover = null; tip.style.opacity = 0; canvas.classList.remove('hovering');
   if (REDUCED) { cb(); return; }
   state.fadeDir = 1; state.fadeCb = cb;
@@ -1783,33 +1905,42 @@ function exitSolar() {
   });
 }
 function syncSceneUI() {
-  const solar = state.scene === 'solar', sky = state.scene === 'sky';
-  $('backBtn').classList.toggle('show', solar || sky);
-  $('timeCtls').classList.toggle('show', solar);
+  const solar = state.scene === 'solar', sky = state.scene === 'sky', exo = state.scene === 'exo';
+  $('backBtn').classList.toggle('show', solar || sky || exo);
+  $('timeCtls').classList.toggle('show', solar || exo);
   $('skyBtn').classList.toggle('on', sky);
   $('tonightBtn').style.display = sky ? 'flex' : 'none';
-  $('crumbTxt').textContent = sky ? 'Night sky · seen from Earth'
+  $('crumbTxt').textContent = exo ? EXO_SYSTEMS[state.system].label
+    : sky ? 'Night sky · seen from Earth'
     : solar ? 'Sol system · Orion Spur'
     : 'Galactic plane · 105,000 ly';
-  $('note').textContent = sky
+  $('note').textContent = exo
+    ? 'Orbits compressed · sizes not to scale · periods real — watch the resonance'
+    : sky
     ? 'Flat chart of the celestial sphere · poles stretched · 13 of 88 figures drawn'
     : solar
     ? 'Orbit spacing compressed · sizes not to scale · speeds proportional to reality'
     : 'Positions approximate · sizes & distances not to scale · drawn for navigation, not measurement';
+  droneScene();
 }
-$('backBtn').onclick = () => { state.scene === 'sky' ? exitSky() : exitSolar(); };
+$('backBtn').onclick = () => {
+  if (state.scene === 'sky') exitSky();
+  else if (state.scene === 'exo') exitExo();
+  else exitSolar();
+};
 
 function goTo(o) {
   const arrive = () => {
     const p = objWorldPos(o);
     flyTo(p[0], p[1], targetZoom(o));
-    state.follow = (o.scene === 'solar' && ((o.orbit && o.orbit.r > 0) || o.kepler)) ? o.id : null;
+    state.follow = ((o.scene === 'solar' || o.scene === 'exo') && ((o.orbit && o.orbit.r > 0) || o.kepler)) ? o.id : null;
     openCard(o);
   };
-  if (o.scene !== state.scene) {
+  if (o.scene !== state.scene || (o.scene === 'exo' && o.system !== state.system)) {
     fadeTo(() => {
       state.scene = o.scene;
-      if (o.scene === 'solar') { state.cam = { x: 0, y: 0, z: Math.min(state.W, state.H) / 1500 }; }
+      if (o.scene === 'exo') { state.system = o.system; state.cam = { x: 0, y: 0, z: fitExoZ() }; }
+      else if (o.scene === 'solar') { state.cam = { x: 0, y: 0, z: Math.min(state.W, state.H) / 1500 }; }
       else if (o.scene === 'sky') { state.cam = { x: o.pos[0], y: o.pos[1], z: skyFitZ() * 1.4 }; }
       else { state.cam = { x: 0, y: 9000, z: state.fitZ }; }
       state.tgt = { ...state.cam };
@@ -1818,6 +1949,7 @@ function goTo(o) {
   } else arrive();
 }
 function targetZoom(o) {
+  if (o.scene === 'exo') return o.orbit && o.orbit.r === 0 ? 2 : 3.2;
   if (o.scene === 'sky') return Math.min(Math.min(state.W, state.H) / (o.ext * 2.4), 14);
   if (o.scene === 'solar') {
     if (o.id === 'sol') return 2.2;
@@ -1883,7 +2015,7 @@ function zoomAt(sx, sy, factor) {
   if (Math.abs(real - 1) > .0001) state.follow = null;
 }
 
-function sceneObjects() { return state.scene === 'galaxy' ? GALAXY_OBJS : state.scene === 'solar' ? SOLAR_OBJS : SKY_OBJS; }
+function sceneObjects() { return state.scene === 'galaxy' ? GALAXY_OBJS : state.scene === 'solar' ? SOLAR_OBJS : state.scene === 'exo' ? sysObjs() : SKY_OBJS; }
 function pickAt(sx, sy) {
   if (state.scene === 'sky') {
     let best = null, bd = 1e9;
@@ -1905,7 +2037,7 @@ function pickAt(sx, sy) {
   let best = null, bd = 1e9;
   for (const o of sceneObjects()) {
     const [x, y] = w2s(...objWorldPos(o));
-    const rr = state.scene === 'solar' ? Math.max((o.size || 4) * state.cam.z + 6, 14) : 15;
+    const rr = (state.scene === 'solar' || state.scene === 'exo') ? Math.max((o.size || 4) * state.cam.z + 6, 14) : 15;
     const d = Math.hypot(sx - x, sy - y);
     if (d < rr && d < bd) { bd = d; best = o; }
   }
@@ -1933,6 +2065,7 @@ $('zoomOut').onclick = () => zoomAt(state.W / 2, state.H / 2, 1 / 1.45);
 $('resetBtn').onclick = () => {
   closeCard();
   if (state.scene === 'solar') flyTo(0, 0, Math.min(state.W, state.H) / 1500);
+  else if (state.scene === 'exo') flyTo(0, 0, fitExoZ());
   else if (state.scene === 'sky') flyTo(0, -6, skyFitZ());
   else flyTo(0, 9000, state.fitZ);
 };
@@ -1958,6 +2091,7 @@ addEventListener('keydown', e => {
     else if (card.classList.contains('open')) closeCard();
     else if (atlasOpen) toggleAtlas(false);
     else if (state.scene === 'solar') exitSolar();
+    else if (state.scene === 'exo') exitExo();
     else if (state.scene === 'sky') exitSky();
   }
   if (e.key === '+' || e.key === '=') zoomAt(state.W / 2, state.H / 2, 1.3);
@@ -1980,7 +2114,7 @@ function updateScalebar() {
     $('scalebarLbl').textContent = nice + '° of sky' + (nice === 10 ? ' — about one fist at arm’s length' : '');
     return;
   }
-  if (state.scene === 'solar') {
+  if (state.scene === 'solar' || state.scene === 'exo') {
     $('scalebarLbl').textContent = state.timeScale === 0 ? 'orbits paused'
       : `1 s ≈ ${DAYS_PER_SEC * state.timeScale} days`;
     $('scalebarBar').style.width = '90px';
@@ -2005,13 +2139,13 @@ function frame(now) {
 
   // follow a moving body
   if (state.follow) {
-    const o = SOLAR_OBJS.find(b => b.id === state.follow);
+    const o = SOLAR_OBJS.find(b => b.id === state.follow) || EXO_OBJS.find(b => b.id === state.follow);
     if (o) { const p = bodyPos(o); state.tgt.x = p[0]; state.tgt.y = p[1]; }
   }
   stepCam(dt);
 
   drawBackdrop();
-  if (state.scene === 'galaxy') drawGalaxy(); else if (state.scene === 'solar') drawSolar(dt); else drawSky();
+  if (state.scene === 'galaxy') drawGalaxy(); else if (state.scene === 'solar') drawSolar(dt); else if (state.scene === 'exo') drawExo(dt); else drawSky();
 
   // scene-change fade
   if (state.fadeDir !== 0) {
@@ -2256,6 +2390,7 @@ $('skyBtn').onclick = () => { state.scene === 'sky' ? exitSky() : enterSky(); };
 
 /* ---------- tonight: the real Sun on the chart ---------- */
 state.tonight = false;
+state.system = 'trappist';
 function sunRaDec(date) {
   const n = (date - Date.UTC(2000, 0, 1, 12)) / 86400000;
   const L = 280.46 + 0.9856474 * n;
@@ -2288,12 +2423,13 @@ function bestMonth(o) {
   return MONTHS[best];
 }
 function statsFor(o) {
-  if (o.scene !== 'sky') return o.stats;
+  if (o.scene !== 'sky' || o.transient) return o.stats;
   return [...o.stats, ['Right now', skyStatus(o)], ['Prime evening month', bestMonth(o)]];
 }
 $('tonightBtn').onclick = () => {
   state.tonight = !state.tonight;
   $('tonightBtn').classList.toggle('on', state.tonight);
+  if (state.tonight && !briefed) { briefed = true; openCard(tonightBriefing()); }
 };
 function drawTonight() {
   const s = sunNow();
@@ -2386,7 +2522,7 @@ function answerQ(btn, i, item) {
   if (qDone) return;
   qDone = true;
   const right = i === item.a;
-  if (right) qScore++;
+  if (right) { qScore++; sfxRight(); } else sfxWrong();
   for (const b of $('quizOpts').children) {
     b.disabled = true;
     if (b === btn && !right) b.classList.add('wrong');
@@ -2423,6 +2559,220 @@ $('quizNext').onclick = () => {
 };
 $('quizClose').onclick = endQuiz;
 $('quizBtn').onclick = startQuiz;
+
+/* ---------- other worlds: enterable exoplanet systems ---------- */
+const EXO_OBJS = CAT.filter(o => o.scene === 'exo');
+function sysObjs() { return EXO_OBJS.filter(o => o.system === state.system); }
+function fitExoZ() { return Math.min(state.W, state.H) / EXO_SYSTEMS[state.system].fit; }
+
+function drawExo(dt) {
+  state.simDays += dt * DAYS_PER_SEC * state.timeScale;
+  const sys = EXO_SYSTEMS[state.system];
+  ctx.save();
+  ctx.translate(state.W / 2, state.H / 2);
+  ctx.scale(state.cam.z, state.cam.z);
+  ctx.translate(-state.cam.x, -state.cam.y);
+  const z = state.cam.z;
+  // the habitable zone, shaded — the whole point of these systems
+  ctx.fillStyle = 'rgba(143,216,201,.055)';
+  ctx.beginPath();
+  ctx.arc(0, 0, sys.hz[1], 0, 6.283);
+  ctx.arc(0, 0, sys.hz[0], 0, 6.283, true);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(143,216,201,.22)'; ctx.lineWidth = 1 / z;
+  ctx.setLineDash([4 / z, 5 / z]);
+  ctx.beginPath(); ctx.arc(0, 0, sys.hz[0], 0, 6.283); ctx.stroke();
+  ctx.beginPath(); ctx.arc(0, 0, sys.hz[1], 0, 6.283); ctx.stroke();
+  ctx.setLineDash([]);
+  // orbit rings
+  for (const o of sysObjs()) {
+    if (!o.orbit || o.orbit.r === 0) continue;
+    ctx.strokeStyle = state.selected === o.id ? 'rgba(240,167,92,.4)' : 'rgba(148,163,184,.13)';
+    ctx.beginPath(); ctx.arc(0, 0, o.orbit.r, 0, 6.283); ctx.stroke();
+  }
+  // the star
+  const p = REDUCED ? .5 : .5 + .5 * Math.sin(tNow * 1.3);
+  const g = ctx.createRadialGradient(0, 0, 0, 0, 0, sys.starR * (3 + p * .5));
+  g.addColorStop(0, `rgba(${sys.glow},.55)`); g.addColorStop(1, `rgba(${sys.glow},0)`);
+  ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, sys.starR * 4, 0, 6.283); ctx.fill();
+  shadeBall(ctx, sys.starR, sys.starCol[0], sys.starCol[1], sys.starCol[2]);
+  // planets, lit by their star
+  for (const o of sysObjs()) {
+    if (!o.orbit || o.orbit.r === 0) continue;
+    const [x, y] = bodyPos(o);
+    ctx.save(); ctx.translate(x, y);
+    shadeBall(ctx, o.size, o.col[0], o.col[1], o.col[2]);
+    const ang = Math.atan2(y, x);
+    const gx = Math.cos(ang) * o.size * .55, gy = Math.sin(ang) * o.size * .55;
+    const tg = ctx.createRadialGradient(-gx, -gy, o.size * .1, 0, 0, o.size * 1.45);
+    tg.addColorStop(0, 'rgba(0,0,0,0)'); tg.addColorStop(.62, 'rgba(2,4,10,0)');
+    tg.addColorStop(1, 'rgba(2,4,10,.88)');
+    ctx.fillStyle = tg; ctx.beginPath(); ctx.arc(0, 0, o.size * 1.02, 0, 6.283); ctx.fill();
+    ctx.restore();
+  }
+  ctx.restore();
+  // captions and labels in screen space
+  const [hx, hy] = w2s(0, -(sys.hz[0] + sys.hz[1]) / 2);
+  ctx.font = '9.5px ui-monospace, Menlo, Consolas, monospace';
+  ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(143,216,201,.6)';
+  ctx.fillText('HABITABLE ZONE', hx, hy);
+  for (const o of sysObjs()) {
+    const [x, y] = w2s(...bodyPos(o));
+    if (x < -40 || y < -40 || x > state.W + 40 || y > state.H + 40) continue;
+    const rs = o.size * state.cam.z;
+    const sel = state.selected === o.id, hov = state.hover === o.id;
+    if (sel) {
+      ctx.strokeStyle = 'rgba(240,167,92,.9)'; ctx.lineWidth = 1.2; ctx.setLineDash([3, 3]);
+      ctx.beginPath(); ctx.arc(x, y, Math.max(rs + 7, 13), 0, 6.283); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    if (state.labels || hov || sel) {
+      ctx.font = '10.5px ui-monospace, Menlo, Consolas, monospace';
+      ctx.fillStyle = sel || hov ? '#ffc98f' : 'rgba(201,211,228,.72)';
+      ctx.fillText(o.name.toUpperCase(), x, y + Math.max(rs, 6) + 14);
+    }
+  }
+}
+function enterExo(key) {
+  closeCard();
+  fadeTo(() => {
+    state.scene = 'exo'; state.system = key;
+    state.cam = { x: 0, y: 0, z: fitExoZ() };
+    state.tgt = { ...state.cam };
+    syncSceneUI();
+  });
+}
+function exitExo() {
+  closeCard();
+  const star = GALAXY_OBJS.find(o => o.id === (state.system === 'trappist' ? 'trappist' : 'kepler186'));
+  fadeTo(() => {
+    state.scene = 'galaxy';
+    state.cam = { x: star.pos[0], y: star.pos[1], z: 2.5 };
+    state.tgt = { x: star.pos[0], y: star.pos[1], z: .6 };
+    if (REDUCED) state.cam = { ...state.tgt };
+    syncSceneUI();
+  });
+}
+
+/* ---------- instrument audio (synthesised, no assets) ---------- */
+state.sound = store.get('mwa-sound', false);
+let AC = null, masterG = null, droneG = null, droneOsc = [], droneFilter = null, noiseBuf = null;
+function ensureAudio() {
+  if (AC) return;
+  AC = new (window.AudioContext || window.webkitAudioContext)();
+  masterG = AC.createGain(); masterG.gain.value = .55; masterG.connect(AC.destination);
+  droneG = AC.createGain(); droneG.gain.value = 0;
+  droneFilter = AC.createBiquadFilter(); droneFilter.type = 'lowpass'; droneFilter.frequency.value = 190;
+  droneG.connect(droneFilter); droneFilter.connect(masterG);
+  for (const det of [0, 7]) {
+    const o = AC.createOscillator(); o.type = 'sine';
+    o.frequency.value = 55; o.detune.value = det;
+    o.connect(droneG); o.start(); droneOsc.push(o);
+  }
+  const lfo = AC.createOscillator(); lfo.frequency.value = .05;
+  const lg = AC.createGain(); lg.gain.value = 55;
+  lfo.connect(lg); lg.connect(droneFilter.frequency); lfo.start();
+  noiseBuf = AC.createBuffer(1, Math.floor(AC.sampleRate * .6), AC.sampleRate);
+  const d = noiseBuf.getChannelData(0);
+  for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+}
+function setDrone(on) { if (AC) droneG.gain.linearRampToValueAtTime(on ? .045 : 0, AC.currentTime + 1.4); }
+function droneScene() {
+  if (!AC || !state.sound) return;
+  const f = { galaxy: 55, solar: 73.42, sky: 65.41, exo: 82.41 }[state.scene] || 55;
+  droneOsc.forEach(o => o.frequency.exponentialRampToValueAtTime(f, AC.currentTime + 2.5));
+}
+function blip(freq, dur, type, gain, when) {
+  if (!state.sound || !AC) return;
+  const t = AC.currentTime + (when || 0);
+  const o = AC.createOscillator(), g2 = AC.createGain();
+  o.type = type || 'sine'; o.frequency.value = freq;
+  g2.gain.setValueAtTime(0, t);
+  g2.gain.linearRampToValueAtTime(gain || .07, t + .01);
+  g2.gain.exponentialRampToValueAtTime(.0004, t + dur);
+  o.connect(g2); g2.connect(masterG); o.start(t); o.stop(t + dur + .05);
+}
+function sfxClick() { blip(1500, .05, 'triangle', .035); }
+function sfxOpen() { blip(523, .22, 'sine', .05); blip(784, .3, 'sine', .04, .07); }
+function sfxDiscover() { blip(523, .18, 'sine', .05); blip(659, .2, 'sine', .05, .09); blip(988, .42, 'sine', .045, .18); }
+function sfxRight() { blip(659, .14, 'triangle', .06); blip(880, .26, 'triangle', .05, .07); }
+function sfxWrong() { blip(196, .3, 'sawtooth', .035); }
+function sfxWhoosh() {
+  if (!state.sound || !AC) return;
+  const src = AC.createBufferSource(); src.buffer = noiseBuf;
+  const f = AC.createBiquadFilter(); f.type = 'bandpass'; f.Q.value = 1.2;
+  const t = AC.currentTime;
+  f.frequency.setValueAtTime(420, t); f.frequency.exponentialRampToValueAtTime(90, t + .5);
+  const g2 = AC.createGain();
+  g2.gain.setValueAtTime(0, t); g2.gain.linearRampToValueAtTime(.05, t + .06);
+  g2.gain.exponentialRampToValueAtTime(.0004, t + .55);
+  src.connect(f); f.connect(g2); g2.connect(masterG); src.start(t);
+}
+function setSound(on) {
+  state.sound = on; store.set('mwa-sound', on);
+  $('soundBtn').classList.toggle('on', on);
+  if (on) { ensureAudio(); AC.resume(); setDrone(true); droneScene(); sfxOpen(); }
+  else if (AC) setDrone(false);
+}
+$('soundBtn').onclick = () => setSound(!state.sound);
+if (state.sound) {
+  $('soundBtn').classList.add('on');
+  addEventListener('pointerdown', () => {
+    ensureAudio(); AC.resume(); setDrone(true); droneScene();
+  }, { once: true });
+}
+document.addEventListener('click', e => {
+  if (e.target.closest('.ctl, .atlasItem, .cardAction, #cardClose, .qOpt')) sfxClick();
+});
+
+/* ---------- tonight's field briefing ---------- */
+const SHOWER_PEAKS = { 'shower-eta': [4, 5], 'shower-per': [7, 12], 'shower-ori': [9, 20], 'shower-leo': [10, 16], 'shower-gem': [11, 13] };
+function nextShower() {
+  const now = new Date();
+  let best = null, bd = 1e9;
+  for (const [id, [m, d]] of Object.entries(SHOWER_PEAKS)) {
+    let dt = new Date(now.getFullYear(), m, d) - now;
+    if (dt < -2 * 86400000) dt += 365.25 * 86400000;
+    const days = Math.max(0, Math.round(dt / 86400000));
+    if (days < bd) { bd = days; best = { id, days }; }
+  }
+  return best;
+}
+let briefed = false;
+function tonightBriefing() {
+  const s = sunNow();
+  const consts = SKY_OBJS.filter(o => o.pts);
+  const ranked = [...consts].sort((a, b) => raDiffH(objRa(b), s.ra) - raDiffH(objRa(a), s.ra));
+  const top = ranked.slice(0, 3), lost = ranked[ranked.length - 1];
+  const ns = nextShower(), nsObj = CAT.find(o => o.id === ns.id);
+  const date = new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric' });
+  return {
+    id: 'briefing', scene: 'sky', type: 'star', transient: true,
+    pos: top[0].pos, name: 'Tonight’s Sky', kicker: 'Field briefing · ' + date,
+    sub: 'A live reading of the celestial clock', plate: 'tonight',
+    stats: [
+      ['Best placed', top.map(c => c.name).join(' · ')],
+      ['Washed out', lost.name + ' — in the Sun’s glare'],
+      ['Next meteor shower', nsObj.name + (ns.days === 0 ? ' — peaking now!' : ' · in ' + ns.days + ' days')],
+      ['The Sun sits at', 'RA ' + s.ra.toFixed(1) + 'h — toward ' + (raDiffH(objRa(lost), s.ra) < 3 ? lost.name : 'the glare zone')]
+    ],
+    blurb: 'Everything on this card is recomputed from today’s date. The constellations opposite the Sun own the night; the ones within a few hours of it rise and set with the daylight and cannot be seen at all. Come back in a month and the cast will have shifted.',
+    facts: ['The whole sky slides about one degree west per night — four minutes earlier for every star, every day.', 'In six months, tonight’s washed-out figures will own the midnight sky.'],
+    action: 'showTonight', showId: top[0].id
+  };
+}
+function openTonight() {
+  $('welcome').classList.add('hide');
+  store.set('mwa-welcomed', true);
+  briefed = true;
+  if (state.scene !== 'sky') enterSky();
+  setTimeout(() => {
+    state.tonight = true;
+    $('tonightBtn').classList.add('on');
+    openCard(tonightBriefing());
+  }, REDUCED ? 60 : 780);
+}
+$('welcomeTonight').onclick = openTonight;
 
 /* ---------- grand tour ---------- */
 const TOUR = ['sun-system','sgr-a','m42','betelgeuse','m31','c-orion','c-tau',
