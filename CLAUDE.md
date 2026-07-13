@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-**Milky Way Atlas** — an interactive, hand-drawn survey of the galaxy. The entire application is a single self-contained `index.html` (~2,500 lines): no dependencies, no build step, no server, no network access, no package.json, no tests, no linter. The font is embedded as a base64 data URI.
+**Milky Way Atlas** — an interactive, hand-drawn survey of the galaxy. The application is a single self-contained `index.html` (~3,300 lines): no dependencies, no build step, no server, no network access, no package.json, no tests, no linter. The font is embedded as a base64 data URI.
+
+The only files beside it are the PWA shell — `manifest.webmanifest`, `sw.js` (stale-while-revalidate service worker; a SW cannot be inlined), `icon-192.png`/`icon-512.png` — and `.github/workflows/deploy-pages.yml`, which publishes the repo root to GitHub Pages on every push to `main` (live at https://joewolly.github.io/universe/). Bump the `CACHE` version in `sw.js` only if a change to caching behaviour itself is needed; content updates propagate automatically.
 
 To run or verify a change, open `index.html` in a browser:
 

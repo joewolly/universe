@@ -3,6 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#04070f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <title>Milky Way Atlas</title>
 <style>
 /* ============================================================
@@ -228,6 +235,50 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
 #luckyBtn{gap:7px;display:flex}
 
 /* ---------- field exam (quiz) ---------- */
+/* ---------- how big? · true-scale comparator ---------- */
+#howbig{
+  position:fixed;inset:0;z-index:44;background:#04070f;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+#howbig.open{opacity:1;pointer-events:auto}
+#hbCanvas{position:absolute;inset:0;width:100%;height:100%;cursor:grab}
+#hbCanvas.dragging{cursor:grabbing}
+#hbTop{
+  position:absolute;top:0;left:0;right:0;padding:16px 22px;
+  display:flex;align-items:flex-start;justify-content:space-between;pointer-events:none;
+}
+#hbTop .k{
+  font-family:var(--mono);font-size:10px;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--ember);margin-bottom:5px;
+}
+#hbTop h2{font-family:var(--display);font-size:21px;font-weight:400;letter-spacing:.04em}
+#hbTop .sub{font-family:var(--mono);font-size:10.5px;color:var(--haze);margin-top:4px;letter-spacing:.06em}
+#hbClose{
+  pointer-events:auto;width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  border-radius:3px;color:var(--haze);font-size:19px;background:var(--panel);
+  border:var(--hairline);transition:color .15s;
+}
+#hbClose:hover{color:var(--starlight)}
+#hbBottom{
+  position:absolute;left:0;right:0;bottom:0;padding:12px 18px 16px;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  background:linear-gradient(rgba(4,7,15,0),rgba(4,7,15,.88) 40%);
+}
+#hbCaption{
+  font-family:var(--mono);font-size:12px;color:var(--ember-hot);letter-spacing:.05em;
+  text-align:center;min-height:16px;
+}
+#hbChips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.hbChip{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--haze);background:var(--panel);border:var(--hairline);border-radius:3px;
+  padding:6px 10px;transition:color .15s,border-color .15s;
+}
+.hbChip:hover{color:var(--ember-hot);border-color:rgba(240,167,92,.45)}
+.hbChip.on{color:var(--ember-hot);border-color:rgba(240,167,92,.6);background:rgba(240,167,92,.1)}
+#hbSlider{width:min(520px,80vw);accent-color:var(--ember)}
+#hbScaleLbl{font-family:var(--mono);font-size:10px;color:var(--haze-dim);letter-spacing:.08em}
+
 #quiz{
   position:fixed;inset:0;z-index:46;display:flex;align-items:center;justify-content:center;
   background:rgba(4,6,12,.74);backdrop-filter:blur(5px);padding:20px;
@@ -401,11 +452,30 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   <button class="ctl" id="quizBtn" title="Test what you have learned">&#9998; Exam</button>
   <button class="ctl" id="tourBtn" title="A guided tour of the highlights">&#9672; Grand tour</button>
   <button class="ctl" id="skyBtn" title="The constellations, as seen from Earth">&#10038; Night sky</button>
+  <button class="ctl" id="scaleBtn" title="Moon to Betelgeuse at true relative scale — the one honest view">&#9678; How big?</button>
   <button class="ctl" id="luckyBtn" title="Fly somewhere unexplored">&#10022; Surprise me</button>
   <button class="ctl on" id="lblBtn" title="Toggle labels">Labels</button>
   <button class="ctl" id="zoomOut" title="Zoom out">&minus;</button>
   <button class="ctl" id="zoomIn" title="Zoom in">+</button>
   <button class="ctl" id="resetBtn" title="Reset view">&#8634;</button>
+</div>
+
+<div id="howbig" role="dialog" aria-modal="true" aria-label="How big? A true-scale size comparison">
+  <canvas id="hbCanvas"></canvas>
+  <div id="hbTop">
+    <div>
+      <div class="k">How big?</div>
+      <h2>Every width here is real</h2>
+      <div class="sub">The one view in this atlas drawn to scale &middot; drag to pan &middot; scroll or slide to zoom</div>
+    </div>
+    <button id="hbClose" aria-label="Close comparator">&times;</button>
+  </div>
+  <div id="hbBottom">
+    <div id="hbCaption"></div>
+    <div id="hbChips"></div>
+    <input id="hbSlider" type="range" min="0" max="1000" value="0" aria-label="Zoom scale">
+    <div id="hbScaleLbl"></div>
+  </div>
 </div>
 
 <div id="quiz" role="dialog" aria-modal="true" aria-label="Field exam">
@@ -2225,7 +2295,8 @@ for (const [id, v] of speeds) {
 addEventListener('keydown', e => {
   if (e.target.tagName === 'INPUT') return;   // typing in the atlas search, not steering
   if (e.key === 'Escape') {
-    if ($('quiz').classList.contains('open')) endQuiz();
+    if ($('howbig').classList.contains('open')) closeHowBig();
+    else if ($('quiz').classList.contains('open')) endQuiz();
     else if (card.classList.contains('open')) closeCard();
     else if (atlasOpen) toggleAtlas(false);
     else if (state.scene === 'solar') exitSolar();
@@ -3260,6 +3331,170 @@ $('tourEnd').onclick = endTour;
 $('tourBtn').onclick = () => { tourIdx >= 0 ? endTour() : startTour(); };
 $('welcomeTour').onclick = startTour;
 
+/* ============ HOW BIG? · true-scale comparator ============
+   Everywhere else the atlas apologises: sizes not to scale. This is the one
+   view where every width is real — diameters in kilometres, nothing fudged. */
+const SCALE_OBJS = [
+  { key:'moon', name:'The Moon', d:3474, col:'#cfd6e4', glow:false, cap:'About as wide as Australia.' },
+  { key:'earth', name:'Earth', d:12742, col:'#9fc4ef', glow:false, cap:'Home. Watch how fast it vanishes.' },
+  { key:'neptune', name:'Neptune', d:49244, col:'#8fb8e8', glow:false, cap:'Four Earths, side by side.' },
+  { key:'jupiter', name:'Jupiter', d:139820, col:'#e8cfa8', glow:false, cap:'Every other planet would fit inside it — together.' },
+  { key:'trappist', name:'TRAPPIST-1', d:166000, col:'#ff9d6b', glow:true, cap:'A true star barely wider than Jupiter — carrying seven worlds.' },
+  { key:'sun', name:'The Sun', d:1392700, col:'#ffd98e', glow:true, cap:'109 Earths across; 1.3 million would fit inside.' },
+  { key:'sirius', name:'Sirius A', d:2380000, col:'#eef4ff', glow:true, cap:'The brightest star of our nights — 1.7 Suns wide.' },
+  { key:'rigel', name:'Rigel', d:110000000, col:'#cfe0ff', glow:true, cap:'Orion’s blue foot: 79 Suns side by side.' },
+  { key:'betelgeuse', name:'Betelgeuse', d:1060000000, col:'#ff9d6b', glow:true, cap:'764 Suns wide. In the Sun’s place it would swallow Mars.' },
+];
+{ // lay the row out in kilometres on a shared ground line
+  let xcur = 0, prevR = null;
+  for (const o of SCALE_OBJS) {
+    const r = o.d / 2;
+    if (prevR !== null) xcur += (prevR + r) * 1.35;
+    o.x = xcur; prevR = r;
+  }
+}
+const HB_ROW_END = SCALE_OBJS[SCALE_OBJS.length - 1].x + SCALE_OBJS[SCALE_OBJS.length - 1].d / 2;
+
+const hb = { open: false, ls: 0, tls: 0, cx: 0, tcx: 0, focus: null, raf: 0, inited: false };
+const hbCanvas = $('hbCanvas'), hbg = hbCanvas.getContext('2d');
+function hbDims() {
+  const W = innerWidth, H = innerHeight;
+  return { W, H, lsMin: Math.log((W * .92) / HB_ROW_END), lsMax: Math.log((H * .62) / SCALE_OBJS[0].d) };
+}
+function hbResize() {
+  hbCanvas.width = innerWidth * DPR; hbCanvas.height = innerHeight * DPR;
+  hbg.setTransform(DPR, 0, 0, DPR, 0, 0);
+}
+function fmtKm(km) {
+  if (km >= 1e9) return +(km / 1e9).toFixed(2) + ' billion km';
+  if (km >= 1e6) return +(km / 1e6).toFixed(2) + ' million km';
+  return (km >= 100 ? Math.round(km).toLocaleString('en-US') : +km.toFixed(1)) + ' km';
+}
+function hbFocus(o) {
+  const { H, lsMin, lsMax } = hbDims();
+  hb.focus = o;
+  hb.tcx = o.x;
+  hb.tls = Math.min(lsMax, Math.max(lsMin, Math.log((H * .5) / o.d)));
+  $('hbCaption').textContent = o.name + ' · ' + fmtKm(o.d) + ' wide — ' + o.cap;
+  document.querySelectorAll('.hbChip').forEach(el => el.classList.toggle('on', el.dataset.key === o.key));
+}
+for (const o of SCALE_OBJS) {
+  const b = document.createElement('button');
+  b.className = 'hbChip'; b.dataset.key = o.key; b.textContent = o.name;
+  b.onclick = () => hbFocus(o);
+  $('hbChips').appendChild(b);
+}
+function hbFrame() {
+  if (!hb.open) return;
+  const { W, H, lsMin, lsMax } = hbDims();
+  const k = REDUCED ? 1 : .14;
+  hb.ls += (hb.tls - hb.ls) * k;
+  hb.cx += (hb.tcx - hb.cx) * k;
+  const s = Math.exp(hb.ls);
+  hbg.fillStyle = '#04070f'; hbg.fillRect(0, 0, W, H);
+  const rnd = mulberry(99);                       // fixed backdrop stars
+  for (let i = 0; i < 110; i++) {
+    hbg.globalAlpha = .1 + rnd() * .5;
+    hbg.fillStyle = rnd() < .9 ? '#c8d4ea' : '#ffe9c9';
+    hbg.fillRect(rnd() * W, rnd() * H, 1, 1);
+  }
+  hbg.globalAlpha = 1;
+  const groundY = H * .74;
+  hbg.strokeStyle = 'rgba(148,163,184,.22)'; hbg.lineWidth = 1;
+  hbg.beginPath(); hbg.moveTo(0, groundY + .5); hbg.lineTo(W, groundY + .5); hbg.stroke();
+  hbg.textAlign = 'center';
+  for (const o of SCALE_OBJS) {
+    const r = o.d / 2 * s;
+    const cxp = (o.x - hb.cx) * s + W / 2;
+    if (cxp + r < -80 || cxp - r > W + 80) continue;
+    const cy = groundY - r;
+    if (r > 40000) {                              // so vast it reads as a wall
+      hbg.fillStyle = o.col + '22';
+      const x0 = Math.max(0, cxp - r), x1 = Math.min(W, cxp + r);
+      hbg.fillRect(x0, 0, x1 - x0, groundY);
+    } else if (r >= .35) {
+      if (o.glow && r > 2) {
+        const halo = hbg.createRadialGradient(cxp, cy, r * .6, cxp, cy, r * 1.8);
+        halo.addColorStop(0, o.col + '3c'); halo.addColorStop(1, o.col + '00');
+        hbg.fillStyle = halo;
+        hbg.beginPath(); hbg.arc(cxp, cy, r * 1.8, 0, 6.283); hbg.fill();
+      }
+      hbg.fillStyle = o.col;
+      hbg.beginPath(); hbg.arc(cxp, cy, r, 0, 6.283); hbg.fill();
+      const shade = hbg.createRadialGradient(cxp - r * .4, cy - r * .4, r * .1, cxp, cy, r);
+      shade.addColorStop(0, 'rgba(4,7,15,0)'); shade.addColorStop(.72, 'rgba(4,7,15,.08)');
+      shade.addColorStop(1, 'rgba(4,7,15,.5)');
+      hbg.fillStyle = shade;
+      hbg.beginPath(); hbg.arc(cxp, cy, r, 0, 6.283); hbg.fill();
+    } else {                                      // smaller than a pixel: a dot, honestly
+      hbg.fillStyle = o.col; hbg.globalAlpha = .9;
+      hbg.fillRect(cxp - .6, groundY - 1.4, 1.3, 1.3);
+      hbg.globalAlpha = 1;
+    }
+    if (r > 13 || hb.focus === o) {
+      const ly = Math.max(cy - r - 26, 58);
+      hbg.font = '600 12px ' + '"SF Mono", ui-monospace, Menlo, Consolas, monospace';
+      hbg.fillStyle = hb.focus === o ? '#ffc98f' : 'rgba(184,207,232,.75)';
+      hbg.fillText(o.name.toUpperCase(), cxp, ly);
+      hbg.font = '10px ui-monospace, Menlo, Consolas, monospace';
+      hbg.fillStyle = 'rgba(148,163,184,.6)';
+      hbg.fillText(fmtKm(o.d), cxp, ly + 15);
+    }
+  }
+  $('hbScaleLbl').textContent = '1 pixel = ' + fmtKm(1 / s);
+  $('hbSlider').value = Math.round((hb.ls - lsMin) / (lsMax - lsMin) * 1000);
+  hb.raf = requestAnimationFrame(hbFrame);
+}
+function openHowBig() {
+  const { lsMin } = hbDims();
+  $('howbig').classList.add('open');
+  hbResize();
+  if (!hb.inited) {
+    hb.inited = true;
+    hb.ls = hb.tls = lsMin;
+    hb.cx = hb.tcx = HB_ROW_END / 2;
+    $('hbCaption').textContent = 'Nine real diameters on one line — pick one, or slide.';
+  }
+  hb.open = true;
+  setHash('#howbig');
+  sfxOpen();
+  cancelAnimationFrame(hb.raf);
+  hb.raf = requestAnimationFrame(hbFrame);
+}
+function closeHowBig() {
+  hb.open = false;
+  $('howbig').classList.remove('open');
+  if (location.hash === '#howbig') setHash(location.pathname + location.search);
+}
+$('scaleBtn').onclick = openHowBig;
+$('hbClose').onclick = closeHowBig;
+$('hbSlider').addEventListener('input', () => {
+  const { lsMin, lsMax } = hbDims();
+  hb.tls = lsMin + ($('hbSlider').value / 1000) * (lsMax - lsMin);
+  hb.focus = null;
+  document.querySelectorAll('.hbChip').forEach(el => el.classList.remove('on'));
+});
+hbCanvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  const { W, lsMin, lsMax } = hbDims();
+  const wx = (e.clientX - W / 2) / Math.exp(hb.ls) + hb.cx;   // world km under cursor
+  hb.tls = Math.min(lsMax, Math.max(lsMin, hb.tls - e.deltaY * .0016));
+  hb.tcx = wx - (e.clientX - W / 2) / Math.exp(hb.tls);
+}, { passive: false });
+let hbDrag = null;
+hbCanvas.addEventListener('pointerdown', e => {
+  hbCanvas.setPointerCapture(e.pointerId);
+  hbDrag = e.clientX; hbCanvas.classList.add('dragging');
+});
+hbCanvas.addEventListener('pointermove', e => {
+  if (hbDrag === null) return;
+  const dx = e.clientX - hbDrag; hbDrag = e.clientX;
+  hb.tcx -= dx / Math.exp(hb.ls);
+  hb.cx = hb.tcx;
+});
+addEventListener('pointerup', () => { hbDrag = null; hbCanvas.classList.remove('dragging'); });
+addEventListener('resize', () => { if (hb.open) hbResize(); });
+
 /* ---------- boot ---------- */
 addEventListener('resize', resize);
 resize();
@@ -3279,6 +3514,11 @@ $('beginBtn').onclick = () => {
 };
 if (store.get('mwa-welcomed', false)) { welcome.classList.add('hide'); }
 
+/* ---------- offline: install as an app ---------- */
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
+
 /* ---------- deep links: #catalog-id opens the atlas flown to the object ---------- */
 function hashTarget() {
   let id = location.hash.slice(1);
@@ -3286,6 +3526,7 @@ function hashTarget() {
   return id ? CAT.find(o => o.id === id) : null;
 }
 addEventListener('hashchange', () => {
+  if (location.hash === '#howbig') { if (!hb.open) openHowBig(); return; }
   const o = hashTarget();
   if (o && state.selected !== o.id) goTo(o);
 });
@@ -3293,6 +3534,9 @@ const linked = hashTarget();
 if (linked) {
   welcome.classList.add('hide');            // straight to the object; welcome can wait
   setTimeout(() => goTo(linked), REDUCED ? 80 : 600);
+} else if (location.hash === '#howbig') {
+  welcome.classList.add('hide');
+  openHowBig();
 }
 
 requestAnimationFrame(frame);
