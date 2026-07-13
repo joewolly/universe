@@ -328,6 +328,25 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
 }
 #quizClose:hover{color:var(--starlight)}
 
+/* ---------- tour menu (chooser) ---------- */
+#tourMenu{
+  position:fixed;right:calc(18px + var(--sar));bottom:calc(60px + var(--sab));z-index:34;
+  display:none;flex-direction:column;width:270px;
+  background:var(--panel);border:var(--hairline);border-radius:4px;
+  backdrop-filter:blur(12px);overflow:hidden;padding:5px;
+  box-shadow:0 18px 50px rgba(0,0,0,.5);
+}
+#tourMenu.open{display:flex}
+.tourOpt{
+  display:flex;flex-direction:column;gap:2px;text-align:left;
+  padding:10px 12px;border-radius:3px;transition:background .12s;
+}
+.tourOpt:hover{background:rgba(240,167,92,.09)}
+.tourOpt b{font-family:var(--display);font-weight:400;font-size:14.5px;letter-spacing:.04em;
+  color:var(--starlight)}
+.tourOpt:hover b{color:var(--ember-hot)}
+.tourOpt span{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--haze)}
+
 /* ---------- grand tour bar ---------- */
 #tourbar{
   position:fixed;left:50%;bottom:calc(16px + var(--sab));z-index:33;
@@ -464,7 +483,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   <button class="ctl" id="tonightBtn" style="display:none" title="Where is the Sun today — and what can you actually see?">&#9737; Tonight</button>
   <button class="ctl" id="latBtn" style="display:none" title="Where on Earth are you observing from? Changes every visibility call."></button>
   <button class="ctl" id="quizBtn" title="Test what you have learned">&#9998; Exam</button>
-  <button class="ctl" id="tourBtn" title="A guided tour of the highlights">&#9672; Grand tour</button>
+  <button class="ctl" id="tourBtn" title="Guided tours — pick a route">&#9672; Tours</button>
   <button class="ctl" id="skyBtn" title="The constellations, as seen from Earth">&#10038; Night sky</button>
   <button class="ctl" id="scaleBtn" title="Moon to Betelgeuse at true relative scale — the one honest view">&#9678; How big?</button>
   <button class="ctl" id="luckyBtn" title="Fly somewhere unexplored">&#10022; Surprise me</button>
@@ -509,8 +528,14 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   </div>
 </div>
 
+<div id="tourMenu" role="menu" aria-label="Choose a tour">
+  <button class="tourOpt" data-tour="grand"><b>The grand tour</b><span>The whole atlas — highlights of every scene</span></button>
+  <button class="tourOpt" data-tour="deaths"><b>Deaths of stars</b><span>How suns end: gently, violently, strangely</span></button>
+  <button class="tourOpt" data-tour="life"><b>Could life be there?</b><span>The ocean moons and other Earths</span></button>
+</div>
+
 <div id="tourbar">
-  <span class="tk">Grand tour</span>
+  <span class="tk" id="tourLabel">Grand tour</span>
   <span id="tourStep"></span>
   <span id="tourName"></span>
   <button class="ctl" id="tourPrev" aria-label="Previous stop">&larr;</button>
@@ -1045,6 +1070,46 @@ const SKY_EXT = [
   stats:[['Brightest star','Kaus Australis'],['Best seen','Jul – Sep, low in the south'],['Aim','The spout points at the galactic centre'],['Backdrop','The richest star clouds in the sky']],
   blurb:'Officially a centaur archer; to every modern stargazer, a teapot. The “steam” rising from its spout is real — it is the glowing star clouds of the galactic core, 26,000 light-years behind it.',
   facts:['Sagittarius A*, the Milky Way’s central black hole, sits just above the spout.','Scan this region with binoculars on a dark night: nebulae and star clusters crowd in like nowhere else in the sky.'] },
+
+{ id:'c-peg', name:'Pegasus', kicker:'Constellation · the Winged Horse',
+  sub:'The Great Square — autumn’s landmark, and history’s exoplanet',
+  stars:[[23.079,15.21,2.49,'Markab'],[23.063,28.08,2.42,'Scheat',1],[24.221,15.18,2.83,'Algenib'],
+    [24.140,29.09,2.06,'Alpheratz'],[21.736,9.88,2.39,'Enif',1],[22.691,10.83,3.40],
+    [22.170,6.20,3.53],[22.717,30.22,2.95,'Matar']],
+  lines:[[0,1],[1,3],[3,2],[2,0],[0,5],[5,6],[6,4],[1,7]],
+  marks:[{ra:21.500,dec:12.17,kind:'cluster',label:'M15'}],
+  stats:[['Brightest star','Enif — the muzzle'],['Best seen','Sep – Nov'],['Asterism','The Great Square'],['Made history','51 Pegasi b, 1995'],['Corner loan','Alpheratz belongs to Andromeda']],
+  blurb:'The winged horse that sprang from Medusa’s blood, flying upside down across the autumn sky. Forget the horse: find the Great Square, four medium stars framing an expanse of apparently empty darkness. It is the season’s landmark — every autumn constellation is found by starting here.',
+  facts:['In 1995 a planet was found circling 51 Pegasi, a Sun-like star just off the square’s western side — the first ever, and the discovery that opened the exoplanet era.','Count the faint stars inside the Square: from a city, none; from a dark site, dozens. It is astronomy’s oldest light-pollution meter.','The Square’s fourth corner, Alpheratz, is officially on loan — it belongs to neighbouring Andromeda.'] },
+
+{ id:'c-per', name:'Perseus', kicker:'Constellation · the Hero',
+  sub:'Medusa’s severed head still winks — every 2.87 days',
+  stars:[[3.405,49.86,1.79,'Mirfak'],[3.136,40.96,2.09,'Algol'],[3.080,53.51,2.93],
+    [3.715,47.79,3.01],[3.964,40.01,2.89],[3.902,31.88,2.85],[3.086,38.84,3.39,'',1]],
+  lines:[[2,0],[0,3],[3,4],[4,5],[0,1],[1,6]],
+  marks:[{ra:2.330,dec:57.14,kind:'cluster',label:'Double Cluster'}],
+  stats:[['Brightest star','Mirfak'],['Best seen','Oct – Jan'],['The demon','Algol dims every 2.87 days'],['Treasure','The Double Cluster'],['Every August','The Perseid radiant']],
+  blurb:'The hero flies home with Medusa’s severed head in hand — and the head still blinks. Algol, the Demon Star, is really two stars eclipsing each other: every 2.87 days it visibly fades for ten hours, then recovers. Ancient observers noticed, and named it the ghoul.',
+  facts:['Algol’s clockwork winking may be encoded in a 3,200-year-old Egyptian calendar of lucky and unlucky days.','Between Perseus and Cassiopeia hangs the Double Cluster — two swarms of young stars in one binocular field, visible to the naked eye as a brighter knot in the Milky Way.','The Perseid meteors of August stream out of this constellation, which lends them its name.'] },
+
+{ id:'c-aql', name:'Aquila', kicker:'Constellation · the Eagle',
+  sub:'Zeus’s thunderbolt-bearer, completing the Summer Triangle',
+  stars:[[19.846,8.87,0.76,'Altair'],[19.771,10.61,2.72,'Tarazed',1],[19.921,6.41,3.71,'Alshain'],
+    [19.424,3.11,3.36],[19.090,13.86,2.99],[20.188,-0.82,3.24],[19.106,-4.88,3.43]],
+  lines:[[4,1],[1,0],[0,2],[0,3],[3,5],[3,6]],
+  stats:[['Brightest star','Altair — 17 ly away'],['Best seen','Jul – Sep'],['Asterism','Summer Triangle, with Vega & Deneb'],['Altair’s day','~9 hours — visibly squashed'],['Flies along','The Milky Way’s band']],
+  blurb:'The eagle that carried Zeus’s thunderbolts, gliding down the band of the Milky Way toward Cygnus the swan. Its eye is Altair, one of our nearest bright stars — close enough that the light in your eye left it under two decades ago — flanked by two dimmer stars like wingtips.',
+  facts:['Altair spins in about nine hours — so fast the star bulges into an oval, wider at the equator than pole to pole.','Altair, Vega and Deneb form the Summer Triangle: three constellations’ brightest stars, and the frame of every northern summer night.','In East Asian star lore Altair is the cowherd, exiled across the river of the Milky Way from Vega the weaver girl — reunited one night each July.'] },
+
+{ id:'c-cen', name:'Centaurus', kicker:'Constellation · the Centaur',
+  sub:'The wise centaur, carrying our nearest neighbouring suns',
+  stars:[[14.660,-60.83,-0.27,'Alpha Centauri'],[14.064,-60.37,0.61,'Hadar'],[14.111,-36.37,2.06,'Menkent'],
+    [12.692,-48.96,2.17],[13.665,-53.47,2.30],[13.926,-47.29,2.55],[12.139,-50.72,2.58],[13.343,-36.71,2.73]],
+  lines:[[0,1],[1,4],[4,3],[3,6],[4,5],[5,2],[5,7]],
+  marks:[{ra:13.446,dec:-47.48,kind:'cluster',label:'ω Cen'}],
+  stats:[['Brightest star','Alpha Centauri — the nearest system'],['Best seen','Mar – Jun, southern skies'],['The Pointers','α & β aim at the Southern Cross'],['Treasure','Omega Centauri overhead'],['From mid-north','Never rises']],
+  blurb:'Chiron, the wise centaur who tutored the heroes — and the constellation holding our next-door neighbours. Its two brilliant forefeet are the Pointers: follow the line from Alpha Centauri through Hadar and you arrive at the Southern Cross. Alpha itself is the nearest star system of all, three suns just 4.4 light-years out.',
+  facts:['To the naked eye Alpha Centauri is one star; a small telescope splits it into two golden suns. The third, faint Proxima, is actually the closest — and carries a planet.','Omega Centauri, the greatest globular cluster in the sky, rides on the centaur’s back — ten million ancient stars in one misty naked-eye glow.','From most of Europe and North America the centaur never clears the horizon; it is the southern hemisphere’s reward.'] },
 ];
 
 for (const c of SKY_EXT) {
@@ -3190,6 +3255,10 @@ const QUIZ = [
 { q:'T Coronae Borealis, the “Blaze Star”, is famous for…', c:['Exploding roughly every 80 years','Being the coldest star known','Orbiting a planet','Changing colour monthly'], a:0, ref:'t-crb', why:'A white dwarf detonates its stolen hydrogen on a schedule — the next eruption is due any year now.' },
 { q:'How many spiral galaxies does our Local Group contain?', c:['Three — Andromeda, the Milky Way and Triangulum','Exactly one','Dozens','None'], a:0, ref:'m33', why:'Everything else in the neighbourhood is a dwarf or an elliptical.' },
 { q:'The Sagittarius Dwarf galaxy is currently…', c:['Being torn apart and eaten by the Milky Way','Colliding with Andromeda','Escaping the Local Group','Forming a new sun every second'], a:0, ref:'sgr-dwarf', why:'Its shredded stars wrap the whole Milky Way in the Sagittarius Stream. Galaxies grow by eating.' },
+{ q:'Algol, the “Demon Star” in Perseus, visibly fades every 2.87 days because…', c:['A companion star eclipses it','It is running out of fuel','Clouds cross its surface','The Moon blocks it'], a:0, ref:'c-per', why:'Two stars orbit and eclipse each other like clockwork — ancient observers noticed the winking and called it the ghoul.' },
+{ q:'The Summer Triangle is made of the brightest stars of…', c:['Lyra, Cygnus and Aquila','Orion, Taurus and Gemini','The Big and Little Dippers','Three planets'], a:0, ref:'c-aql', why:'Vega, Deneb and Altair — three constellations’ leading stars, framing northern summer nights.' },
+{ q:'The first planet ever found around another Sun-like star orbits…', c:['51 Pegasi, near the Great Square','Polaris','Betelgeuse','Sirius'], a:0, ref:'c-peg', why:'51 Pegasi b, discovered in 1995, opened the exoplanet era — and earned a Nobel Prize.' },
+{ q:'How do southern navigators find the Southern Cross?', c:['Follow the Pointers — Alpha Centauri and Hadar','Follow Orion’s belt','It never moves','Wait for moonrise'], a:0, ref:'c-cen', why:'The centaur’s two brilliant forefeet aim straight at Crux — and the Cross’s long beam aims at the pole.' },
 { q:'The Crab Nebula is the wreckage of a supernova witnessed in…', c:['1054 AD','1986','44 BC','1900'], a:0, ref:'m1', why:'Chinese and Japanese astronomers logged a “guest star” visible in daylight for 23 days.' },
 { q:'Which nearby star is expected to explode as a supernova?', c:['Betelgeuse','Sirius','Polaris','Vega'], a:0, ref:'betelgeuse', why:'Orion’s red shoulder — “soon” in astronomer-speak means within ~100,000 years.' },
 { q:'The nearest star system to our Sun is…', c:['Alpha Centauri','Sirius','TRAPPIST-1','Betelgeuse'], a:0, ref:'alpha-cen', why:'4.37 light-years away — about 70,000 years of travel at Voyager speed.' },
@@ -3505,22 +3574,29 @@ function openTonight() {
 }
 $('welcomeTonight').onclick = openTonight;
 
-/* ---------- grand tour ---------- */
-const TOUR = ['sun-system','sgr-a','m42','betelgeuse','m31','c-orion','c-tau',
-  'shower-ori','sol','saturn','pluto','voyager','halley'];
-let tourIdx = -1;
+/* ---------- guided tours ---------- */
+const TOURS = {
+  grand: { label: 'Grand tour', ids: ['sun-system','sgr-a','m42','betelgeuse','m31','c-orion','c-tau',
+    'shower-ori','sol','saturn','pluto','voyager','halley'] },
+  deaths: { label: 'Deaths of stars', ids: ['m57','betelgeuse','m1','vela','sgr1806','t-crb','cyg-x1','sgr-a'] },
+  life: { label: 'Could life be there?', ids: ['earth','mars','europa','enceladus','titan','trappist','kepler186'] },
+};
+let curTour = TOURS.grand, tourIdx = -1;
 function tourGo() {
-  const o = CAT.find(x => x.id === TOUR[tourIdx]);
+  const o = CAT.find(x => x.id === curTour.ids[tourIdx]);
   $('tourbar').classList.add('show');
   $('tourBtn').classList.add('on');
-  $('tourStep').textContent = (tourIdx + 1) + ' / ' + TOUR.length;
+  $('tourLabel').textContent = curTour.label;
+  $('tourStep').textContent = (tourIdx + 1) + ' / ' + curTour.ids.length;
   $('tourName').textContent = o.name;
   $('tourPrev').disabled = tourIdx === 0;
-  $('tourNext').innerHTML = tourIdx === TOUR.length - 1 ? 'Finish &#10003;' : 'Next &rarr;';
+  $('tourNext').innerHTML = tourIdx === curTour.ids.length - 1 ? 'Finish &#10003;' : 'Next &rarr;';
   goTo(o);
 }
-function startTour() {
+function startTour(key) {
+  curTour = TOURS[key] || TOURS.grand;
   tourIdx = 0;
+  toggleTourMenu(false);
   $('welcome').classList.add('hide');
   store.set('mwa-welcomed', true);
   tourGo();
@@ -3530,11 +3606,18 @@ function endTour() {
   $('tourbar').classList.remove('show');
   $('tourBtn').classList.remove('on');
 }
-$('tourNext').onclick = () => { if (tourIdx >= TOUR.length - 1) endTour(); else { tourIdx++; tourGo(); } };
+function toggleTourMenu(force) {
+  $('tourMenu').classList.toggle('open', force !== undefined ? force : !$('tourMenu').classList.contains('open'));
+}
+document.querySelectorAll('.tourOpt').forEach(b => { b.onclick = () => startTour(b.dataset.tour); });
+document.addEventListener('pointerdown', e => {
+  if (!$('tourMenu').contains(e.target) && e.target !== $('tourBtn')) toggleTourMenu(false);
+});
+$('tourNext').onclick = () => { if (tourIdx >= curTour.ids.length - 1) endTour(); else { tourIdx++; tourGo(); } };
 $('tourPrev').onclick = () => { if (tourIdx > 0) { tourIdx--; tourGo(); } };
 $('tourEnd').onclick = endTour;
-$('tourBtn').onclick = () => { tourIdx >= 0 ? endTour() : startTour(); };
-$('welcomeTour').onclick = startTour;
+$('tourBtn').onclick = () => { tourIdx >= 0 ? endTour() : toggleTourMenu(); };
+$('welcomeTour').onclick = () => startTour('grand');
 
 /* ============ HOW BIG? · true-scale comparator ============
    Everywhere else the atlas apologises: sizes not to scale. This is the one
