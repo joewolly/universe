@@ -106,6 +106,14 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   text-transform:uppercase;font-weight:400;
 }
 #atlas header .prog{font-family:var(--mono);font-size:10px;color:var(--haze);letter-spacing:.08em}
+#atlasSearch{
+  margin:10px 12px 2px;padding:7px 10px;flex:none;
+  background:rgba(6,10,20,.55);border:var(--hairline);border-radius:3px;
+  color:var(--starlight);font-family:var(--mono);font-size:12px;letter-spacing:.04em;
+  outline:none;transition:border-color .15s;
+}
+#atlasSearch::placeholder{color:var(--haze-dim)}
+#atlasSearch:focus{border-color:rgba(240,167,92,.45)}
 #atlasList{overflow-y:auto;flex:1;padding:6px 0 10px;scrollbar-width:thin;scrollbar-color:var(--haze-dim) transparent}
 #atlasList h3{
   font-family:var(--mono);font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;
@@ -354,6 +362,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
     <h2>Atlas Index</h2>
     <span class="prog" id="progSide">0 / 0 surveyed</span>
   </header>
+  <input id="atlasSearch" type="search" placeholder="Search the atlas&hellip;" autocomplete="off" spellcheck="false" aria-label="Search the atlas">
   <div id="atlasList"></div>
 </nav>
 
@@ -388,6 +397,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   </div>
   <button class="ctl" id="soundBtn" title="Instrument audio — synthesised, gentle">&#9834; Sound</button>
   <button class="ctl" id="tonightBtn" style="display:none" title="Where is the Sun today — and what can you actually see?">&#9737; Tonight</button>
+  <button class="ctl" id="latBtn" style="display:none" title="Where on Earth are you observing from? Changes every visibility call."></button>
   <button class="ctl" id="quizBtn" title="Test what you have learned">&#9998; Exam</button>
   <button class="ctl" id="tourBtn" title="A guided tour of the highlights">&#9672; Grand tour</button>
   <button class="ctl" id="skyBtn" title="The constellations, as seen from Earth">&#10038; Night sky</button>
@@ -898,6 +908,82 @@ const SHOWERS = [
 ];
 for (const sh of SHOWERS) { sh.scene = 'sky'; sh.group = 'Meteor showers'; sh.type = 'shower'; sh.mark = 4; sh.plate = 'shower'; }
 CAT.push(...SHOWERS);
+
+/* --- the zodiac, completed: the seven figures the chart was missing --- */
+const ZODIAC_EXT = [
+{ id:'c-ari', name:'Aries', kicker:'Constellation · the Ram',
+  sub:'Three stars in a bend — and two thousand years of borrowed fame',
+  stars:[[2.120,23.46,2.00,'Hamal'],[1.911,20.81,2.64,'Sheratan'],[1.892,19.29,3.86],
+    [2.833,27.26,3.63]],
+  lines:[[3,0],[0,1],[1,2]],
+  stats:[['Brightest star','Hamal — 66 ly'],['Best seen','Oct – Dec'],['Shape','A short bent line of three'],['Claim to fame','The “First Point of Aries”']],
+  blurb:'The ram of the Golden Fleece, the prize Jason and the Argonauts sailed for. Modest in stars but huge in history: two thousand years ago the Sun crossed into Aries at the spring equinox, so astronomers still call that crossing the First Point of Aries — even though Earth’s slow wobble has since carried it into Pisces.',
+  facts:['Precession shifts the equinox westward one constellation every ~2,150 years; the charts keep the old name anyway.','Mesarthim, the faintest of the three, was one of the first double stars ever found — by Robert Hooke in 1664, while chasing a comet.'] },
+
+{ id:'c-cnc', name:'Cancer', kicker:'Constellation · the Crab',
+  sub:'The zodiac’s faintest figure, hiding a naked-eye star swarm',
+  stars:[[8.275,9.19,3.52,'Al Tarf'],[8.975,11.86,4.25,'Acubens'],[8.745,18.15,3.94],
+    [8.721,21.47,4.66],[8.778,28.76,4.02]],
+  lines:[[4,3],[3,2],[2,1],[2,0]],
+  marks:[{ra:8.67,dec:19.98,kind:'cluster',label:'M44'}],
+  stats:[['Brightest star','Al Tarf — only mag 3.5'],['Best seen','Feb – Apr'],['Treasure','M44, the Beehive cluster'],['Find it','The gap between Gemini and Leo']],
+  blurb:'The faintest constellation of the zodiac — a dim upside-down Y between the twins and the lion, invisible from a city. The crab was sent to pinch Hercules mid-battle and was crushed underfoot for its trouble. Its saving grace floats at its centre: the Beehive, a swarm of six hundred stars visible to the naked eye as a soft smudge.',
+  facts:['The two “donkey” stars, Asellus Borealis and Australis, flank the Beehive — ancient observers saw the cluster as the manger they fed from.','Galileo aimed his telescope at the smudge in 1610 and counted forty stars; a pair of binoculars will repeat the trick for you.'] },
+
+{ id:'c-vir', name:'Virgo', kicker:'Constellation · the Maiden',
+  sub:'The harvest maiden, gateway to a city of galaxies',
+  stars:[[13.420,-11.16,0.97,'Spica'],[11.845,1.76,3.60,'Zavijava'],[12.694,-1.45,2.74,'Porrima'],
+    [12.927,3.40,3.38],[13.036,10.96,2.83,'Vindemiatrix'],[13.578,-0.60,3.37],[12.332,-0.67,3.89]],
+  lines:[[1,6],[6,2],[2,3],[3,4],[2,0],[0,5],[5,3]],
+  stats:[['Brightest star','Spica — “the ear of wheat”'],['Best seen','Apr – Jun'],['Size','Second-largest of all 88'],['The trick','Arc to Arcturus, then spike to Spica']],
+  blurb:'The harvest maiden holding a single ear of wheat — Spica — at the foot of the sky’s second-largest constellation. Her faint Y of stars is a doorway: just behind it lies the Virgo Cluster, some two thousand galaxies whose gravity our entire Local Group is slowly falling toward.',
+  facts:['Follow the arc of the Big Dipper’s handle to Arcturus, then drive the spike onward to Spica.','Spica is two stars locked so close they circle each other every four days, each pulled into an egg by the other’s tides.','Sweep a telescope just west of Vindemiatrix and galaxies drift through the eyepiece like plankton.'] },
+
+{ id:'c-lib', name:'Libra', kicker:'Constellation · the Scales',
+  sub:'The only zodiac figure that was never alive',
+  stars:[[14.848,-16.04,2.75,'Zubenelgenubi'],[15.283,-9.38,2.61,'Zubeneschamali'],
+    [15.592,-14.79,3.91],[15.067,-25.28,3.29]],
+  lines:[[0,1],[1,2],[2,0],[0,3]],
+  stats:[['Brightest star','Zubeneschamali'],['Best seen','May – Jul'],['History','Once the scorpion’s claws'],['Oddity','The zodiac’s only inanimate object']],
+  blurb:'The scales of justice — the only thing in the zodiac that never breathed. For centuries these stars were simply the outstretched claws of neighbouring Scorpius, and their names still confess it: Zubenelgenubi and Zubeneschamali, Arabic for the southern and northern claw.',
+  facts:['Zubeneschamali is the sky’s most persistent colour argument: observers keep reporting it as green, which physics says no star can be. Look and pick a side.','When the Sun stood here at the autumn equinox, day and night sat in perfect balance — the scales may be the zodiac’s oldest metaphor.'] },
+
+{ id:'c-cap', name:'Capricornus', kicker:'Constellation · the Sea Goat',
+  sub:'A smiling triangle of faint stars, four thousand years old',
+  stars:[[20.301,-12.54,3.57,'Algedi'],[20.350,-14.78,3.08,'Dabih'],[20.768,-25.27,4.14],
+    [20.864,-26.92,4.11],[21.099,-17.23,4.07],[21.668,-16.66,3.68],[21.784,-16.13,2.87,'Deneb Algedi'],
+    [21.444,-22.41,3.74]],
+  lines:[[6,5],[5,4],[4,0],[0,1],[1,2],[2,3],[3,7],[7,6]],
+  stats:[['Brightest star','Deneb Algedi — the goat’s tail'],['Best seen','Aug – Oct'],['Shape','A wide, smiling triangle'],['Historic guest','Neptune, discovered here in 1846']],
+  blurb:'Half goat, half fish — one of the oldest constellations of all, drawn as a sea goat by the Babylonians four thousand years ago. The myth-tellers said it was the god Pan, who dove into a river mid-escape and transformed only halfway. It is faint, but its broad grin of stars is easy once seen.',
+  facts:['On 23 September 1846, Galle and d’Arrest swung a Berlin telescope to Le Verrier’s predicted spot among these stars and found Neptune within one degree.','Sharp eyes split Algedi in two unaided — an optical double: the pair lie about 100 and 600 light-years away, strangers in line.'] },
+
+{ id:'c-aqr', name:'Aquarius', kicker:'Constellation · the Water Bearer',
+  sub:'A dim stream poured through the sky’s “Sea”',
+  stars:[[21.526,-5.57,2.87,'Sadalsuud'],[22.096,-0.32,2.94,'Sadalmelik'],[22.361,-1.39,3.85],
+    [22.480,-0.02,3.65],[22.877,-7.58,3.73],[22.911,-15.82,3.27,'Skat']],
+  lines:[[0,1],[1,2],[2,3],[3,4],[4,5]],
+  stats:[['Brightest star','Sadalsuud — “luckiest of the lucky”'],['Best seen','Sep – Nov'],['Asterism','The Water Jar — a small Y'],['Bonus','Radiant of May’s Eta Aquariids']],
+  blurb:'A youth pouring water from a jar, in a region the Babylonians called the Sea — every neighbour here is watery: the fishes, the sea goat, the whale. Nothing in it is bright; the pleasure is tracing the stream of dim stars spilling from the little Y of the Water Jar toward the southern horizon.',
+  facts:['Every May, crumbs of Halley’s Comet streak out of the Water Jar — the Eta Aquariid radiant sits right on it.','Its two brightest stars are both named for luck: their dawn rising once announced the end of the rainy season.'] },
+
+/* Pisces straddles the chart's RA 0h edge; its Circlet stars use ra − 24
+   so the figure stays contiguous inside the chart's ±200° margin. */
+{ id:'c-psc', name:'Pisces', kicker:'Constellation · the Fishes',
+  sub:'Two faint fish on a cord — now keepers of the equinox',
+  stars:[[-0.714,3.28,3.70],[-0.534,6.38,4.28],[-0.335,5.63,4.13],[-0.298,1.78,4.49],
+    [0.811,7.59,4.44],[1.049,7.89,4.27],[1.525,15.35,3.62,'Alpherg'],[2.034,2.76,3.82,'Alrescha'],
+    [1.756,9.16,4.26]],
+  lines:[[0,1],[1,2],[2,3],[3,0],[3,4],[4,5],[5,7],[7,8],[8,6]],
+  stats:[['Brightest star','Alpherg — mag 3.6, as good as it gets'],['Best seen','Oct – Dec'],['Asterism','The Circlet, under Pegasus'],['Now hosting','The spring equinox point']],
+  blurb:'Two fish tied tail-to-tail by a long cord, knotted at Alrescha — Aphrodite and Eros, who leapt into a river to escape the monster Typhon and roped themselves together so they could not be parted. Faint but important water: the Sun crosses the celestial equator here every March, so the spring equinox now happens in Pisces.',
+  facts:['Every star here is fainter than magnitude 3.5 — hunt the Circlet from a dark site, just south of the Great Square of Pegasus.','Precession slid the equinox from Aries into Pisces around 68 BC; in six centuries more it moves on into Aquarius.'] },
+];
+for (const c of ZODIAC_EXT) {
+  c.scene = 'sky'; c.group = 'The night sky'; c.type = 'constellation';
+  c.mark = 5; c.plate = 'const';
+}
+CAT.push(...ZODIAC_EXT);
 
 /* --- extensions to the existing scenes --- */
 CAT.push(
@@ -1737,6 +1823,17 @@ function drawPlate(o) {
     }
     g.globalAlpha = 1;
     glowBlob(g, -170, -70, 30, 'rgba(207,224,255,.9)', 1);      // first star of the evening
+    // tonight's real moon, phase and all
+    const mph = moonNow();
+    const mR = 24, mX = 165, mY = -100;
+    glowBlob(g, mX, mY, mR * 2.4, `rgba(214,226,244,${.25 + mph.illum * .45})`, 1);
+    g.fillStyle = '#dce6f4';
+    g.beginPath(); g.arc(mX, mY, mR, 0, 6.283); g.fill();
+    g.save();
+    g.beginPath(); g.arc(mX, mY, mR, 0, 6.283); g.clip();
+    g.fillStyle = '#070b14';
+    g.beginPath(); g.arc(mX - (mph.waxing ? 1 : -1) * 2 * mR * mph.illum, mY, mR * 1.02, 0, 6.283); g.fill();
+    g.restore();
     const hg = g.createLinearGradient(0, 30, 0, 165);
     hg.addColorStop(0, 'rgba(240,167,92,0)'); hg.addColorStop(1, 'rgba(240,120,60,.32)');
     g.fillStyle = hg; g.fillRect(-372, 30, 744, 140);
@@ -1829,12 +1926,17 @@ function openCard(o) {
   } else {
     sfxOpen();
   }
+  if (!o.transient) setHash('#' + o.id);   // shareable deep link
   refreshAtlas();
 }
 function closeCard() {
   card.classList.remove('open');
   state.selected = null; state.follow = null;
+  if (location.hash) setHash(location.pathname + location.search);
   refreshAtlas();
+}
+function setHash(url) {   // replaceState keeps Back usable; some file:// setups forbid it
+  try { history.replaceState(null, '', url); } catch (e) { /* live without deep links */ }
 }
 $('cardClose').onclick = closeCard;
 
@@ -1850,6 +1952,7 @@ function buildAtlas() {
     for (const o of objs) {
       const b = document.createElement('button');
       b.className = 'atlasItem'; b.dataset.id = o.id;
+      b.dataset.search = (o.name + ' ' + (o.kicker || '')).toLowerCase();
       b.innerHTML = `<span class="swatch" style="background:${TYPE_COLORS[o.type]}"></span>
         <span class="nm">${o.name}</span><span class="seen">✓</span>`;
       b.onclick = () => { goTo(o); if (innerWidth < 720) toggleAtlas(false); };
@@ -1874,6 +1977,35 @@ function toggleAtlas(force) {
   $('atlasToggle').setAttribute('aria-expanded', atlasOpen);
 }
 $('atlasToggle').onclick = () => toggleAtlas();
+
+/* ---------- atlas search ---------- */
+const atlasSearch = $('atlasSearch');
+function filterAtlas() {
+  const q = atlasSearch.value.trim().toLowerCase();
+  let head = null, headHas = false;
+  for (const el of $('atlasList').children) {
+    if (el.tagName === 'H3') {
+      if (head) head.style.display = headHas ? '' : 'none';
+      head = el; headHas = false;
+    } else {
+      const hit = !q || el.dataset.search.includes(q);
+      el.style.display = hit ? '' : 'none';
+      if (hit) headHas = true;
+    }
+  }
+  if (head) head.style.display = headHas ? '' : 'none';
+}
+atlasSearch.oninput = filterAtlas;
+atlasSearch.onkeydown = e => {
+  e.stopPropagation();
+  if (e.key === 'Enter') {
+    const first = [...document.querySelectorAll('.atlasItem')].find(el => el.style.display !== 'none');
+    if (first) first.click();
+  } else if (e.key === 'Escape') {
+    if (atlasSearch.value) { atlasSearch.value = ''; filterAtlas(); }
+    else atlasSearch.blur();
+  }
+};
 
 /* ---------- scene switching ---------- */
 function fadeTo(cb) {
@@ -1910,6 +2042,7 @@ function syncSceneUI() {
   $('timeCtls').classList.toggle('show', solar || exo);
   $('skyBtn').classList.toggle('on', sky);
   $('tonightBtn').style.display = sky ? 'flex' : 'none';
+  $('latBtn').style.display = sky ? 'flex' : 'none';
   $('crumbTxt').textContent = exo ? EXO_SYSTEMS[state.system].label
     : sky ? 'Night sky · seen from Earth'
     : solar ? 'Sol system · Orion Spur'
@@ -1917,7 +2050,7 @@ function syncSceneUI() {
   $('note').textContent = exo
     ? 'Orbits compressed · sizes not to scale · periods real — watch the resonance'
     : sky
-    ? 'Flat chart of the celestial sphere · poles stretched · 13 of 88 figures drawn'
+    ? 'Flat chart of the celestial sphere · poles stretched · 20 of 88 figures drawn'
     : solar
     ? 'Orbit spacing compressed · sizes not to scale · speeds proportional to reality'
     : 'Positions approximate · sizes & distances not to scale · drawn for navigation, not measurement';
@@ -2086,6 +2219,7 @@ for (const [id, v] of speeds) {
   };
 }
 addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;   // typing in the atlas search, not steering
   if (e.key === 'Escape') {
     if ($('quiz').classList.contains('open')) endQuiz();
     else if (card.classList.contains('open')) closeCard();
@@ -2218,6 +2352,23 @@ function buildSkySprite() {
     g.globalAlpha = 1;
   }
   g.globalCompositeOperation = 'source-over';
+  // the ecliptic — the Sun's annual path, static in RA/Dec so it lives in the sprite
+  g.strokeStyle = 'rgba(240,167,92,.3)';
+  g.lineWidth = 1.2;
+  g.setLineDash([6, 7]);
+  for (const shift of [-360, 0, 360]) {         // repeat into the chart's ±200° margins
+    g.beginPath();
+    let lastX = null;
+    for (let lam = 0; lam <= 360; lam += 2) {
+      const e = eclToRaDec(lam, 0);
+      const [wx, wy] = skyXY(e.ra, e.dec);
+      const [bx, by] = px(wx + shift, wy);
+      if (lastX !== null && Math.abs(bx - lastX) < 80) g.lineTo(bx, by); else g.moveTo(bx, by);
+      lastX = bx;
+    }
+    g.stroke();
+  }
+  g.setLineDash([]);
   // field stars everywhere
   for (let i = 0; i < 2100; i++) {
     g.globalAlpha = .08 + rnd() * .5;
@@ -2325,8 +2476,9 @@ function drawSky() {
       ctx.font = '600 12.5px ui-monospace, Menlo, Consolas, monospace';
       ctx.textAlign = 'center';
       const washed = state.tonight && inGlare(c);
-      ctx.fillStyle = hot ? '#ffc98f' : washed ? 'rgba(240,167,92,.45)' : 'rgba(184,207,232,.6)';
-      ctx.fillText(c.name.toUpperCase() + (washed ? ' · IN GLARE' : ''), lx, ly + (c.ext / 2) * z + 22);
+      const below = state.tonight && neverRises(c);
+      ctx.fillStyle = hot ? '#ffc98f' : below ? 'rgba(148,163,184,.35)' : washed ? 'rgba(240,167,92,.45)' : 'rgba(184,207,232,.6)';
+      ctx.fillText(c.name.toUpperCase() + (below ? ' · BELOW YOUR HORIZON' : washed ? ' · IN GLARE' : ''), lx, ly + (c.ext / 2) * z + 22);
     }
   }
   // meteor-shower radiants: a ring with streaks racing outward
@@ -2363,6 +2515,15 @@ function drawSky() {
       ctx.fillText(c.name.toUpperCase(), rx, ry + 82);
     }
   }
+  // name the ecliptic where the chart is quiet, between Scorpius and Sagittarius
+  if (state.labels) {
+    const e = eclToRaDec(255, 0);
+    const [ex, ey] = w2s(...skyXY(e.ra, e.dec));
+    ctx.font = '9.5px ui-monospace, Menlo, Consolas, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(240,167,92,.5)';
+    ctx.fillText('ECLIPTIC · THE SUN’S PATH', ex, ey + 14);
+  }
   if (state.tonight) drawTonight();
 }
 
@@ -2391,25 +2552,80 @@ $('skyBtn').onclick = () => { state.scene === 'sky' ? exitSky() : enterSky(); };
 /* ---------- tonight: the real Sun on the chart ---------- */
 state.tonight = false;
 state.system = 'trappist';
-function sunRaDec(date) {
+const EPS = 23.439 * Math.PI / 180;      // obliquity of the ecliptic
+const RAD = Math.PI / 180;
+function eclToRaDec(lamDeg, betaDeg) {   // ecliptic → equatorial
+  const lam = lamDeg * RAD, beta = betaDeg * RAD;
+  let ra = Math.atan2(Math.sin(lam) * Math.cos(EPS) - Math.tan(beta) * Math.sin(EPS), Math.cos(lam));
+  if (ra < 0) ra += 2 * Math.PI;
+  const dec = Math.asin(Math.sin(beta) * Math.cos(EPS) + Math.cos(beta) * Math.sin(EPS) * Math.sin(lam));
+  return { ra: ra * 12 / Math.PI, dec: dec / RAD };
+}
+function sunEclLon(date) {
   const n = (date - Date.UTC(2000, 0, 1, 12)) / 86400000;
   const L = 280.46 + 0.9856474 * n;
-  const g = (357.528 + 0.9856003 * n) * Math.PI / 180;
-  const lam = (L + 1.915 * Math.sin(g) + 0.02 * Math.sin(2 * g)) * Math.PI / 180;
-  const eps = 23.439 * Math.PI / 180;
-  let ra = Math.atan2(Math.cos(eps) * Math.sin(lam), Math.cos(lam));
-  if (ra < 0) ra += 2 * Math.PI;
-  return { ra: ra * 12 / Math.PI, dec: Math.asin(Math.sin(eps) * Math.sin(lam)) * 180 / Math.PI };
+  const g = (357.528 + 0.9856003 * n) * RAD;
+  return L + 1.915 * Math.sin(g) + 0.02 * Math.sin(2 * g);
 }
+function sunRaDec(date) { return eclToRaDec(sunEclLon(date), 0); }
 function sunNow() { return sunRaDec(Date.now()); }
+/* low-precision lunar ephemeris — same spirit as the sun formula above:
+   right to a degree or two, plenty for a chart drawn for navigation */
+function moonEph(date) {
+  const d = (date - Date.UTC(2000, 0, 1, 12)) / 86400000;
+  const L = 218.316 + 13.176396 * d;                 // mean longitude
+  const M = (134.963 + 13.064993 * d) * RAD;         // mean anomaly
+  const F = (93.272 + 13.229350 * d) * RAD;          // mean argument of latitude
+  const lam = L + 6.289 * Math.sin(M);
+  const beta = 5.128 * Math.sin(F);
+  const elong = (lam - sunEclLon(date)) * RAD;       // angle from the Sun
+  const illum = (1 - Math.cos(elong)) / 2;
+  const waxing = Math.sin(elong) > 0;
+  const phase = illum < .04 ? 'New moon' : illum > .96 ? 'Full moon'
+    : Math.abs(illum - .5) < .06 ? (waxing ? 'First quarter' : 'Last quarter')
+    : illum < .5 ? (waxing ? 'Waxing crescent' : 'Waning crescent')
+    : (waxing ? 'Waxing gibbous' : 'Waning gibbous');
+  return { ...eclToRaDec(lam, beta), illum, waxing, phase };
+}
+function moonNow() { return moonEph(Date.now()); }
 function raDiffH(a, b) { const d = Math.abs(a - b) % 24; return d > 12 ? 24 - d : d; }
 function objRa(o) { return ((12 - o.pos[0] / 15) % 24 + 24) % 24; }
 function inGlare(o) { return raDiffH(objRa(o), sunNow().ra) < 2.8; }
+
+/* ---------- observing latitude: North / Equator / South ---------- */
+const LATS = [{ lat: 45, label: '⌖ North 45°' }, { lat: 0, label: '⌖ Equator' }, { lat: -35, label: '⌖ South 35°' }];
+state.obsLat = store.get('mwa-lat', 45);
+function maxAlt(o) { return 90 - Math.abs(state.obsLat + o.pos[1]); }   // pos[1] = −Dec
+function neverRises(o) { return maxAlt(o) < 5; }
+function circumpolar(o) {
+  const a = Math.abs(state.obsLat);
+  return a > 0 && Math.sign(state.obsLat) * -o.pos[1] > 90 - a + 4;
+}
+function syncLatBtn() {
+  const cur = LATS.find(l => l.lat === state.obsLat) || LATS[0];
+  $('latBtn').textContent = cur.label;
+}
+$('latBtn').onclick = () => {
+  const i = LATS.findIndex(l => l.lat === state.obsLat);
+  state.obsLat = LATS[(i + 1) % LATS.length].lat;
+  store.set('mwa-lat', state.obsLat);
+  syncLatBtn();
+  // refresh the open card so its visibility line tells the new truth
+  if (state.selected) {
+    const o = CAT.find(x => x.id === state.selected);
+    if (o && o.scene === 'sky') openCard(o);
+  }
+};
+syncLatBtn();
+
 function skyStatus(o) {
+  if (neverRises(o)) return 'Never rises from your latitude';
+  if (circumpolar(o)) return 'Circumpolar — up every night of the year';
   const raC = objRa(o), s = sunNow(), d = raDiffH(raC, s.ra);
   if (d < 2.8) return 'Lost in the Sun’s glare this month';
   const evening = ((raC - s.ra + 24) % 24) < 12;
   if (d < 5.5) return evening ? 'Low in the west after dusk' : 'Low in the east before dawn';
+  if (maxAlt(o) < 25) return 'Up tonight, but always low from your latitude';
   return d > 10 ? 'Prime position — up nearly all night' : 'Well placed in tonight’s sky';
 }
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -2424,7 +2640,22 @@ function bestMonth(o) {
 }
 function statsFor(o) {
   if (o.scene !== 'sky' || o.transient) return o.stats;
-  return [...o.stats, ['Right now', skyStatus(o)], ['Prime evening month', bestMonth(o)]];
+  const live = [...o.stats, ['Right now', skyStatus(o)], ['Prime evening month', bestMonth(o)]];
+  if (o.radiant) live.push(['Moonlight at next peak', showerMoon(o.id)]);
+  return live;
+}
+function showerPeakTime(id) {
+  const [m, d] = SHOWER_PEAKS[id];
+  const now = new Date();
+  let t = Date.UTC(now.getUTCFullYear(), m, d);
+  if (t < Date.now() - 2 * 86400000) t = Date.UTC(now.getUTCFullYear() + 1, m, d);
+  return t;
+}
+function showerMoon(id) {
+  const pc = Math.round(moonEph(showerPeakTime(id)).illum * 100);
+  return pc + '% lit — ' + (pc < 25 ? 'dark skies, a good year'
+    : pc < 60 ? 'fair; the faint ones will hide'
+    : 'a bright moon will wash it out');
 }
 $('tonightBtn').onclick = () => {
   state.tonight = !state.tonight;
@@ -2460,6 +2691,29 @@ function drawTonight() {
   ctx.fillText('THE SUN · TODAY', sx, sy - 18);
   ctx.fillStyle = 'rgba(240,167,92,.55)';
   ctx.fillText('DAYLIGHT DROWNS THIS STRETCH', sx, sy + 44);
+  // the Moon, tonight's phase and all
+  const m = moonNow();
+  const [mx, my] = w2s(...skyXY(m.ra, m.dec));
+  const R = 8;
+  const halo = ctx.createRadialGradient(mx, my, 0, mx, my, 28);
+  halo.addColorStop(0, `rgba(214,226,244,${.1 + m.illum * .4})`);
+  halo.addColorStop(1, 'rgba(214,226,244,0)');
+  ctx.fillStyle = halo; ctx.beginPath(); ctx.arc(mx, my, 28, 0, 6.283); ctx.fill();
+  ctx.fillStyle = '#dde6f2';
+  ctx.beginPath(); ctx.arc(mx, my, R, 0, 6.283); ctx.fill();
+  // bite the shadow out of the lit disk, on the side away from the Sun
+  ctx.save();
+  ctx.beginPath(); ctx.arc(mx, my, R, 0, 6.283); ctx.clip();
+  const dir = Math.sign(sx - mx) || 1;
+  ctx.fillStyle = '#0a1220';
+  ctx.beginPath(); ctx.arc(mx - dir * 2 * R * m.illum, my, R * 1.02, 0, 6.283); ctx.fill();
+  ctx.restore();
+  ctx.strokeStyle = 'rgba(214,226,244,.5)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.arc(mx, my, R, 0, 6.283); ctx.stroke();
+  ctx.fillStyle = '#cfe0ff';
+  ctx.fillText('THE MOON · ' + m.phase.toUpperCase(), mx, my - 16);
+  ctx.fillStyle = 'rgba(207,224,255,.55)';
+  ctx.fillText(Math.round(m.illum * 100) + '% LIT', mx, my + 24);
 }
 
 /* ---------- field exam ---------- */
@@ -2739,12 +2993,25 @@ function nextShower() {
   return best;
 }
 let briefed = false;
-function tonightBriefing() {
+const ZODIAC_IDS = ['c-ari','c-tau','c-gem','c-cnc','c-leo','c-vir','c-lib','c-sco','c-sgr','c-cap','c-aqr','c-psc'];
+function sunZodiac() {
   const s = sunNow();
-  const consts = SKY_OBJS.filter(o => o.pts);
+  let best = null, bd = 99;
+  for (const id of ZODIAC_IDS) {
+    const o = CAT.find(x => x.id === id);
+    const d = raDiffH(objRa(o), s.ra);
+    if (d < bd) { bd = d; best = o; }
+  }
+  return best;
+}
+function tonightBriefing() {
+  const s = sunNow(), m = moonNow();
+  const consts = SKY_OBJS.filter(o => o.pts && !neverRises(o));
   const ranked = [...consts].sort((a, b) => raDiffH(objRa(b), s.ra) - raDiffH(objRa(a), s.ra));
   const top = ranked.slice(0, 3), lost = ranked[ranked.length - 1];
   const ns = nextShower(), nsObj = CAT.find(o => o.id === ns.id);
+  const moonWarn = ns.days <= 4 && moonEph(showerPeakTime(ns.id)).illum > .6
+    ? ' — but a bright moon will spoil it' : '';
   const date = new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric' });
   return {
     id: 'briefing', scene: 'sky', type: 'star', transient: true,
@@ -2752,9 +3019,10 @@ function tonightBriefing() {
     sub: 'A live reading of the celestial clock', plate: 'tonight',
     stats: [
       ['Best placed', top.map(c => c.name).join(' · ')],
+      ['The Moon', m.phase + ' · ' + Math.round(m.illum * 100) + '% lit'],
       ['Washed out', lost.name + ' — in the Sun’s glare'],
-      ['Next meteor shower', nsObj.name + (ns.days === 0 ? ' — peaking now!' : ' · in ' + ns.days + ' days')],
-      ['The Sun sits at', 'RA ' + s.ra.toFixed(1) + 'h — toward ' + (raDiffH(objRa(lost), s.ra) < 3 ? lost.name : 'the glare zone')]
+      ['Next meteor shower', nsObj.name + (ns.days === 0 ? ' — peaking now!' : ' · in ' + ns.days + ' days') + moonWarn],
+      ['The Sun stands in', sunZodiac().name + ' — hidden in its glare']
     ],
     blurb: 'Everything on this card is recomputed from today’s date. The constellations opposite the Sun own the night; the ones within a few hours of it rise and set with the daylight and cannot be seen at all. Come back in a month and the cast will have shifted.',
     facts: ['The whole sky slides about one degree west per night — four minutes earlier for every star, every day.', 'In six months, tonight’s washed-out figures will own the midnight sky.'],
@@ -2823,6 +3091,22 @@ $('beginBtn').onclick = () => {
   if (innerWidth > 900) toggleAtlas(true);
 };
 if (store.get('mwa-welcomed', false)) { welcome.classList.add('hide'); }
+
+/* ---------- deep links: #catalog-id opens the atlas flown to the object ---------- */
+function hashTarget() {
+  let id = location.hash.slice(1);
+  try { id = decodeURIComponent(id); } catch (e) { return null; }
+  return id ? CAT.find(o => o.id === id) : null;
+}
+addEventListener('hashchange', () => {
+  const o = hashTarget();
+  if (o && state.selected !== o.id) goTo(o);
+});
+const linked = hashTarget();
+if (linked) {
+  welcome.classList.add('hide');            // straight to the object; welcome can wait
+  setTimeout(() => goTo(linked), REDUCED ? 80 : 600);
+}
 
 requestAnimationFrame(frame);
 
