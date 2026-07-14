@@ -740,7 +740,7 @@ const CAT = [
 
 { id:'alpha-cen', scene:'galaxy', group:'Stars & other suns', type:'star', name:'Alpha Centauri',
   kicker:'Nearest star system', sub:'Three suns next door — 4.4 light-years away',
-  pos:s(-2,4), mark:5, minLabelZoom:.15, plate:'star:#ffd98e',
+  pos:s(-2,4), mark:5, minLabelZoom:.15, plate:'star:#ffd98e', action:'enterExo', exoSystem:'proxima',
   stats:[['Distance','4.37 ly'],['Members','3 stars (A, B, Proxima)'],['Known planets','Proxima b, in habitable zone'],['Travel time','~70,000 yrs at Voyager speed']],
   blurb:'The closest star system to home: two Sun-like stars in a tight waltz, plus the faint red dwarf Proxima, which hides at least one rocky planet in its habitable zone. At this map’s scale, the system sits directly on top of the Sun — zoom all the way in to separate them.',
   facts:['A radio message to Proxima b would take 4.2 years each way — a conversation of decades.','Breakthrough Starshot proposes laser-sail probes that could make the trip in ~20 years.'] },
@@ -1143,6 +1143,45 @@ const SKY_EXT = [
   stats:[['Brightest star','Canopus — 2nd only to Sirius'],['Best seen','Southern summer, Jan – Apr'],['Once part of','Argo Navis, the giant ship'],['Treasure','The Carina Nebula'],['From mid-north','Never rises']],
   blurb:'The southern sky’s flagship — literally. The ancients drew one enormous constellation here, Argo Navis, the ship of Jason and the Argonauts; it was so unwieldy that astronomers broke it up in 1763, and Carina is the keel. At its helm blazes Canopus, second only to Sirius, and along its length runs the most spectacular stretch of the southern Milky Way.',
   facts:['Canopus is no near neighbour like Sirius — it is 310 ly away and truly luminous, shining with 10,000 Suns. Spacecraft have navigated by it since the 1960s.','The Carina Nebula, faintly visible to the naked eye, is four times the size of Orion’s — and hides Eta Carinae, a star expected to explode.','Because Argo was dismembered, Carina kept letters α and β while neighbouring Vela and Puppis start at γ — the alphabet still remembers the ship.'] },
+
+{ id:'c-vel', name:'Vela', kicker:'Constellation · the Sails',
+  sub:'The sails of Argo — flying over a dead star’s wreckage',
+  stars:[[8.158,-47.34,1.83,'Regor'],[8.745,-54.71,1.96,'Alsephina'],[9.133,-43.43,2.21,'Suhail',1],
+    [9.369,-55.01,2.48,'Markeb'],[10.779,-49.42,2.69],[9.512,-40.47,3.60],[9.947,-54.57,3.54]],
+  lines:[[0,2],[2,5],[5,4],[4,6],[6,3],[3,1],[1,0]],
+  marks:[{ra:8.588,dec:-45.18,kind:'nebula',label:'Vela SNR'}],
+  stats:[['Brightest star','Regor — γ² Velorum'],['Best seen','Feb – Apr, southern skies'],['Once part of','Argo Navis, with Carina & Puppis'],['Buried inside','The Vela Pulsar'],['Warning','Half of the False Cross']],
+  blurb:'The billowing sails of the ship Argo, a loose ring of bright stars strung along the southern Milky Way. Sailing within it is a shipwreck of another kind: the torn, glowing wreath of the Vela supernova — and at its heart the Vela Pulsar, the city-sized lighthouse this atlas charts on the galaxy plate.',
+  facts:['Regor is the brightest Wolf–Rayet star in the sky — a heavyweight sun peeling itself apart in a furious wind, a supernova-in-waiting.','Two of Vela’s stars and two of Carina’s form the False Cross, which generations of navigators have mistaken for the real Crux — it points nowhere useful.','The Vela supernova exploded ~11,000 years ago; ice-age skywatchers would have seen it rival the Moon.'] },
+
+{ id:'c-pup', name:'Puppis', kicker:'Constellation · the Stern',
+  sub:'The stern of the great ship, steered by the hottest star you can see',
+  stars:[[8.060,-40.00,2.25,'Naos'],[7.285,-37.10,2.70,'',1],[8.126,-24.30,2.81],
+    [6.833,-50.61,2.93],[6.629,-43.20,3.17],[7.822,-24.86,3.34]],
+  lines:[[3,4],[4,1],[1,0],[0,5],[5,2]],
+  stats:[['Brightest star','Naos — ζ Puppis'],['Best seen','Jan – Mar'],['Once part of','Argo Navis — this was the poop deck'],['Naos runs at','~40,000 °C, blue-white'],['Alphabet scar','No α or β — Carina took them']],
+  blurb:'The stern of Argo, trailing the keel through the richest star fields of the winter Milky Way. Its helmsman is Naos: the hottest star the naked eye can easily see, a blue monster burning at forty thousand degrees whose surface blasts out a wind a thousand times stronger than the Sun’s.',
+  facts:['Naos shines with the light of ~800,000 Suns once its ultraviolet output is counted — most of its brilliance is invisible to human eyes.','“Puppis” is the ship’s poop deck; the sky genuinely contains one.','When Argo Navis was broken up in 1763, the star letters were not re-dealt: Puppis begins at ζ, its alphabet forever missing the letters Carina sailed off with.'] },
+
+{ id:'c-crb', name:'Corona Borealis', kicker:'Constellation · the Northern Crown',
+  sub:'Ariadne’s crown — waiting for its temporary eighth jewel',
+  stars:[[15.578,26.71,2.23,'Alphecca'],[15.464,29.11,3.68,'Nusakan'],[15.549,31.36,4.14],
+    [15.712,26.30,3.84],[15.826,26.07,4.63],[15.959,26.88,4.15],[16.024,29.85,4.99]],
+  lines:[[2,1],[1,0],[0,3],[3,4],[4,5],[5,6]],
+  marks:[{ra:15.996,dec:25.92,kind:'star',label:'T CrB'}],
+  stats:[['Brightest star','Alphecca — “the jewel”'],['Best seen','May – Jul'],['Shape','A perfect little tiara'],['Resident','T CrB, the Blaze Star'],['Find it','Between Arcturus and Hercules']],
+  blurb:'The wedding crown of Ariadne, tossed into the sky by Dionysus: seven stars in a neat semicircle, one of the few constellations that looks exactly like its name. Keep an eye on it — just outside the arc waits T Coronae Borealis, the Blaze Star, due any year now to erupt and hang a temporary eighth jewel on the crown.',
+  facts:['When T CrB blows, this little crown will make world news — and for a week, anyone who learned its shape will see the “new star” instantly.','The crown holds a second celebrity: R CrB, an anti-nova that unpredictably fades away — a star that hides behind clouds of its own soot.','In Australian Aboriginal astronomy the semicircle is a boomerang; in Arabic, a beggar’s broken bowl.'] },
+
+{ id:'c-cep', name:'Cepheus', kicker:'Constellation · the King',
+  sub:'A child’s drawing of a house — holding the ruler of the universe',
+  stars:[[21.310,62.59,2.46,'Alderamin'],[21.478,70.56,3.23,'Alfirk'],[23.655,77.63,3.21,'Errai'],
+    [22.486,58.42,3.75,'δ Cephei'],[22.181,58.20,3.35],[20.754,61.84,3.41],
+    [21.725,58.78,4.08,'Garnet Star',1],[22.828,66.20,3.51]],
+  lines:[[0,1],[1,2],[2,7],[7,4],[4,0],[4,3],[0,5]],
+  stats:[['Brightest star','Alderamin'],['Best seen','All year from the north; best Sep – Nov'],['Shape','A house with a steep roof'],['Resident','δ Cephei — the original standard candle'],['Also inside','The Garnet Star, reddest of all']],
+  blurb:'King Cepheus, husband of boastful Cassiopeia — drawn in the sky as a lopsided house beside his wife’s W. The house shelters the most important variable star in history: δ Cephei, whose steady four-day pulse gave astronomy its measuring tape. Stars like it — Cepheids — are how we know the distance to other galaxies.',
+  facts:['Henrietta Leavitt discovered that a Cepheid’s pulse rate reveals its true brightness — and therefore its distance. Hubble used exactly this to prove Andromeda was another galaxy.','The Garnet Star lives inside the house: a red supergiant so vast that, in the Sun’s place, it would reach past Jupiter — and so red that Herschel named it after the gem.','The roof-peak star Errai takes over as the North Star around the year 4000 — the crown moves house.'] },
 ];
 
 for (const c of SKY_EXT) {
@@ -1304,10 +1343,12 @@ CAT.push(
 TYPE_COLORS.exoplanet = '#9fc4ef';
 
 const EXO_SYSTEMS = {
-  trappist: { label: 'TRAPPIST-1 · seven worlds', starId: 'trappist-star', fit: 500,
+  trappist: { label: 'TRAPPIST-1 · seven worlds', starId: 'trappist-star', homeId: 'trappist', fit: 500,
     starR: 13, starCol: ['#ffd0b0', '#e05535', '#5a1a0e'], glow: '255,120,80', hz: [100, 208] },
-  kepler186: { label: 'Kepler-186 · the first Earth cousin', starId: 'k186-star', fit: 540,
-    starR: 17, starCol: ['#ffe0bc', '#e8804d', '#6a2812'], glow: '255,150,90', hz: [188, 248] }
+  kepler186: { label: 'Kepler-186 · the first Earth cousin', starId: 'k186-star', homeId: 'kepler186', fit: 540,
+    starR: 17, starCol: ['#ffe0bc', '#e8804d', '#6a2812'], glow: '255,150,90', hz: [188, 248] },
+  proxima: { label: 'Proxima Centauri · the worlds next door', starId: 'prox-star', homeId: 'alpha-cen', fit: 520,
+    starR: 11, starCol: ['#ffc4a8', '#d84830', '#4a120a'], glow: '255,110,70', hz: [70, 120] }
 };
 
 const EXO_EXT = [
@@ -1384,6 +1425,28 @@ const EXO_EXT = [
   stats:[['Year','130 Earth days'],['Size','1.11 × Earth'],['Distance','0.43 AU'],['Discovered','17 April 2014'],['Verdict','In the habitable zone']],
   blurb:'The planet that changed the question from “are there Earth-sized worlds in habitable zones?” to “how many?”. If it holds water and air, its noon light is a warm perpetual sunset — and any photosynthesis might favour black and crimson over green.',
   facts:['It receives about a third of Earth’s sunlight — comparable to a bright winter afternoon.','Its discovery paper made the cover of Science; the atlas you are using marks it in the galaxy view, 580 ly from home.'] },
+
+/* ---------------- Proxima Centauri ---------------- */
+{ id:'prox-star', system:'proxima', type:'star', name:'Proxima Centauri', kicker:'M5.5Ve · flare star',
+  sub:'The nearest star to the Sun — small, dim, and furious', orbit:{r:0,periodDays:1,phase:0}, size:11, plate:'star:#ff8a5c',
+  stats:[['Distance','4.246 ly — the closest star of all'],['Size','~15 % of the Sun'],['Mass','12 % of the Sun'],['Light','0.17 % of the Sun’s output'],['Temperament','Violent flares, often doubling in brightness'],['Belongs to','The Alpha Centauri triple system']],
+  blurb:'The Sun’s nearest neighbour is not the bright double star navigators know — it is this dim red ember trailing two trillion kilometres behind it, invisible without a telescope despite being closest of all. It makes up for its faintness with rage: Proxima is a flare star, whipping its planets with eruptions of X-rays and charged particles.',
+  facts:['Found in 1915 by Robert Innes in South Africa — humanity has known its nearest stellar neighbour for barely a century.','It orbits the bright Alpha Centauri pair roughly every 550,000 years.','It will still be burning, essentially unchanged, when the Sun has been a white dwarf for trillions of years.'] },
+{ id:'prox-d', system:'proxima', type:'exoplanet', name:'Proxima d', kicker:'Planet d · the featherweight',
+  sub:'A quarter of an Earth, skimming the flames', orbit:{r:55,periodDays:5.12,phase:2.6}, size:4.0, col:['#e0b090','#b06040','#48200f'],
+  stats:[['Year','5.12 Earth days'],['Mass','~26 % of Earth — sub-Earth'],['Distance','0.029 AU'],['Found','2022, by the wobble it makes'],['Verdict','Far too hot']],
+  blurb:'One of the lightest exoplanets ever detected: a world a quarter of Earth’s mass, found by the tiny 40-centimetre-per-second wobble it drags its star through — slower than a person walks. It skims just outside the star’s worst weather, far too hot for comfort.',
+  facts:['Detecting it meant measuring the star’s motion to walking pace across four light-years.'] },
+{ id:'prox-b', system:'proxima', type:'exoplanet', name:'Proxima b', kicker:'Planet b · the planet next door',
+  sub:'The nearest known world beyond the Solar System', orbit:{r:95,periodDays:11.19,phase:0.7}, size:5.4, col:['#b8ccc0','#587888','#1c2c40'],
+  stats:[['Year','11.19 Earth days'],['Mass','≥ 1.07 × Earth'],['Distance','0.049 AU — but in the habitable zone'],['Discovered','2016 — the “Pale Red Dot” campaign'],['Weather report','Flares may have stripped its air'],['Verdict','The nearest maybe-Earth']],
+  blurb:'Every star in every sky has a nearest known planet, and for the Sun it is this one: an approximately Earth-mass world in Proxima’s habitable zone, four and a quarter light-years away. Whether it is a living ocean world or a flare-scoured rock depends on a single unknown — whether it kept its atmosphere. It is the closest place the question of other life can possibly have an answer.',
+  facts:['Its discovery campaign was named Pale Red Dot, a nod to Sagan’s pale blue one.','Tidally locked: any inhabitants would live at the terminator, in a ring of eternal sunset.','Breakthrough Starshot proposes laser-driven gram-scale probes that could reach it within a human lifetime — arriving about 20 years after launch.'] },
+{ id:'prox-c', system:'proxima', type:'exoplanet', name:'Proxima c', kicker:'Planet c · the cold candidate',
+  sub:'A possible super-Earth in the deep freeze', orbit:{r:230,periodDays:1928,phase:4.4}, size:6.6, col:['#ccd4e0','#7c8ca4','#2c3444'],
+  stats:[['Year','~5.2 Earth years'],['Mass','~7 × Earth (if real)'],['Distance','1.49 AU'],['Status','Candidate — still being confirmed'],['Verdict','A frozen world, −230 °C']],
+  blurb:'Far outside the habitable zone drifts a heavier, colder question mark: a candidate super-Earth whose signal has appeared in years of measurements but is not yet beyond doubt. The atlas draws it honestly — as a world that probably exists, in an orbit where sunlight is a rumour.',
+  facts:['If confirmed, it orbits where Mars does — but its sun gives so little heat that it is colder than Pluto.','Its wide orbit makes it a rare thing: an exoplanet close enough that future telescopes might photograph it directly.'] },
 ];
 for (const e of EXO_EXT) { e.scene = 'exo'; e.group = 'Other worlds'; e.mark = 4; if (!e.plate) e.plate = 'exoball'; }
 CAT.push(...EXO_EXT);
@@ -3295,6 +3358,10 @@ const QUIZ = [
 { q:'“Arc to Arcturus” means…', c:['Follow the Big Dipper’s handle to the 4th-brightest star','Draw a line from Polaris','Trace the Milky Way’s band','Wait for the star to rise'], a:0, ref:'c-boo', why:'Extend the curve of the Dipper’s handle and it lands on brilliant orange Arcturus, tail of the kite of Boötes.' },
 { q:'The second-brightest star in the night sky is…', c:['Canopus, in Carina','Polaris','Betelgeuse','Vega'], a:0, ref:'c-car', why:'Southern Canopus is outshone only by Sirius — and spacecraft have steered by it since the 1960s.' },
 { q:'In 1974 the Arecibo telescope beamed humanity’s first deliberate message toward…', c:['M13, the Hercules Cluster','The Moon','Andromeda','Proxima Centauri'], a:0, ref:'m13', why:'Three minutes of radio aimed at 300,000 ancient suns — arriving in roughly 22,000 years.' },
+{ q:'The nearest known planet beyond the Solar System orbits…', c:['Proxima Centauri, 4.2 ly away','Sirius','Vega','Barnard’s Star'], a:0, ref:'prox-b', why:'Proxima b: roughly Earth-mass, in the habitable zone of the Sun’s nearest neighbour.' },
+{ q:'The False Cross is…', c:['Four stars of Vela & Carina often mistaken for Crux','A constellation that vanished','The old name for Cygnus','A radio telescope'], a:0, ref:'c-vel', why:'It has fooled navigators for centuries — unlike the real Southern Cross, it points nowhere useful.' },
+{ q:'δ Cephei matters to astronomy because…', c:['Its pulse rate reveals its true distance','It is the brightest star','It will explode this century','It never moves'], a:0, ref:'c-cep', why:'Cepheids pulse on a schedule set by their true brightness — Leavitt’s law, the measuring tape of the universe.' },
+{ q:'The hottest star the naked eye can easily see is…', c:['Naos, in Puppis','Betelgeuse','Polaris','Proxima Centauri'], a:0, ref:'c-pup', why:'ζ Puppis burns blue-white at ~40,000 °C — most of its light is ultraviolet, invisible to us.' },
 { q:'The Crab Nebula is the wreckage of a supernova witnessed in…', c:['1054 AD','1986','44 BC','1900'], a:0, ref:'m1', why:'Chinese and Japanese astronomers logged a “guest star” visible in daylight for 23 days.' },
 { q:'Which nearby star is expected to explode as a supernova?', c:['Betelgeuse','Sirius','Polaris','Vega'], a:0, ref:'betelgeuse', why:'Orion’s red shoulder — “soon” in astronomer-speak means within ~100,000 years.' },
 { q:'The nearest star system to our Sun is…', c:['Alpha Centauri','Sirius','TRAPPIST-1','Betelgeuse'], a:0, ref:'alpha-cen', why:'4.37 light-years away — about 70,000 years of travel at Voyager speed.' },
@@ -3465,7 +3532,7 @@ function enterExo(key) {
 }
 function exitExo() {
   closeCard();
-  const star = GALAXY_OBJS.find(o => o.id === (state.system === 'trappist' ? 'trappist' : 'kepler186'));
+  const star = GALAXY_OBJS.find(o => o.id === EXO_SYSTEMS[state.system].homeId);
   fadeTo(() => {
     state.scene = 'galaxy';
     state.cam = { x: star.pos[0], y: star.pos[1], z: 2.5 };
@@ -3615,7 +3682,7 @@ const TOURS = {
   grand: { label: 'Grand tour', ids: ['sun-system','sgr-a','m42','betelgeuse','m31','c-orion','c-tau',
     'shower-ori','sol','saturn','pluto','voyager','halley'] },
   deaths: { label: 'Deaths of stars', ids: ['m57','betelgeuse','m1','vela','sgr1806','t-crb','cyg-x1','sgr-a'] },
-  life: { label: 'Could life be there?', ids: ['earth','mars','europa','enceladus','titan','trappist','kepler186'] },
+  life: { label: 'Could life be there?', ids: ['earth','mars','europa','enceladus','titan','trappist','kepler186','prox-b'] },
 };
 let curTour = TOURS.grand, tourIdx = -1;
 function tourGo() {
