@@ -348,7 +348,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
 .tourOpt span{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--haze)}
 
 /* ---------- grand tour bar ---------- */
-#tourbar{
+#tourbar,#hopbar{
   position:fixed;left:50%;bottom:calc(16px + var(--sab));z-index:33;
   transform:translate(-50%,90px);opacity:0;pointer-events:none;
   display:flex;align-items:center;gap:12px;
@@ -356,15 +356,15 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   padding:8px 10px 8px 16px;backdrop-filter:blur(10px);
   transition:transform .3s cubic-bezier(.2,.8,.25,1),opacity .25s;
 }
-#tourbar.show{transform:translate(-50%,0);opacity:1;pointer-events:auto}
-#tourbar .tk{font-family:var(--mono);font-size:10px;letter-spacing:.22em;
+#tourbar.show,#hopbar.show{transform:translate(-50%,0);opacity:1;pointer-events:auto}
+#tourbar .tk,#hopbar .tk{font-family:var(--mono);font-size:10px;letter-spacing:.22em;
   text-transform:uppercase;color:var(--ember);white-space:nowrap}
-#tourStep{font-family:var(--mono);font-size:11px;color:var(--haze);font-variant-numeric:tabular-nums}
-#tourName{font-family:var(--display);font-size:14.5px;letter-spacing:.04em;
+#tourStep,#hopScore{font-family:var(--mono);font-size:11px;color:var(--haze);font-variant-numeric:tabular-nums}
+#tourName,#hopPrompt{font-family:var(--display);font-size:14.5px;letter-spacing:.04em;
   max-width:190px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #tourbar button:disabled{opacity:.35;cursor:default}
 @media (max-width:720px){
-  #tourbar{bottom:auto;top:calc(64px + var(--sat));width:calc(100vw - 24px);justify-content:space-between;padding:8px 10px}
+  #tourbar,#hopbar{bottom:auto;top:calc(64px + var(--sat));width:calc(100vw - 24px);justify-content:space-between;padding:8px 10px}
   #tourName{display:none}
 }
 
@@ -482,6 +482,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   <button class="ctl" id="soundBtn" title="Instrument audio — synthesised, gentle">&#9834; Sound</button>
   <button class="ctl" id="tonightBtn" style="display:none" title="Where is the Sun today — and what can you actually see?">&#9737; Tonight</button>
   <button class="ctl" id="latBtn" style="display:none" title="Where on Earth are you observing from? Changes every visibility call."></button>
+  <button class="ctl" id="hopBtn" style="display:none" title="Find the constellations on the chart — a pointing game">&#8982; Star hop</button>
   <button class="ctl" id="quizBtn" title="Test what you have learned">&#9998; Exam</button>
   <button class="ctl" id="tourBtn" title="Guided tours — pick a route">&#9672; Tours</button>
   <button class="ctl" id="skyBtn" title="The constellations, as seen from Earth">&#10038; Night sky</button>
@@ -532,6 +533,13 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   <button class="tourOpt" data-tour="grand"><b>The grand tour</b><span>The whole atlas — highlights of every scene</span></button>
   <button class="tourOpt" data-tour="deaths"><b>Deaths of stars</b><span>How suns end: gently, violently, strangely</span></button>
   <button class="tourOpt" data-tour="life"><b>Could life be there?</b><span>The ocean moons and other Earths</span></button>
+</div>
+
+<div id="hopbar">
+  <span class="tk">Star hop</span>
+  <span id="hopPrompt"></span>
+  <span id="hopScore"></span>
+  <button class="ctl" id="hopEnd" aria-label="End star hop">&times;</button>
 </div>
 
 <div id="tourbar">
@@ -2506,6 +2514,8 @@ function syncSceneUI() {
   $('skyBtn').classList.toggle('on', sky);
   $('tonightBtn').style.display = sky ? 'flex' : 'none';
   $('latBtn').style.display = sky ? 'flex' : 'none';
+  $('hopBtn').style.display = sky ? 'flex' : 'none';
+  if (!sky && $('hopbar').classList.contains('show')) endHop();
   $('crumbTxt').textContent = exo ? EXO_SYSTEMS[state.system].label
     : sky ? 'Night sky · seen from Earth'
     : solar ? 'Sol system · Orion Spur'
@@ -2640,6 +2650,7 @@ function pickAt(sx, sy) {
   return best;
 }
 function clickAt(sx, sy) {
+  if (hop.on && state.scene === 'sky') { hopGuess(pickAt(sx, sy)); return; }
   const t = tonightPickAt(sx, sy);
   if (t) { goTo(tonightCardFor(t)); return; }
   const o = pickAt(sx, sy);
@@ -2657,6 +2668,49 @@ function hoverAt(sx, sy) {
     tip.style.opacity = 1;
   } else tip.style.opacity = 0;
 }
+
+/* ---------- star hop · find-the-figure game ---------- */
+const hop = { on: false, order: [], idx: 0, score: 0 };
+function hopRound() {
+  $('hopPrompt').textContent = 'Find: ' + hop.order[hop.idx].name;
+  $('hopScore').textContent = (hop.idx + 1) + '/' + hop.order.length + ' · ' + hop.score + ' right';
+}
+function startHop() {
+  hop.order = shuffle(SKY_OBJS.filter(o => o.pts)).slice(0, 8);
+  hop.idx = 0; hop.score = 0; hop.on = true;
+  closeCard(); endTour();
+  flyTo(0, -6, skyFitZ());
+  $('hopbar').classList.add('show');
+  $('hopBtn').classList.add('on');
+  hopRound();
+}
+function endHop() {
+  hop.on = false;
+  $('hopbar').classList.remove('show');
+  $('hopBtn').classList.remove('on');
+}
+function hopGuess(o) {
+  if (!o || !o.pts) return;                     // empty sky or a shower radiant: not a guess
+  const t = hop.order[hop.idx];
+  if (o.id !== t.id) {
+    $('hopPrompt').textContent = 'That’s ' + o.name + ' — find ' + t.name;
+    sfxOpen();
+    return;
+  }
+  hop.score++; sfxDiscover();
+  if (++hop.idx >= hop.order.length) {
+    const best = Math.max(hop.score, store.get('mwa-hop-best', 0));
+    store.set('mwa-hop-best', best);
+    $('hopPrompt').textContent = 'Done — ' + hop.score + ' of ' + hop.order.length + (hop.score === hop.order.length ? ' · a perfect sweep' : '');
+    $('hopScore').textContent = 'best ' + best;
+    hop.on = false;
+    $('hopBtn').classList.remove('on');
+    return;
+  }
+  hopRound();
+}
+$('hopBtn').onclick = () => { hop.on ? endHop() : startHop(); };
+$('hopEnd').onclick = endHop;
 
 /* ---------- controls ---------- */
 $('zoomIn').onclick = () => zoomAt(state.W / 2, state.H / 2, 1.45);
