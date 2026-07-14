@@ -703,6 +703,20 @@ const CAT = [
   blurb:'A spherical swarm of ten million stars older than the galactic disk itself, orbiting in the Milky Way’s halo. It is so massive and strange that many astronomers believe it is the stolen core of a dwarf galaxy the Milky Way devoured long ago.',
   facts:['At its heart, stars sit 0.1 light-years apart — a night sky there would blaze with thousands of brilliant suns.','Its stars formed before the Earth, the Sun, and most of the galaxy’s disk.'] },
 
+{ id:'m13', scene:'galaxy', group:'Clusters & neighbours', type:'cluster', name:'Hercules Cluster',
+  kicker:'M13 · globular cluster', sub:'The northern sky’s great ball of ancient suns — and our first addressee',
+  pos:s(19000,-11400), mark:5, plate:'cluster',
+  stats:[['Distance','22,200 ly'],['Stars','~300,000'],['Age','~11.6 billion yrs'],['Catalogued','1714, by Edmond Halley'],['Naked eye','A soft smudge in Hercules, dark skies'],['Mail sent','1974, from Arecibo']],
+  blurb:'Three hundred thousand stars packed into a ball 150 light-years wide, wheeling through the halo since before the Milky Way had a disk. In 1974 humanity chose this cluster as the address for its first deliberate letter to the stars: the Arecibo message, three minutes of radio describing DNA, a human figure, and our place in the Solar System.',
+  facts:['The Arecibo message arrives in ~22,000 years; any reply doubles the wait. It was less a call than a proof we could shout.','Halley noted it shows “but a little patch” to the eye — then Herschel’s telescope resolved the patch into uncountable suns.','Globular clusters like this are the galaxy’s fossils: their stars are so old they formed from gas nearly untouched by earlier generations.'] },
+
+{ id:'47tuc', scene:'galaxy', group:'Clusters & neighbours', type:'cluster', name:'47 Tucanae',
+  kicker:'NGC 104 · globular cluster', sub:'A million suns with a core tight enough to collide',
+  pos:s(-10500,-7650), mark:5, plate:'cluster',
+  stats:[['Distance','~13,000 ly'],['Stars','~1 million'],['Age','~12 billion yrs'],['Rank','Second brightest globular, after ω Cen'],['Sky trick','Sits beside the SMC — but 20× nearer'],['Core','So dense stars physically collide']],
+  blurb:'The second-greatest globular cluster hangs in the far-southern sky right next to the Small Magellanic Cloud — a line-of-sight prank, since the cluster is twenty times closer. Its core is the most crowded place in our neighbourhood: stars pass so near one another that they steal partners, strip atmospheres, and occasionally merge outright.',
+  facts:['Collisions and mergers build “blue stragglers” — stars reborn hot and young in a cluster where everything should be ancient.','A search for planets among 34,000 of its stars found none: crowded cores may tear infant solar systems apart.','From a planet inside the core, the night would never be dark — thousands of stars would outshine Venus.'] },
+
 { id:'lmc', scene:'galaxy', group:'Clusters & neighbours', type:'galaxy', name:'Large Magellanic Cloud',
   kicker:'Satellite galaxy', sub:'Our biggest companion galaxy',
   pos:[28000,54000], mark:5, plate:'satgal',
@@ -1110,6 +1124,25 @@ const SKY_EXT = [
   stats:[['Brightest star','Alpha Centauri — the nearest system'],['Best seen','Mar – Jun, southern skies'],['The Pointers','α & β aim at the Southern Cross'],['Treasure','Omega Centauri overhead'],['From mid-north','Never rises']],
   blurb:'Chiron, the wise centaur who tutored the heroes — and the constellation holding our next-door neighbours. Its two brilliant forefeet are the Pointers: follow the line from Alpha Centauri through Hadar and you arrive at the Southern Cross. Alpha itself is the nearest star system of all, three suns just 4.4 light-years out.',
   facts:['To the naked eye Alpha Centauri is one star; a small telescope splits it into two golden suns. The third, faint Proxima, is actually the closest — and carries a planet.','Omega Centauri, the greatest globular cluster in the sky, rides on the centaur’s back — ten million ancient stars in one misty naked-eye glow.','From most of Europe and North America the centaur never clears the horizon; it is the southern hemisphere’s reward.'] },
+
+{ id:'c-boo', name:'Boötes', kicker:'Constellation · the Herdsman',
+  sub:'A kite of stars flown from the sky’s fourth-brightest point',
+  stars:[[14.261,19.18,-0.05,'Arcturus',1],[15.032,40.39,3.49,'Nekkar'],[14.535,38.31,3.04,'Seginus'],
+    [14.749,27.07,2.35,'Izar'],[15.258,33.31,3.47],[14.530,30.37,3.57],[13.911,18.40,2.68,'Muphrid']],
+  lines:[[0,3],[3,4],[4,1],[1,2],[2,5],[5,0],[0,6]],
+  stats:[['Brightest star','Arcturus — 4th brightest of all'],['Best seen','Apr – Jul'],['Shape','A kite, or an ice-cream cone'],['Find it','Arc from the Dipper’s handle'],['Arcturus is','An orange giant, 37 ly away']],
+  blurb:'The herdsman driving the Great Bear around the pole, drawn as a tall kite with brilliant orange Arcturus at its tail. Every stargazer learns it the same way: follow the arc of the Big Dipper’s handle and keep going — “arc to Arcturus” — and the fourth-brightest star in the sky is yours.',
+  facts:['Arcturus is a visitor: it belongs to the galaxy’s old halo and is cutting through our neighbourhood sideways. In half a million years it will have faded from naked-eye view.','The 1933 Chicago World’s Fair was opened by starlight — Arcturus’s light, caught by photocells, believed to have left the star during the previous Chicago fair in 1893.','Arcturus is what our Sun may look like near the end: a middle-mass star swollen into an orange giant.'] },
+
+{ id:'c-car', name:'Carina', kicker:'Constellation · the Keel',
+  sub:'The keel of the great ship Argo, steered by the second-brightest star',
+  stars:[[6.400,-52.70,-0.74,'Canopus'],[9.220,-69.72,1.69,'Miaplacidus'],[8.375,-59.51,1.86,'Avior',1],
+    [9.285,-59.28,2.21,'Aspidiske'],[10.716,-64.39,2.74],[9.785,-65.07,2.92],[10.229,-70.03,3.29]],
+  lines:[[0,2],[2,3],[3,5],[5,1],[1,6],[6,4],[4,3]],
+  marks:[{ra:10.750,dec:-59.87,kind:'nebula',label:'NGC 3372'}],
+  stats:[['Brightest star','Canopus — 2nd only to Sirius'],['Best seen','Southern summer, Jan – Apr'],['Once part of','Argo Navis, the giant ship'],['Treasure','The Carina Nebula'],['From mid-north','Never rises']],
+  blurb:'The southern sky’s flagship — literally. The ancients drew one enormous constellation here, Argo Navis, the ship of Jason and the Argonauts; it was so unwieldy that astronomers broke it up in 1763, and Carina is the keel. At its helm blazes Canopus, second only to Sirius, and along its length runs the most spectacular stretch of the southern Milky Way.',
+  facts:['Canopus is no near neighbour like Sirius — it is 310 ly away and truly luminous, shining with 10,000 Suns. Spacecraft have navigated by it since the 1960s.','The Carina Nebula, faintly visible to the naked eye, is four times the size of Orion’s — and hides Eta Carinae, a star expected to explode.','Because Argo was dismembered, Carina kept letters α and β while neighbouring Vela and Puppis start at γ — the alphabet still remembers the ship.'] },
 ];
 
 for (const c of SKY_EXT) {
@@ -3259,6 +3292,9 @@ const QUIZ = [
 { q:'The Summer Triangle is made of the brightest stars of…', c:['Lyra, Cygnus and Aquila','Orion, Taurus and Gemini','The Big and Little Dippers','Three planets'], a:0, ref:'c-aql', why:'Vega, Deneb and Altair — three constellations’ leading stars, framing northern summer nights.' },
 { q:'The first planet ever found around another Sun-like star orbits…', c:['51 Pegasi, near the Great Square','Polaris','Betelgeuse','Sirius'], a:0, ref:'c-peg', why:'51 Pegasi b, discovered in 1995, opened the exoplanet era — and earned a Nobel Prize.' },
 { q:'How do southern navigators find the Southern Cross?', c:['Follow the Pointers — Alpha Centauri and Hadar','Follow Orion’s belt','It never moves','Wait for moonrise'], a:0, ref:'c-cen', why:'The centaur’s two brilliant forefeet aim straight at Crux — and the Cross’s long beam aims at the pole.' },
+{ q:'“Arc to Arcturus” means…', c:['Follow the Big Dipper’s handle to the 4th-brightest star','Draw a line from Polaris','Trace the Milky Way’s band','Wait for the star to rise'], a:0, ref:'c-boo', why:'Extend the curve of the Dipper’s handle and it lands on brilliant orange Arcturus, tail of the kite of Boötes.' },
+{ q:'The second-brightest star in the night sky is…', c:['Canopus, in Carina','Polaris','Betelgeuse','Vega'], a:0, ref:'c-car', why:'Southern Canopus is outshone only by Sirius — and spacecraft have steered by it since the 1960s.' },
+{ q:'In 1974 the Arecibo telescope beamed humanity’s first deliberate message toward…', c:['M13, the Hercules Cluster','The Moon','Andromeda','Proxima Centauri'], a:0, ref:'m13', why:'Three minutes of radio aimed at 300,000 ancient suns — arriving in roughly 22,000 years.' },
 { q:'The Crab Nebula is the wreckage of a supernova witnessed in…', c:['1054 AD','1986','44 BC','1900'], a:0, ref:'m1', why:'Chinese and Japanese astronomers logged a “guest star” visible in daylight for 23 days.' },
 { q:'Which nearby star is expected to explode as a supernova?', c:['Betelgeuse','Sirius','Polaris','Vega'], a:0, ref:'betelgeuse', why:'Orion’s red shoulder — “soon” in astronomer-speak means within ~100,000 years.' },
 { q:'The nearest star system to our Sun is…', c:['Alpha Centauri','Sirius','TRAPPIST-1','Betelgeuse'], a:0, ref:'alpha-cen', why:'4.37 light-years away — about 70,000 years of travel at Voyager speed.' },
@@ -3623,7 +3659,9 @@ $('welcomeTour').onclick = () => startTour('grand');
    Everywhere else the atlas apologises: sizes not to scale. This is the one
    view where every width is real — diameters in kilometres, nothing fudged. */
 const SCALE_OBJS = [
+  { key:'enceladus', name:'Enceladus', d:504, col:'#eef2f8', glow:false, cap:'Saturn’s geyser moon. A day’s drive would loop it.' },
   { key:'moon', name:'The Moon', d:3474, col:'#cfd6e4', glow:false, cap:'About as wide as Australia.' },
+  { key:'titan', name:'Titan', d:5150, col:'#ddab62', glow:false, cap:'A moon bigger than the planet Mercury, wrapped in smog.' },
   { key:'earth', name:'Earth', d:12742, col:'#9fc4ef', glow:false, cap:'Home. Watch how fast it vanishes.' },
   { key:'neptune', name:'Neptune', d:49244, col:'#8fb8e8', glow:false, cap:'Four Earths, side by side.' },
   { key:'jupiter', name:'Jupiter', d:139820, col:'#e8cfa8', glow:false, cap:'Every other planet would fit inside it — together.' },
@@ -3741,7 +3779,7 @@ function openHowBig() {
     hb.inited = true;
     hb.ls = hb.tls = lsMin;
     hb.cx = hb.tcx = HB_ROW_END / 2;
-    $('hbCaption').textContent = 'Nine real diameters on one line — pick one, or slide.';
+    $('hbCaption').textContent = SCALE_OBJS.length + ' real diameters on one line — pick one, or slide.';
   }
   hb.open = true;
   setHash('#howbig');
