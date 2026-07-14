@@ -11,5 +11,16 @@
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Tonight's sky", "short_name": "Tonight", "url": "./#tonight",
+      "description": "The Moon, the planets, and what's visible tonight",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] },
+    { "name": "Night sky chart", "short_name": "Night sky", "url": "./#sky",
+      "description": "The constellations, as seen from Earth",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] },
+    { "name": "How big?", "short_name": "How big?", "url": "./#howbig",
+      "description": "True-scale sizes, Enceladus to Betelgeuse",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] }
   ]
 }
