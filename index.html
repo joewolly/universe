@@ -292,6 +292,37 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
 #hbSlider{width:min(520px,80vw);accent-color:var(--ember)}
 #hbScaleLbl{font-family:var(--mono);font-size:10px;color:var(--haze-dim);letter-spacing:.08em}
 
+/* ---------- how far? · light-travel explorer ---------- */
+#howfar{
+  position:fixed;inset:0;z-index:44;background:#04070f;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+#howfar.open{opacity:1;pointer-events:auto}
+#hfCanvas{position:absolute;inset:0;width:100%;height:100%}
+#hfBottom{
+  position:absolute;left:0;right:0;bottom:0;padding:12px 18px calc(16px + var(--sab));
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  background:linear-gradient(rgba(4,7,15,0),rgba(4,7,15,.88) 42%);
+}
+#hfCaption{
+  font-family:var(--mono);font-size:12px;color:var(--ember-hot);letter-spacing:.05em;
+  text-align:center;min-height:16px;
+}
+.hfRow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;max-width:900px}
+.hfLbl{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--ember);width:38px;text-align:right;flex:none;
+}
+.hfChips{display:flex;flex-wrap:wrap;gap:5px;justify-content:center}
+.hfChip{
+  font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--haze);background:var(--panel);border:var(--hairline);border-radius:3px;
+  padding:5px 9px;transition:color .15s,border-color .15s;
+}
+.hfChip:hover{color:var(--ember-hot);border-color:rgba(240,167,92,.45)}
+.hfChip.on{color:var(--ember-hot);border-color:rgba(240,167,92,.6);background:rgba(240,167,92,.1)}
+#hfRate{font-family:var(--mono);font-size:10px;color:var(--haze-dim);letter-spacing:.08em;min-height:13px}
+
 #quiz{
   position:fixed;inset:0;z-index:46;display:flex;align-items:center;justify-content:center;
   background:rgba(4,6,12,.74);backdrop-filter:blur(5px);padding:20px;
@@ -484,9 +515,11 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   <button class="ctl" id="latBtn" style="display:none" title="Where on Earth are you observing from? Changes every visibility call."></button>
   <button class="ctl" id="hopBtn" style="display:none" title="Find the constellations on the chart — a pointing game">&#8982; Star hop</button>
   <button class="ctl" id="quizBtn" title="Test what you have learned">&#9998; Exam</button>
+  <button class="ctl" id="dailyBtn" title="A fresh five-question challenge every day — keep your streak alive">&#10022; Daily</button>
   <button class="ctl" id="tourBtn" title="Guided tours — pick a route">&#9672; Tours</button>
   <button class="ctl" id="skyBtn" title="The constellations, as seen from Earth">&#10038; Night sky</button>
   <button class="ctl" id="scaleBtn" title="Moon to Betelgeuse at true relative scale — the one honest view">&#9678; How big?</button>
+  <button class="ctl" id="farBtn" title="Watch light crawl between any two worlds — real light-travel times">&#10142; How far?</button>
   <button class="ctl" id="luckyBtn" title="Fly somewhere unexplored">&#10022; Surprise me</button>
   <button class="ctl on" id="lblBtn" title="Toggle labels">Labels</button>
   <button class="ctl" id="zoomOut" title="Zoom out">&minus;</button>
@@ -509,6 +542,24 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
     <div id="hbChips"></div>
     <input id="hbSlider" type="range" min="0" max="1000" value="0" aria-label="Zoom scale">
     <div id="hbScaleLbl"></div>
+  </div>
+</div>
+
+<div id="howfar" role="dialog" aria-modal="true" aria-label="How far? Light-travel times between worlds">
+  <canvas id="hfCanvas"></canvas>
+  <div id="hbTop">
+    <div>
+      <div class="k">How far?</div>
+      <h2>Nothing outruns light</h2>
+      <div class="sub">Pick a start and a destination &middot; watch a single photon make the crossing in real light-travel time</div>
+    </div>
+    <button id="hfClose" aria-label="Close light explorer">&times;</button>
+  </div>
+  <div id="hfBottom">
+    <div id="hfCaption"></div>
+    <div class="hfRow"><span class="hfLbl">From</span><div id="hfFromChips" class="hfChips"></div></div>
+    <div class="hfRow"><span class="hfLbl">To</span><div id="hfToChips" class="hfChips"></div></div>
+    <div id="hfRate"></div>
   </div>
 </div>
 
@@ -816,6 +867,42 @@ const CAT = [
   blurb:'A dead white dwarf circles a bloated red giant, siphoning off its gas. The stolen hydrogen piles up on the dwarf’s surface for about eighty years — then detonates in a thermonuclear flash that briefly makes the system ten thousand times brighter. It last blew in 1946. Astronomers are watching it nightly, because the next eruption is due any year now.',
   facts:['Unlike a supernova, the star survives: the same white dwarf has been erupting on schedule for centuries, and will keep doing it.','When it goes, an apparently new star will appear in the constellation Corona Borealis for several nights — check the news, then look up.','Records suggest earlier outbursts were spotted in 1217 and 1787.'] },
 
+/* ---------- black holes & the extreme ---------- */
+{ id:'m87', scene:'galaxy', group:'Black holes & the extreme', type:'blackhole', name:'M87*',
+  kicker:'Supermassive black hole · first ever photographed', sub:'The monster whose shadow we finally saw',
+  pos:[-46000,-30000], mark:6, plate:'bhjet',
+  stats:[['True distance','53 million ly (drawn at the rim)'],['Mass','6.5 billion Suns'],['First image','10 April 2019 (EHT)'],['Event horizon','~40 billion km'],['Jet','A beam ~5,000 ly long'],['Host','Galaxy M87, in Virgo']],
+  blurb:'For a century black holes were a prediction on paper. Then in 2019 a planet-sized network of radio dishes stared at the heart of the giant galaxy M87 and returned a picture: a ring of light around a circle of absolute dark — the shadow of an object weighing six and a half billion Suns. It lies fifty million light-years away and is drawn here at the galaxy’s edge, a signpost far beyond our own.',
+  facts:['The Event Horizon Telescope had to link dishes from Hawaii to the South Pole to build a lens effectively the size of Earth.','This black hole fires a jet of plasma five thousand light-years long — a searchlight first noticed in 1918, before anyone knew what a black hole was.','Its shadow is so large that our entire Solar System would fit inside the black circle several times over.'] },
+
+{ id:'3c273', scene:'galaxy', group:'Black holes & the extreme', type:'blackhole', name:'3C 273',
+  kicker:'Quasar · the first ever recognised', sub:'A black hole outshining a trillion Suns',
+  pos:[-56000,4000], mark:6, plate:'quasar',
+  stats:[['True distance','2.4 billion ly (drawn at the rim)'],['Luminosity','~4 trillion Suns'],['Powered by','A black hole ~900 million Suns'],['Identified','1963, by Maarten Schmidt'],['Jet','A plume ~200,000 ly long'],['Apparent brightness','Visible in a backyard telescope']],
+  blurb:'In 1963 astronomers puzzled over a "star" with a spectrum nobody could read. Maarten Schmidt realised the lines were simply shifted enormously toward the red — the object was billions of light-years away, and to be visible at all it had to be blazing brighter than a whole galaxy. It was the first quasar: gas heated white-hot as it spirals into a supermassive black hole, the brightest kind of steady beacon in the universe.',
+  facts:['Despite lying 2.4 billion light-years off, it is bright enough to glimpse through an amateur telescope — the most distant thing many stargazers ever see.','A "quasar" is the feeding frenzy of a black hole: matter queuing to fall in glows hotter than any star.','Its jet was one of the first ever imaged, shooting from the core across a fifth of a million light-years.'] },
+
+{ id:'ton618', scene:'galaxy', group:'Black holes & the extreme', type:'blackhole', name:'TON 618',
+  kicker:'Ultramassive black hole', sub:'Very nearly the largest thing weighed in the universe',
+  pos:[-52000,34000], mark:6, plate:'quasar',
+  stats:[['True distance','~18 billion light-travel-years'],['Mass','~66 billion Suns'],['Event horizon','~1,300 AU across'],['Luminosity','~140 trillion Suns'],['Type','Hyperluminous quasar'],['Light left it','When the cosmos was young']],
+  blurb:'If M87* is a monster, this is a leviathan. Sixty-six billion times the mass of the Sun, TON 618 is among the heaviest black holes ever weighed — its event horizon alone is wider than the Solar System’s orbit around the galaxy would be, a sphere of no-return some 1,300 times the Earth–Sun distance across. We see it as a brilliant quasar whose light has been travelling toward us since the universe was a fraction of its present age.',
+  facts:['Its event horizon is so vast that light would take weeks just to cross it.','To shine as a quasar, it may be swallowing the equivalent of dozens of Suns every year.','Objects this heavy strain our theories: it is hard to build a black hole so large so early in cosmic history.'] },
+
+{ id:'gw150914', scene:'galaxy', group:'Black holes & the extreme', type:'blackhole', name:'GW150914',
+  kicker:'Black-hole merger · first gravitational wave', sub:'The day we first heard spacetime ring',
+  pos:[-30000,-50000], mark:5, plate:'merger',
+  stats:[['True distance','~1.3 billion ly (drawn at the rim)'],['Detected','14 September 2015 (LIGO)'],['The pair','36 + 29 Suns'],['Merged into','A single 62-Sun black hole'],['Lost to waves','~3 Suns of pure energy'],['Signal length','0.2 seconds']],
+  blurb:'This is not an object but an event — the first time humanity felt gravity itself move. Over a billion years ago, two black holes spiralled together and merged, and for a fifth of a second radiated more power than all the stars in the observable universe combined, entirely as ripples in spacetime. On 14 September 2015 those ripples reached Earth and stretched the LIGO detectors by less than the width of a proton. We heard a chirp.',
+  facts:['Einstein predicted gravitational waves in 1916 and doubted they would ever be measurable; it took a century and two four-kilometre laser instruments.','The three Suns’ worth of mass that vanished into waves is why the merged hole weighs less than the sum of its parents.','The discovery won the 2017 Nobel Prize and opened a new way to observe the universe — by listening, not looking.'] },
+
+{ id:'v404cyg', scene:'galaxy', group:'Black holes & the extreme', type:'blackhole', name:'V404 Cygni',
+  kicker:'Microquasar · a black hole feeding nearby', sub:'A stellar black hole with a companion on the menu',
+  pos:s(7600,-1400), mark:5, plate:'microquasar',
+  stats:[['Distance','~7,800 ly — in our galaxy'],['Black hole','~9 Suns'],['Companion','A star slightly smaller than the Sun'],['Outbursts','1938, 1989, 2015'],['Jets','Blobs flung at near light-speed'],['Type','Low-mass X-ray binary']],
+  blurb:'A black hole nine times the Sun’s mass circles an ordinary star close enough to steal its gas. The stolen matter piles into a searing disk and, every few decades, dumps inward all at once — and the system erupts. In 2015 it woke up after 26 years of quiet and, for two weeks, its jets flung glowing clots of plasma outward at almost the speed of light: a quasar’s violence in miniature, right in our own galaxy.',
+  facts:['During the 2015 outburst it briefly became one of the brightest X-ray sources in the sky, and amateur astronomers watched it flicker in mere seconds.','Because it is so close, astronomers can study a black hole feeding in detail impossible for a distant quasar.','Between tantrums it sits dark and quiet, its stolen gas slowly refilling the reservoir for the next eruption.'] },
+
 /* ================= SOLAR SCENE ================= */
 { id:'sol', scene:'solar', group:'The Solar System', type:'star', name:'The Sun',
   kicker:'Sol · G2V yellow dwarf', sub:'The engine of everything you have ever known',
@@ -859,12 +946,19 @@ const CAT = [
   blurb:'The rusted planet wears the scars of a warmer youth: dried river deltas, lake beds, and canyons carved by floods. Its day is almost exactly as long as ours, which is why more spacecraft have gone here than to any other planet.',
   facts:['Olympus Mons is the tallest volcano known — nearly three times the height of Everest, wide as France.','Valles Marineris is a canyon system as long as the United States is wide.','Its moon Phobos orbits so low it will crash into Mars or shred into a ring within ~50 million years.'] },
 
-{ id:'belt', scene:'solar', group:'The Solar System', type:'belt', name:'Asteroid Belt & Ceres',
+{ id:'belt', scene:'solar', group:'The Solar System', type:'belt', name:'The Asteroid Belt',
   kicker:'Main belt · 2.2–3.2 AU', sub:'Rubble of a planet that never formed',
   orbit:{r:245,periodDays:1682,phase:2.9}, size:3, mark:4, plate:'belt', ring:[228,262],
   stats:[['Span','2.2–3.2 AU'],['Total mass','~4 % of the Moon'],['Largest member','Ceres, 940 km — a dwarf planet'],['Typical gap between rocks','~1 million km']],
   blurb:'Jupiter’s gravity never let a planet gather here, leaving a belt of leftovers. Forget the movies: the rocks are on average a million kilometres apart — spacecraft fly through without aiming. Queen of the belt is Ceres, a dwarf planet hiding salty brine beneath its crust.',
-  facts:['All the asteroids combined weigh far less than our Moon.','Bright spots on Ceres are salt deposits from subsurface brine that seeped up and dried — signs of a hidden ocean’s remains.'] },
+  facts:['All the asteroids combined weigh far less than our Moon.','The belt was the Solar System’s failed planet — Jupiter kept stirring the rubble until it could never coalesce.'] },
+
+{ id:'ceres', scene:'solar', group:'The Solar System', type:'planet', name:'Ceres',
+  kicker:'Dwarf planet · king of the belt', sub:'A tiny world with the ghost of an ocean',
+  orbit:{r:250,periodDays:1682,phase:0.4}, size:2.6, mark:4, plate:'p:ceres',
+  stats:[['Diameter','940 km — a third of the Moon'],['Distance','2.77 AU average'],['Year','4.6 Earth yrs'],['Discovered','1801 — briefly called a planet'],['Visited','Dawn, 2015'],['Signature','Bright salt spots in Occator crater']],
+  blurb:'The largest object in the asteroid belt and the only dwarf planet in the inner Solar System. When Dawn arrived in 2015 it found two dazzling bright spots on a dark world — deposits of salt left behind when briny water welled up from below and boiled away into space. Ceres is a rock with the memory of an ocean.',
+  facts:['Discovered in 1801, it was called the eighth planet for half a century before being reclassed as an asteroid — then promoted to dwarf planet in 2006, the same year Pluto was demoted.','The bright carbonate spots in Occator crater are among the most reflective surfaces in the Solar System — sunlight on dried alien brine.','It may still hold a slushy layer of salty water beneath its crust today.'] },
 
 { id:'jupiter', scene:'solar', group:'The Solar System', type:'planet', name:'Jupiter',
   kicker:'Planet V · gas giant', sub:'The king — heavier than all other planets combined',
@@ -935,6 +1029,27 @@ const CAT = [
   stats:[['Diameter','2,377 km — smaller than our Moon'],['Distance','39.5 AU average'],['Year','248 Earth yrs'],['Day','6.4 Earth days'],['Surface','−232 °C'],['Moons','5 — Charon is half its size']],
   blurb:'Demoted in 2006, redeemed in 2015: when New Horizons flew past, "boring" Pluto turned out to have mountains of water ice, a heart-shaped nitrogen glacier the size of Texas, and a hazy blue sky. Its moon Charon is so large the pair orbit each other like dance partners.',
   facts:['The heart — Sputnik Planitia — is a churning glacier of nitrogen ice, resurfacing itself with no craters at all.','Pluto hasn’t completed even one orbit since its 1930 discovery; that happens in 2178.','A dusting of Clyde Tombaugh’s ashes, its discoverer, flew past aboard New Horizons.'] },
+
+{ id:'eris', scene:'solar', group:'The Solar System', type:'planet', name:'Eris',
+  kicker:'Dwarf planet · the world that demoted Pluto', sub:'A frozen twin on a wildly tilted, distant loop',
+  kepler:{a:607,e:0.226,periodDays:204000,phase:0.5,rot:2.2,dir:1}, size:2.8, mark:5, plate:'p:eris',
+  stats:[['Diameter','2,326 km — a hair smaller than Pluto'],['Mass','27 % more than Pluto'],['Distance','38–98 AU — very eccentric'],['Year','558 Earth yrs'],['Surface','−240 °C, bright methane ice'],['Moon','Dysnomia']],
+  blurb:'Found in 2005 far beyond Pluto, Eris is almost exactly Pluto’s size but noticeably heavier — and its discovery forced the question no one could dodge: if Pluto is a planet, why not this? The answer, in 2006, was to invent the "dwarf planet" and reclass them both. Eris is the most massive dwarf planet known, wrapped in a frost so reflective it is nearly as bright as fresh snow.',
+  facts:['Its discovery directly triggered the 2006 vote that cut the Solar System’s planets from nine to eight.','It is so far away and cold that its atmosphere freezes solid onto the surface, then sublimates back as it swings sunward.','It was informally nicknamed "Xena" before receiving the name of the Greek goddess of discord — fittingly, for the world that caused so much of it.'] },
+
+{ id:'makemake', scene:'solar', group:'The Solar System', type:'planet', name:'Makemake',
+  kicker:'Dwarf planet · Kuiper Belt', sub:'A reddish ice world named for a creator god',
+  orbit:{r:648,periodDays:112000,phase:5.1}, size:2.3, mark:4, plate:'p:makemake',
+  stats:[['Diameter','~1,430 km'],['Distance','45.4 AU average'],['Year','306 Earth yrs'],['Surface','Frozen methane, red-brown'],['Named for','The creator god of Rapa Nui'],['Moon','One, tiny and dark']],
+  blurb:'One of the four accepted dwarf planets beyond Neptune, discovered in 2005 just after Easter and nicknamed "Easterbunny" until it was formally named for the creator god of Easter Island. Its surface is coated in frozen methane tinted red-brown by sunlight — a deep-freeze relic from the Solar System’s birth.',
+  facts:['It is one of the brightest Kuiper Belt objects, though still far too faint for the naked eye.','Its methane frost forms pellets up to a centimetre across, unlike the fine snows of its neighbours.','A dark little moon, spotted in 2016, helped astronomers weigh it.'] },
+
+{ id:'haumea', scene:'solar', group:'The Solar System', type:'planet', name:'Haumea',
+  kicker:'Dwarf planet · the spinning egg', sub:'A ringed world stretched by its own dizzying spin',
+  orbit:{r:628,periodDays:103800,phase:2.0}, size:2.5, mark:4, plate:'p:haumea',
+  stats:[['Shape','Egg-shaped, ~2,100 × 1,160 km'],['Distance','43 AU average'],['Year','284 Earth yrs'],['Day','Just 3.9 hours — fastest of any large body'],['Rings','Yes — first found on a dwarf planet'],['Moons','Two, Hiʻiaka and Namaka']],
+  blurb:'Haumea spins so fast — one full turn every four hours — that it has stretched into the shape of an egg, or a squashed rugby ball. The whirl is likely the fossil of an ancient collision that also gave it two moons and a family of icy shards. In 2017 it became the first object beyond Neptune found to wear a ring.',
+  facts:['A day on Haumea is under four hours — the fastest rotation of any body in the Solar System larger than 100 km.','Its surface is nearly pure crystalline water ice, unusually bright and clean for so cold a world.','The collision that spun it up scattered a "family" of icy fragments that still share its orbit.'] },
 
 { id:'kuiper', scene:'solar', group:'The Solar System', type:'belt', name:'Kuiper Belt',
   kicker:'30–55 AU · icy frontier', sub:'The Solar System’s deep-freeze attic',
@@ -1374,12 +1489,75 @@ CAT.push(
   blurb:'Our corner of the universe — the Local Group — has exactly three spiral galaxies: Andromeda, the Milky Way, and this modest third sibling near Andromeda’s side. We happen to see it face-on, its pinwheel arms laid out flat like a diagram of what our own galaxy would look like from outside.',
   facts:['Under truly dark skies it is the most distant thing an unaided human eye can detect — a whisper of light from 2.7 million years ago.','It hosts NGC 604, one of the largest star nurseries known — the Orion Nebula would be a footnote inside it.','It may be a satellite of Andromeda, and will likely be swept up in the same merger that awaits the Milky Way.'] },
 
+{ id:'m51', scene:'galaxy', group:'Clusters & neighbours', type:'galaxy', name:'Whirlpool Galaxy',
+  kicker:'M51 · grand-design spiral', sub:'The first galaxy ever seen to have arms',
+  pos:[30000,-48000], mark:5, plate:'spiral',
+  stats:[['True distance','~31 million ly (drawn at the rim)'],['Type','Grand-design spiral + companion'],['Spiral seen','1845, by Lord Rosse'],['Companion','NGC 5195, tugging its arm'],['Find it','Below the Big Dipper’s handle'],['Diameter','~76,000 ly']],
+  blurb:'In 1845, using a telescope with a six-foot mirror, Lord Rosse sketched a nebula and drew something no one had ever recorded: a spiral. For decades no one knew what spirals were; this was the first hint that the faint smudges were pinwheels of stars. A smaller galaxy is passing close and gravity has pulled the Whirlpool’s nearest arm into a perfect, textbook curve.',
+  facts:['It was the very first object in which spiral structure was recognised — a milestone on the road to understanding galaxies.','The little companion galaxy tugging its arm will eventually be absorbed, the way our galaxy grows by eating its neighbours.','Face-on and photogenic, it is a favourite of backyard astronomers and the Hubble telescope alike.'] },
+
+{ id:'m104', scene:'galaxy', group:'Clusters & neighbours', type:'galaxy', name:'Sombrero Galaxy',
+  kicker:'M104 · edge-on spiral', sub:'A galaxy wearing a brim of dark dust',
+  pos:[-16000,52000], mark:5, plate:'edgeon',
+  stats:[['True distance','~28 million ly (drawn at the rim)'],['Type','Spiral, seen almost edge-on'],['Signature','A knife-edge dust lane'],['Central bulge','Unusually huge and bright'],['Black hole','~1 billion Suns'],['Find it','In Virgo, near the border with Corvus']],
+  blurb:'Tilted just six degrees from edge-on, this spiral shows us its slender disk as a dark lane of dust slicing across a swollen, glowing core — the silhouette of a wide-brimmed hat. Its central bulge is enormous, and hidden inside sits one of the more massive black holes measured in a nearby galaxy: a billion Suns.',
+  facts:['The dark band is the galaxy’s own dust disk, seen almost exactly side-on and backlit by a billion stars.','It is wrapped in an unusually rich swarm of nearly 2,000 globular clusters — ten times the Milky Way’s haul.','Bright enough to find in a small telescope, it is one of the finest edge-on galaxies in the sky.'] },
+
+{ id:'hyades', scene:'galaxy', group:'Clusters & neighbours', type:'cluster', name:'The Hyades',
+  kicker:'Melotte 25 · open cluster', sub:'The nearest star cluster — the face of the Bull',
+  pos:s(-70,150), mark:4, plate:'cluster',
+  stats:[['Distance','151 ly — the closest cluster'],['Members','~300–400 stars'],['Age','~625 million yrs'],['Shape','The V of Taurus’s face'],['Not a member','Aldebaran — nearer, just in line'],['Naked eye','A whole cluster, unaided']],
+  blurb:'The closest open cluster to the Sun, so near that its stars spread across a patch of sky wider than your fist and make up the V-shaped face of Taurus the Bull. The fiery orange eye of the Bull, Aldebaran, is a fraud — it lies less than half as far away and merely happens to sit in the same direction.',
+  facts:['At 151 light-years it is the benchmark cluster astronomers use to calibrate the distances to all the others.','Its stars share a common motion through space, drifting together like a flock — proof they were born from one cloud.','Aldebaran is a line-of-sight impostor: subtract it, and the true cluster still fills the Bull’s face.'] },
+
+{ id:'m44', scene:'galaxy', group:'Clusters & neighbours', type:'cluster', name:'Beehive Cluster',
+  kicker:'M44 · Praesepe · open cluster', sub:'A swarm of bees the ancients used to forecast weather',
+  pos:s(520,-200), mark:4, plate:'cluster',
+  stats:[['Distance','~577 ly'],['Members','~1,000 stars'],['Age','~600 million yrs'],['Naked eye','A soft glow in Cancer'],['First resolved','Galileo, 1609 — ~40 stars'],['Nickname','Praesepe, “the manger”']],
+  blurb:'To the naked eye it is a faint patch of haze in the dim constellation Cancer — the Greeks and Romans called it Praesepe, the manger, and watched it: when the haze vanished, they said, a storm was coming (really just thin high cloud veiling a faint object). Galileo turned his first telescope on it and the haze dissolved into forty stars.',
+  facts:['It shares an age and a direction of drift with the Hyades — the two clusters may have been born from the same great cloud.','Its disappearance before storms is folklore with a grain of truth: haze and cirrus dim faint objects first.','Two confirmed planets orbit stars inside it — worlds forming in the crowd of a cluster.'] },
+
+{ id:'m8', scene:'galaxy', group:'Star nurseries & remnants', type:'nebula', name:'Lagoon Nebula',
+  kicker:'M8 · star-forming region', sub:'A naked-eye nursery on the road to the core',
+  pos:s(900,-4000), mark:5, plate:'nebula:#f0a0b0:#8fb8e8',
+  stats:[['Distance','~4,100 ly'],['Width','~110 ly'],['In','Sagittarius, toward the core'],['Contains','The cluster NGC 6530'],['Naked eye','A pale patch on dark nights'],['Named for','A dark dust channel across its face']],
+  blurb:'Sweep binoculars along the Milky Way toward Sagittarius — toward the heart of the galaxy — and you will land on a glowing cloud split by a dark lagoon of dust. It is one of the few star-forming nebulae bright enough to see with the naked eye: a pink hydrogen cloud lit by hot young stars, with a newborn cluster blazing at its edge.',
+  facts:['You are looking almost straight down the Sagittarius arm toward the galactic centre when you find it.','Inside are “Bok globules” — dark knots of collapsing gas caught in the act of becoming stars.','The dark channel that names it is a lane of foreground dust, not a gap in the cloud.'] },
+
+{ id:'m27', scene:'galaxy', group:'Star nurseries & remnants', type:'nebula', name:'Dumbbell Nebula',
+  kicker:'M27 · planetary nebula', sub:'The first planetary nebula ever found',
+  pos:s(-1400,-900), mark:4, plate:'nebula:#8fd8c9:#e8b0d0',
+  stats:[['Distance','~1,360 ly'],['In','Vulpecula, the little fox'],['Discovered','1764, by Charles Messier'],['Age of shell','~10,000 yrs'],['Centre','A hot white-dwarf ember'],['Best in','A small telescope']],
+  blurb:'When Charles Messier logged this fuzzy patch in 1764 he became the first person to record a planetary nebula — the exhaled outer atmosphere of a dying Sun-like star, glowing as its bare core bakes it from within. Through a small telescope it shows the pinched, two-lobed shape of an apple core or a dumbbell.',
+  facts:['It is a preview of the Sun’s distant future: in five billion years our star will puff off a shell just like this.','“Planetary” is a 1780s misnomer — small telescopes made these round glows look like the disk of a planet.','At the centre sits one of the largest known white dwarfs, the fading heart of the star that made the cloud.'] },
+
 { id:'halley', scene:'solar', group:'The Solar System', type:'comet', name:'Halley’s Comet',
   kicker:'1P/Halley · periodic comet', sub:'The once-in-a-lifetime visitor',
   kepler:{a:352.5,e:0.7305,periodDays:27740,phase:2.6,rot:-0.55,dir:-1}, size:3.5, mark:5, plate:'comet',
   stats:[['Period','~76 years'],['Last visit','1986'],['Next visit','Mid-2061'],['Nucleus','15 × 8 km, darker than coal'],['Orbit','Retrograde — against the planets'],['Recorded since','240 BC']],
   blurb:'The comet that taught humanity comets return. Edmond Halley noticed the visitors of 1531, 1607 and 1682 shared an orbit and predicted a 1758 return — it appeared, sixteen years after his death, and carries his name forever.',
-  facts:['It rides its stretched orbit backwards — opposite to every planet — from inside Venus’s orbit out past Neptune’s.','Every year Earth crosses its debris trail twice, giving the Eta Aquariid (May) and Orionid (October) meteor showers.','Mark Twain was born at its 1835 visit and predicted he would “go out with it” — he died the day after its 1910 perihelion.'] }
+  facts:['It rides its stretched orbit backwards — opposite to every planet — from inside Venus’s orbit out past Neptune’s.','Every year Earth crosses its debris trail twice, giving the Eta Aquariid (May) and Orionid (October) meteor showers.','Mark Twain was born at its 1835 visit and predicted he would “go out with it” — he died the day after its 1910 perihelion.'] },
+
+{ id:'hale-bopp', scene:'solar', group:'The Solar System', type:'comet', name:'Comet Hale–Bopp',
+  kicker:'C/1995 O1 · great comet of 1997', sub:'The comet half the planet stopped to watch',
+  kepler:{a:415,e:0.687,periodDays:925000,phase:3.05,rot:1.9,dir:1}, size:3.2, mark:5, plate:'comet',
+  stats:[['Visible to the eye','A record ~18 months'],['Perihelion','1 April 1997'],['Nucleus','~60 km — unusually huge'],['Two tails','Blue gas and white dust'],['Next return','~4385'],['Discovered','1995, independently by two observers']],
+  blurb:'For a year and a half in 1996–97 a brilliant comet hung in the evening sky, bright enough to see from city centres — the most widely observed comet in history. Its nucleus was a giant, perhaps sixty kilometres across, which is why it blazed so long and so far from the Sun. It will not pass this way again until the human world is unrecognisable, around the year 4385.',
+  facts:['It stayed visible to the naked eye for about 18 months — longer than any comet on record.','Two tails streamed from it: a blue one of gas pushed straight out by the solar wind, and a curved white one of dust.','Its long orbit means the people who saw it in 1997 shared a once-in-a-hundred-generations event.'] },
+
+{ id:'neowise', scene:'solar', group:'The Solar System', type:'comet', name:'Comet NEOWISE',
+  kicker:'C/2020 F3 · great comet of 2020', sub:'The lockdown comet, found by a space telescope',
+  kepler:{a:440,e:0.74,periodDays:2470000,phase:3.1,rot:-2.4,dir:1}, size:2.8, mark:4, plate:'comet',
+  stats:[['Discovered','March 2020, by the NEOWISE telescope'],['Perihelion','3 July 2020'],['Nucleus','~5 km'],['Best seen','July 2020, evening sky'],['Next return','~8800'],['Survived','A close solar passage that destroys most comets']],
+  blurb:'Discovered by an infrared space telescope in March 2020, this comet swept close past the Sun and — unlike most, which crumble — held together, emerging to grace the July evening sky as the finest naked-eye comet in a generation for the northern hemisphere. Millions, housebound that strange summer, stepped outside to find it hanging beneath the Big Dipper.',
+  facts:['It was named for the NASA space telescope that spotted it, not a person — a modern way to find comets.','Comets this bright are rare from the northern hemisphere: the last comparable one was Hale–Bopp, 23 years earlier.','Its orbit is so long it will not return for roughly 6,800 years.'] },
+
+{ id:'67p', scene:'solar', group:'The Solar System', type:'comet', name:'Comet 67P',
+  kicker:'67P/Churyumov–Gerasimenko · we landed here', sub:'The rubber-duck comet a robot touched down on',
+  kepler:{a:227,e:0.34,periodDays:2352,phase:1.0,rot:0.8,dir:1}, size:2.6, mark:4, plate:'comet',
+  stats:[['Period','6.4 years'],['Shape','Two lobes — a "rubber duck"'],['Nucleus','~4 km'],['Orbited by','Rosetta, 2014–2016'],['Landed on','Philae, 12 Nov 2014'],['A first','The first soft landing on a comet']],
+  blurb:'In 2014 the Rosetta spacecraft caught up with this small comet, flew alongside it for two years, and dropped a lander named Philae onto its surface — humanity’s first touchdown on a comet. Up close, 67P proved to be a bizarre double-lobed world, like a rubber duck of ice and dust, hissing jets of gas as the Sun warmed it. Unlike the great comets, it loops back every six years and actually moves visibly on this map.',
+  facts:['Philae bounced twice on landing and came to rest in a shadowed crack, but still returned data from the surface of a comet — a first in history.','Rosetta found the comet’s water is chemically unlike Earth’s oceans, a clue that comets may not have delivered our water after all.','The two lobes are probably two separate objects that drifted together gently in the early Solar System.'] }
 );
 
 /* ============ OTHER WORLDS · enterable exoplanet systems ============
@@ -1866,12 +2044,14 @@ function drawSolar(dt) {
     ctx.strokeStyle = state.selected === o.id ? 'rgba(240,167,92,.4)' : 'rgba(148,163,184,.1)';
     ctx.beginPath(); ctx.arc(pp[0], pp[1], o.orbit.r, 0, 6.283); ctx.stroke();
   }
-  // Halley's stretched, retrograde orbit
-  const hk = SOLAR_OBJS.find(b => b.id === 'halley');
-  if (hk) {
+  // stretched, eccentric orbits: comets and scattered-disk dwarf planets
+  for (const hk of SOLAR_OBJS) {
+    if (!hk.kepler) continue;
     const k = hk.kepler, b2 = k.a * Math.sqrt(1 - k.e * k.e), c2 = k.a * k.e;
-    ctx.save(); ctx.rotate(k.rot);
-    ctx.strokeStyle = state.selected === 'halley' ? 'rgba(240,167,92,.45)' : 'rgba(159,216,232,.18)';
+    const cometish = hk.type === 'comet';
+    ctx.save(); ctx.rotate(k.rot || 0);
+    ctx.strokeStyle = state.selected === hk.id ? 'rgba(240,167,92,.45)'
+      : cometish ? 'rgba(159,216,232,.18)' : 'rgba(148,163,184,.14)';
     ctx.setLineDash([3 / z, 4 / z]);
     ctx.beginPath(); ctx.ellipse(-c2, 0, k.a, b2, 0, 0, 6.283); ctx.stroke();
     ctx.setLineDash([]); ctx.restore();
@@ -2089,6 +2269,30 @@ const PLANET_PAINTERS = {
     c.arc(-r * .16, r * .1, r * .22, 2.5, 6.0);
     c.arc(r * .18, r * .1, r * .22, 3.4, 0.7);
     c.lineTo(0, r * .62); c.closePath(); c.fill(); },
+  ceres:   (c, r) => { shadeBall(c, r, '#b8b0a4', '#8a8278', '#464038');
+    c.save(); c.beginPath(); c.arc(0, 0, r, 0, 6.283); c.clip();
+    c.fillStyle = 'rgba(60,55,50,.4)';                        // craters
+    for (const [dx, dy, rr] of [[-.3, -.2, .16], [.35, .15, .12], [.05, .4, .1]])
+      { c.beginPath(); c.arc(dx * r, dy * r, rr * r, 0, 6.283); c.fill(); }
+    c.fillStyle = 'rgba(255,250,240,.95)';                    // the Occator bright spots
+    c.beginPath(); c.arc(-.1 * r, -.05 * r, r * .07, 0, 6.283); c.fill();
+    c.restore(); },
+  eris:    (c, r) => { shadeBall(c, r, '#fbfdff', '#d6dee8', '#7c8894');   // brilliant white ice
+    c.strokeStyle = 'rgba(210,225,240,.35)'; c.lineWidth = r * .1;
+    c.beginPath(); c.arc(0, 0, r * 1.1, 0, 6.283); c.stroke(); },
+  makemake:(c, r) => { shadeBall(c, r, '#e0a074', '#b06840', '#5a2c18');   // reddish tholin frost
+    c.save(); c.beginPath(); c.arc(0, 0, r, 0, 6.283); c.clip();
+    c.fillStyle = 'rgba(255,225,200,.28)';
+    c.beginPath(); c.ellipse(-r * .2, -r * .25, r * .5, r * .3, .4, 0, 6.283); c.fill();
+    c.restore(); },
+  haumea:  (c, r) => {                                        // an egg spun so fast it bulged
+    c.save(); c.scale(1.5, .82);
+    shadeBall(c, r, '#f4f2ee', '#cdc7bd', '#6c665e');
+    c.restore();
+    c.save(); c.rotate(-.25);                                 // its thin dark ring
+    c.strokeStyle = 'rgba(120,120,130,.55)'; c.lineWidth = r * .12;
+    c.beginPath(); c.ellipse(0, 0, r * 1.9, r * .5, 0, 0, 6.283); c.stroke();
+    c.restore(); },
 };
 
 /* ============ ENGINE · plate art, UI, input, main loop ============ */
@@ -2139,6 +2343,76 @@ function drawPlate(o) {
     g.fillStyle = '#01020a'; g.beginPath(); g.arc(0, 0, 62, 0, 6.283); g.fill();
     g.strokeStyle = 'rgba(255,220,170,.95)'; g.lineWidth = 4;
     g.beginPath(); g.arc(0, 0, 66, 0, 6.283); g.stroke();
+  } else if (kind === 'bhjet') {          // a supermassive black hole firing one great jet
+    g.save(); g.rotate(-.9);
+    const jet = g.createLinearGradient(0, 0, 40, -260);   // relativistic beam
+    jet.addColorStop(0, 'rgba(200,220,255,.9)'); jet.addColorStop(1, 'rgba(150,120,255,0)');
+    g.fillStyle = jet; g.beginPath();
+    g.moveTo(-6, 0); g.lineTo(28, -260); g.lineTo(58, -252); g.lineTo(10, 0);
+    g.closePath(); g.fill();
+    const rnd = mulberry(o.name.length * 5);              // knots in the jet
+    for (let i = 0; i < 7; i++) { const t = i / 7; glowBlob(g, 4 + t * 40, -t * 250, 8 + rnd() * 6, 'rgba(210,225,255,.7)', .5); }
+    g.restore();
+    glowBlob(g, 0, 0, 210, 'rgba(179,156,255,.32)', .8);
+    g.save(); g.rotate(-.3);                              // glowing accretion ring
+    const gr = g.createLinearGradient(-170, 0, 170, 0);
+    gr.addColorStop(0, 'rgba(120,90,255,.1)'); gr.addColorStop(.5, 'rgba(255,190,120,.95)'); gr.addColorStop(1, 'rgba(120,90,255,.1)');
+    g.strokeStyle = gr; g.lineWidth = 22;
+    g.beginPath(); g.ellipse(0, 0, 150, 40, 0, 0, 6.283); g.stroke(); g.restore();
+    g.fillStyle = '#01020a'; g.beginPath(); g.arc(0, 0, 58, 0, 6.283); g.fill();
+    g.strokeStyle = 'rgba(255,220,170,.95)'; g.lineWidth = 4;
+    g.beginPath(); g.arc(0, 0, 62, 0, 6.283); g.stroke();
+  } else if (kind === 'quasar') {         // host galaxy + blinding core beacon + jet
+    const rnd = mulberry(o.name.length * 9);
+    g.save(); g.rotate(.4);                               // faint tilted host galaxy
+    for (let i = 0; i < 260; i++) {
+      const r = Math.abs(gauss(rnd)) * 150, a = rnd() * 6.283;
+      g.fillStyle = rnd() < .7 ? '#c9b8e0' : '#e8d0b8'; g.globalAlpha = .12 + rnd() * .3;
+      g.fillRect(Math.cos(a) * r * 1.6, Math.sin(a) * r * .55, 1, 1);
+    }
+    g.globalAlpha = 1; g.restore();
+    g.save(); g.rotate(-1.15);                            // a long thin jet
+    const jet = g.createLinearGradient(0, 0, 0, -250);
+    jet.addColorStop(0, 'rgba(190,210,255,.8)'); jet.addColorStop(1, 'rgba(160,130,255,0)');
+    g.fillStyle = jet; g.beginPath();
+    g.moveTo(-4, 0); g.lineTo(-14, -240); g.lineTo(14, -240); g.lineTo(4, 0); g.closePath(); g.fill();
+    g.restore();
+    glowBlob(g, 0, 0, 140, 'rgba(255,240,210,.85)', .95);  // core beacon
+    glowBlob(g, 0, 0, 46, 'rgba(255,255,255,1)', 1);
+    g.strokeStyle = 'rgba(255,250,235,.8)'; g.lineWidth = 2;   // lens-flare spikes
+    for (const [dx, dy] of [[210, 0], [-210, 0], [0, 150], [0, -150]]) {
+      g.beginPath(); g.moveTo(0, 0); g.lineTo(dx, dy); g.stroke();
+    }
+  } else if (kind === 'merger') {         // two black holes + spacetime ripples
+    for (let i = 6; i >= 1; i--) {                        // expanding ripple rings
+      g.strokeStyle = 'rgba(150,180,255,' + (.05 + (6 - i) * .03) + ')'; g.lineWidth = 2;
+      g.beginPath(); g.ellipse(0, 0, i * 44, i * 30, 0, 0, 6.283); g.stroke();
+    }
+    for (const dir of [1, -1]) {                          // the two holes, mid-inspiral
+      const x = dir * 42, y = dir * 10;
+      glowBlob(g, x, y, 46, 'rgba(255,190,120,.6)', .8);
+      g.fillStyle = '#01020a'; g.beginPath(); g.arc(x, y, 22, 0, 6.283); g.fill();
+      g.strokeStyle = 'rgba(255,220,170,.9)'; g.lineWidth = 3;
+      g.beginPath(); g.arc(x, y, 24, 0, 6.283); g.stroke();
+    }
+  } else if (kind === 'microquasar') {    // companion star bleeding gas into a disk + twin jets
+    glowBlob(g, -150, -30, 90, 'rgba(255,210,150,.55)', .9);   // the donor star
+    shadeBall2(g, -150, -30, 40, '#fff2d0', '#ffcf8e', '#5a4020');
+    g.strokeStyle = 'rgba(255,200,140,.5)'; g.lineWidth = 3;   // stolen-gas stream
+    g.beginPath(); g.moveTo(-118, -20); g.quadraticCurveTo(-40, 30, 55, 6); g.stroke();
+    g.save(); g.translate(70, 0); g.rotate(.5);          // twin jets from the compact object
+    for (const dir of [1, -1]) {
+      const jet = g.createLinearGradient(0, 0, 0, dir * 150);
+      jet.addColorStop(0, 'rgba(200,220,255,.85)'); jet.addColorStop(1, 'rgba(160,130,255,0)');
+      g.fillStyle = jet; g.beginPath();
+      g.moveTo(-4, 0); g.lineTo(-12, dir * 150); g.lineTo(12, dir * 150); g.lineTo(4, 0); g.closePath(); g.fill();
+    }
+    const gr = g.createLinearGradient(-46, 0, 46, 0);    // hot accretion disk
+    gr.addColorStop(0, 'rgba(120,90,255,.15)'); gr.addColorStop(.5, 'rgba(255,200,140,.95)'); gr.addColorStop(1, 'rgba(120,90,255,.15)');
+    g.strokeStyle = gr; g.lineWidth = 10;
+    g.beginPath(); g.ellipse(0, 0, 42, 12, 0, 0, 6.283); g.stroke();
+    g.fillStyle = '#01020a'; g.beginPath(); g.arc(0, 0, 12, 0, 6.283); g.fill();
+    g.restore();
   } else if (kind === 'pulsar') {
     glowBlob(g, 0, 0, 130, 'rgba(168,228,240,.4)', .9);
     g.save(); g.rotate(.55);
@@ -2199,6 +2473,40 @@ function drawPlate(o) {
       g.fillRect(Math.cos(a) * r * 1.5 + gauss(rnd) * 24, Math.sin(a) * r * .75, rnd() > .9 ? 2 : 1, 1.5);
     }
     g.globalAlpha = 1;
+  } else if (kind === 'spiral') {         // a face-on grand-design spiral
+    const rnd = mulberry(o.name.length * 17);
+    g.save(); g.rotate(-.4); g.scale(1, .82);
+    glowBlob(g, 0, 0, 70, 'rgba(255,240,210,.9)', .95);     // bright core
+    for (let i = 0; i < 1400; i++) {                        // two logarithmic arms
+      const arm = i % 2, t = rnd();
+      const ang = t * 5.2 + arm * Math.PI + gauss(rnd) * .18;
+      const rad = 22 + t * 168;
+      const x = Math.cos(ang) * rad, y = Math.sin(ang) * rad;
+      const young = rnd();
+      g.fillStyle = young < .5 ? '#cfe0ff' : young < .8 ? '#eef4ff' : '#ffd7c8';
+      g.globalAlpha = .25 + rnd() * .55 * (1 - t * .5);
+      g.fillRect(x, y, rnd() > .95 ? 2 : 1, 1);
+    }
+    g.globalAlpha = 1;
+    glowBlob(g, 150, 70, 34, 'rgba(230,215,240,.55)', .8);  // little companion galaxy
+    g.restore();
+  } else if (kind === 'edgeon') {         // a spiral seen almost side-on, dust lane and all
+    g.save(); g.rotate(-.16);
+    const rnd = mulberry(o.name.length * 23);
+    glowBlob(g, 0, 0, 120, 'rgba(255,240,215,.6)', .9);     // bulge halo
+    for (let i = 0; i < 900; i++) {                         // the thin stellar disk
+      const x = gauss(rnd) * 200, y = gauss(rnd) * (14 + Math.abs(x) * .02);
+      g.fillStyle = rnd() < .7 ? '#f0e6d0' : '#cfe0ff';
+      g.globalAlpha = .2 + rnd() * .5;
+      g.fillRect(x, y, 1, 1);
+    }
+    g.globalAlpha = 1;
+    shadeBall2(g, 0, 0, 58, '#fff6df', '#f0d9a8', '#6a5836'); // swollen central bulge
+    g.fillStyle = '#04070f';                                 // the dark dust lane
+    g.fillRect(-210, 4, 420, 7);
+    g.fillStyle = 'rgba(4,7,15,.5)';
+    g.fillRect(-210, 1, 420, 3);
+    g.restore();
   } else if (kind === 'exo') {
     glowBlob(g, -170, 0, 130, 'rgba(255,110,80,.65)', 1);
     shadeBall2(g, -170, 0, 44, '#ffb090', '#e05535', '#601a10');
@@ -2405,7 +2713,8 @@ $('cardClose').onclick = closeCard;
 
 /* ---------- atlas index ---------- */
 const GROUP_ORDER = ['Home', 'Heart of the galaxy', 'Spiral arms', 'Star nurseries & remnants',
-  'Clusters & neighbours', 'Stars & other suns', 'The night sky', 'Meteor showers', 'The Solar System', 'Other worlds'];
+  'Clusters & neighbours', 'Stars & other suns', 'Black holes & the extreme',
+  'The night sky', 'Meteor showers', 'The Solar System', 'Other worlds'];
 function buildAtlas() {
   const list = $('atlasList'); list.innerHTML = '';
   for (const grp of GROUP_ORDER) {
@@ -2742,6 +3051,7 @@ addEventListener('keydown', e => {
   if (e.target.tagName === 'INPUT') return;   // typing in the atlas search, not steering
   if (e.key === 'Escape') {
     if ($('howbig').classList.contains('open')) closeHowBig();
+    else if ($('howfar').classList.contains('open')) closeHowFar();
     else if ($('quiz').classList.contains('open')) endQuiz();
     else if (card.classList.contains('open')) closeCard();
     else if (atlasOpen) toggleAtlas(false);
@@ -3496,6 +3806,7 @@ const QUIZ = [
 let qRound = [], qIdx = 0, qScore = 0, qDone = false;
 function shuffle(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 function startQuiz() {
+  dailyMode = false;
   qRound = shuffle(QUIZ).slice(0, 8);
   qIdx = 0; qScore = 0;
   $('quiz').classList.add('open');
@@ -3505,7 +3816,7 @@ function endQuiz() { $('quiz').classList.remove('open'); }
 function renderQ() {
   qDone = false;
   const item = qRound[qIdx];
-  $('quizKicker').textContent = 'Field exam';
+  $('quizKicker').textContent = dailyMode ? 'Daily challenge · ' + dailyPretty() : 'Field exam';
   $('quizQ').textContent = item.q;
   $('quizWhy').textContent = '';
   $('quizVisit').style.display = 'none';
@@ -3541,6 +3852,7 @@ function answerQ(btn, i, item) {
   $('quizNext').textContent = qIdx === qRound.length - 1 ? 'See result' : 'Next';
 }
 function quizResult() {
+  if (dailyMode) { dailyResult(); return; }
   const best = Math.max(store.get('mwa-best', 0), qScore);
   store.set('mwa-best', best);
   const rank = qScore === 8 ? 'Master Navigator' : qScore >= 6 ? 'Star Pilot'
@@ -3556,11 +3868,70 @@ function quizResult() {
   qIdx = -1;
 }
 $('quizNext').onclick = () => {
-  if (qIdx === -1) { startQuiz(); return; }
+  if (qIdx === -1) { dailyMode ? startDaily() : startQuiz(); return; }
   if (qIdx === qRound.length - 1) quizResult(); else { qIdx++; renderQ(); }
 };
 $('quizClose').onclick = endQuiz;
 $('quizBtn').onclick = startQuiz;
+
+/* ---------- daily challenge & streak ---------- */
+let dailyMode = false;
+const DAY_MS = 86400000;
+function isoOf(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+function todayISO() { return isoOf(new Date()); }
+function yesterdayISO() { return isoOf(new Date(Date.now() - DAY_MS)); }
+function dailyPretty() { return new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); }
+function dailySeed() { const d = new Date(); return d.getFullYear() * 372 + (d.getMonth() + 1) * 31 + d.getDate(); }
+function dailyPick() {                          // the same five questions for everyone, all day
+  const idx = QUIZ.map((_, i) => i), rnd = mulberry(dailySeed());
+  for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; }
+  return idx.slice(0, 5).map(i => QUIZ[i]);
+}
+function startDaily() {
+  dailyMode = true;
+  qRound = dailyPick();
+  qIdx = 0; qScore = 0;
+  $('quiz').classList.add('open');
+  renderQ();
+}
+function dailyResult() {
+  const today = todayISO(), already = store.get('mwa-daily-date', '') === today;
+  const passed = qScore >= 3;
+  let streak = store.get('mwa-streak', 0);
+  let note;
+  if (already) {
+    note = 'Already logged today — this run was just for the joy of it.';
+  } else if (passed) {
+    streak = (store.get('mwa-daily-date', '') === yesterdayISO()) ? streak + 1 : 1;
+    store.set('mwa-streak', streak);
+    store.set('mwa-daily-date', today);
+    note = 'Logged. Come back tomorrow to keep the run alive.';
+  } else {
+    note = 'Three of five keeps the streak. Revisit the map and try again — it still counts today.';
+  }
+  const rank = qScore === 5 ? 'Flawless' : qScore >= 4 ? 'Sharp' : qScore >= 3 ? 'Passed' : 'Not yet';
+  $('quizKicker').textContent = 'Daily challenge · ' + dailyPretty();
+  $('quizQ').textContent = `${qScore} / 5 — ${rank}`;
+  $('quizWhy').textContent = (streak > 0 ? `Streak: ${streak} day${streak === 1 ? '' : 's'} running. ` : '') + note;
+  $('quizOpts').innerHTML = '';
+  $('quizVisit').style.display = 'none';
+  $('quizScore').textContent = '';
+  $('quizNext').style.display = 'flex';
+  $('quizNext').textContent = 'Play again';
+  qIdx = -1;
+  syncDailyBtn();
+}
+function syncDailyBtn() {
+  const done = store.get('mwa-daily-date', '') === todayISO();
+  const streak = store.get('mwa-streak', 0);
+  $('dailyBtn').textContent = (done ? '✓ Daily' : '✦ Daily') + (streak > 0 ? ' · ' + streak : '');
+  $('dailyBtn').classList.toggle('on', done);
+  $('dailyBtn').title = done
+    ? `Today's challenge is done. Streak: ${streak} day${streak === 1 ? '' : 's'}. Come back tomorrow.`
+    : 'A fresh five-question challenge every day — keep your streak alive';
+}
+$('dailyBtn').onclick = startDaily;
+syncDailyBtn();
 
 /* ---------- other worlds: enterable exoplanet systems ---------- */
 const EXO_OBJS = CAT.filter(o => o.scene === 'exo');
@@ -4002,6 +4373,186 @@ hbCanvas.addEventListener('pointermove', e => {
 addEventListener('pointerup', () => { hbDrag = null; hbCanvas.classList.remove('dragging'); });
 addEventListener('resize', () => { if (hb.open) hbResize(); });
 
+/* ============ HOW FAR? · light-travel explorer ============
+   The companion to "How big?": pick two worlds and watch a single photon
+   crawl the real light-travel gap between them. Every distance is honest —
+   what bends is only the clock, sped up so a crossing fits in a few seconds.
+   Positions are treated as light-time outward from Earth; the journey shown
+   is the gap between the two chosen rungs of that ladder. */
+const HF_YR = 3.15576e7;                     // seconds in a year
+const FAR_OBJS = [                           // lt = light-travel time from Earth, in seconds
+  { key:'earth', name:'Earth', lt:0, col:'#9fc4ef' },
+  { key:'moon', name:'The Moon', lt:1.282, col:'#cfd6e4' },
+  { key:'sun', name:'The Sun', lt:499, col:'#ffd98e' },
+  { key:'mars', name:'Mars', lt:760, col:'#ff9d6b' },
+  { key:'jupiter', name:'Jupiter', lt:2595, col:'#e8cfa8' },
+  { key:'saturn', name:'Saturn', lt:4759, col:'#e8d8a8' },
+  { key:'voyager', name:'Voyager 1', lt:82800, col:'#f0a75c' },
+  { key:'proxima', name:'Proxima Centauri', lt:4.2465 * HF_YR, col:'#ff9d6b' },
+  { key:'sirius', name:'Sirius', lt:8.6 * HF_YR, col:'#eef4ff' },
+  { key:'betelgeuse', name:'Betelgeuse', lt:548 * HF_YR, col:'#ff9d6b' },
+  { key:'orion', name:'Orion Nebula', lt:1344 * HF_YR, col:'#e88fb8' },
+  { key:'sgr', name:'Galactic Centre', lt:26000 * HF_YR, col:'#b39cff' },
+  { key:'andromeda', name:'Andromeda Galaxy', lt:2.5e6 * HF_YR, col:'#c9a9e8' },
+];
+const HF_MAP = Object.fromEntries(FAR_OBJS.map(o => [o.key, o]));
+const HF_CROSS = 13, HF_PAUSE = 1.6, HF_CYCLE = HF_CROSS + HF_PAUSE;   // seconds of wall time
+const hf = { open: false, from: 'sun', to: 'proxima', t0: 0, raf: 0, inited: false };
+const hfCanvas = $('hfCanvas'), hfg = hfCanvas.getContext('2d');
+function hfResize() {
+  hfCanvas.width = innerWidth * DPR; hfCanvas.height = innerHeight * DPR;
+  hfg.setTransform(DPR, 0, 0, DPR, 0, 0);
+}
+function hfUnit(s) {                          // pick a human unit for a span of light-seconds
+  if (s < 90) return { div: 1, unit: 'light-seconds', dec: 1 };
+  if (s < 5400) return { div: 60, unit: 'light-minutes', dec: 1 };
+  if (s < 172800) return { div: 3600, unit: 'light-hours', dec: 1 };
+  if (s < HF_YR) return { div: 86400, unit: 'light-days', dec: 1 };
+  if (s < 1000 * HF_YR) return { div: HF_YR, unit: 'light-years', dec: s < 10 * HF_YR ? 2 : 0 };
+  if (s < 1e6 * HF_YR) return { div: 1000 * HF_YR, unit: 'thousand light-years', dec: 1 };
+  return { div: 1e6 * HF_YR, unit: 'million light-years', dec: 2 };
+}
+function hfNum(s, u) {
+  const v = s / u.div;
+  return (u.dec === 0 ? Math.round(v) : +v.toFixed(u.dec)).toLocaleString('en-US');
+}
+function hfFmt(s) { const u = hfUnit(s); return hfNum(s, u) + ' ' + u.unit; }
+function hfBuildChips() {
+  for (const [row, which] of [['hfFromChips', 'from'], ['hfToChips', 'to']]) {
+    const host = $(row); host.innerHTML = '';
+    for (const o of FAR_OBJS) {
+      const b = document.createElement('button');
+      b.className = 'hfChip'; b.dataset.key = o.key; b.textContent = o.name;
+      b.onclick = () => hfPick(which, o.key);
+      host.appendChild(b);
+    }
+  }
+}
+function hfSyncChips() {
+  $('hfFromChips').querySelectorAll('.hfChip').forEach(el => el.classList.toggle('on', el.dataset.key === hf.from));
+  $('hfToChips').querySelectorAll('.hfChip').forEach(el => el.classList.toggle('on', el.dataset.key === hf.to));
+}
+function hfPick(which, key) {
+  if (hf[which] === key) return;
+  hf[which] = key;
+  if (hf.from === hf.to) {                    // never a zero-length trip
+    const alt = FAR_OBJS.find(o => o.key !== key);
+    if (which === 'to') hf.from = alt.key; else hf.to = alt.key;
+  }
+  hf.t0 = performance.now();
+  hfSyncChips();
+  sfxOpen();
+}
+function hfFrame() {
+  if (!hf.open) return;
+  const W = innerWidth, H = innerHeight;
+  const from = HF_MAP[hf.from], to = HF_MAP[hf.to];
+  const total = Math.abs(to.lt - from.lt);
+  const elapsed = (performance.now() - hf.t0) / 1000;
+  let p;
+  if (REDUCED) p = 1;
+  else { const c = elapsed % HF_CYCLE; p = c < HF_CROSS ? c / HF_CROSS : 1; }
+  const eased = p;                             // linear: light does not accelerate
+  // backdrop
+  hfg.fillStyle = '#04070f'; hfg.fillRect(0, 0, W, H);
+  const rnd = mulberry(1337);
+  for (let i = 0; i < 130; i++) {
+    hfg.globalAlpha = .1 + rnd() * .5;
+    hfg.fillStyle = rnd() < .9 ? '#c8d4ea' : '#ffe9c9';
+    hfg.fillRect(rnd() * W, rnd() * H, 1, 1);
+  }
+  hfg.globalAlpha = 1;
+  const y = H * .5;
+  const x0 = Math.max(120, W * .16), x1 = W - Math.max(120, W * .16);
+  const px = x0 + eased * (x1 - x0);
+  // the track
+  hfg.strokeStyle = 'rgba(148,163,184,.2)'; hfg.lineWidth = 2;
+  hfg.beginPath(); hfg.moveTo(x0, y); hfg.lineTo(x1, y); hfg.stroke();
+  // travelled portion
+  const tg = hfg.createLinearGradient(x0, 0, px, 0);
+  tg.addColorStop(0, 'rgba(240,167,92,.25)'); tg.addColorStop(1, 'rgba(255,220,150,.9)');
+  hfg.strokeStyle = tg; hfg.lineWidth = 2.5;
+  hfg.beginPath(); hfg.moveTo(x0, y); hfg.lineTo(px, y); hfg.stroke();
+  // endpoints
+  const node = (x, o, label) => {
+    const gr = hfg.createRadialGradient(x, y, 0, x, y, 26);
+    gr.addColorStop(0, o.col); gr.addColorStop(1, o.col + '00');
+    hfg.fillStyle = gr; hfg.globalAlpha = .8;
+    hfg.beginPath(); hfg.arc(x, y, 26, 0, 6.283); hfg.fill(); hfg.globalAlpha = 1;
+    hfg.fillStyle = o.col; hfg.beginPath(); hfg.arc(x, y, 7, 0, 6.283); hfg.fill();
+    hfg.font = '600 13px ' + '"SF Mono", ui-monospace, Menlo, monospace';
+    hfg.fillStyle = 'rgba(207,224,255,.92)'; hfg.textAlign = 'center';
+    hfg.fillText(o.name.toUpperCase(), x, y + 46);
+    hfg.font = '10px ui-monospace, Menlo, monospace';
+    hfg.fillStyle = 'rgba(148,163,184,.6)';
+    hfg.fillText(label, x, y + 62);
+  };
+  node(x0, from, 'START');
+  node(x1, to, 'DESTINATION');
+  // the photon
+  if (!REDUCED || p < 1) {
+    const trail = hfg.createLinearGradient(px - 60, 0, px, 0);
+    trail.addColorStop(0, 'rgba(255,240,210,0)'); trail.addColorStop(1, 'rgba(255,240,210,.7)');
+    hfg.strokeStyle = trail; hfg.lineWidth = 2.5;
+    hfg.beginPath(); hfg.moveTo(Math.max(x0, px - 60), y); hfg.lineTo(px, y); hfg.stroke();
+  }
+  glowBlobAt(hfg, px, y, 15, 'rgba(255,245,220,.9)');
+  hfg.fillStyle = '#fffdf7'; hfg.beginPath(); hfg.arc(px, y, 3.5, 0, 6.283); hfg.fill();
+  // readout above the track
+  const u = hfUnit(total || 1);
+  hfg.textAlign = 'center';
+  hfg.font = '300 40px ' + '"SF Mono", ui-monospace, Menlo, monospace';
+  hfg.fillStyle = '#ffe9c9';
+  hfg.fillText(hfNum(total * p, u) + '  /  ' + hfNum(total, u), W / 2, y - 66);
+  hfg.font = '11px ui-monospace, Menlo, monospace';
+  hfg.fillStyle = 'rgba(240,167,92,.8)';
+  hfg.fillText(u.unit.toUpperCase() + ' OF LIGHT TRAVEL', W / 2, y - 44);
+  // the human line under the track
+  hfg.font = '13px ui-monospace, Menlo, monospace';
+  hfg.fillStyle = 'rgba(184,207,232,.75)';
+  const msg = total === 0 ? 'The same place — light needs no time at all.'
+    : p >= 1 ? 'Arrived. Light made the crossing in ' + hfFmt(total) + '.'
+      : 'If you left as light when this opened, you would be ' + Math.round(p * 100) + '% of the way there.';
+  hfg.fillText(msg, W / 2, y + 96);
+  hf.raf = requestAnimationFrame(hfFrame);
+}
+function glowBlobAt(g, x, y, r, col) {
+  const gr = g.createRadialGradient(x, y, 0, x, y, r);
+  gr.addColorStop(0, col); gr.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = gr; g.beginPath(); g.arc(x, y, r, 0, 6.283); g.fill();
+}
+function hfUpdateFoot() {
+  const from = HF_MAP[hf.from], to = HF_MAP[hf.to];
+  const total = Math.abs(to.lt - from.lt);
+  $('hfCaption').textContent = from.name + '  →  ' + to.name + '   ·   light takes ' + (total === 0 ? 'no time' : hfFmt(total));
+  $('hfRate').textContent = total === 0 ? '' : 'At this pace, one second on screen ≈ ' + hfFmt(total / HF_CROSS) + ' of real travel';
+}
+function openHowFar() {
+  if (!hf.inited) { hf.inited = true; hfBuildChips(); }
+  $('howfar').classList.add('open');
+  hfResize();
+  hfSyncChips();
+  hf.open = true; hf.t0 = performance.now();
+  setHash('#howfar');
+  sfxOpen();
+  cancelAnimationFrame(hf.raf);
+  const tick = () => { if (hf.open) { hfUpdateFoot(); } };
+  tick();
+  // keep the foot caption in step as the photon flips between travelling and arrived
+  clearInterval(hf._footTimer); hf._footTimer = setInterval(tick, 400);
+  hf.raf = requestAnimationFrame(hfFrame);
+}
+function closeHowFar() {
+  hf.open = false;
+  clearInterval(hf._footTimer);
+  cancelAnimationFrame(hf.raf);
+  $('howfar').classList.remove('open');
+  if (location.hash === '#howfar') setHash(location.pathname + location.search);
+}
+$('farBtn').onclick = openHowFar;
+$('hfClose').onclick = closeHowFar;
+addEventListener('resize', () => { if (hf.open) hfResize(); });
+
 /* ---------- boot ---------- */
 addEventListener('resize', resize);
 resize();
@@ -4034,6 +4585,7 @@ function hashTarget() {
 }
 addEventListener('hashchange', () => {
   if (location.hash === '#howbig') { if (!hb.open) openHowBig(); return; }
+  if (location.hash === '#howfar') { if (!hf.open) openHowFar(); return; }
   if (location.hash === '#sky') { if (state.scene !== 'sky') enterSky(); return; }
   if (location.hash === '#tonight') { openTonight(); return; }
   const o = hashTarget();
@@ -4046,6 +4598,9 @@ if (linked) {
 } else if (location.hash === '#howbig') {
   welcome.classList.add('hide');
   openHowBig();
+} else if (location.hash === '#howfar') {
+  welcome.classList.add('hide');
+  openHowFar();
 } else if (location.hash === '#sky') {          // PWA shortcut: straight to the chart
   welcome.classList.add('hide');
   store.set('mwa-welcomed', true);
