@@ -515,6 +515,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   <button class="ctl" id="latBtn" style="display:none" title="Where on Earth are you observing from? Changes every visibility call."></button>
   <button class="ctl" id="hopBtn" style="display:none" title="Find the constellations on the chart — a pointing game">&#8982; Star hop</button>
   <button class="ctl" id="quizBtn" title="Test what you have learned">&#9998; Exam</button>
+  <button class="ctl" id="dailyBtn" title="A fresh five-question challenge every day — keep your streak alive">&#10022; Daily</button>
   <button class="ctl" id="tourBtn" title="Guided tours — pick a route">&#9672; Tours</button>
   <button class="ctl" id="skyBtn" title="The constellations, as seen from Earth">&#10038; Night sky</button>
   <button class="ctl" id="scaleBtn" title="Moon to Betelgeuse at true relative scale — the one honest view">&#9678; How big?</button>
@@ -3805,6 +3806,7 @@ const QUIZ = [
 let qRound = [], qIdx = 0, qScore = 0, qDone = false;
 function shuffle(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 function startQuiz() {
+  dailyMode = false;
   qRound = shuffle(QUIZ).slice(0, 8);
   qIdx = 0; qScore = 0;
   $('quiz').classList.add('open');
@@ -3814,7 +3816,7 @@ function endQuiz() { $('quiz').classList.remove('open'); }
 function renderQ() {
   qDone = false;
   const item = qRound[qIdx];
-  $('quizKicker').textContent = 'Field exam';
+  $('quizKicker').textContent = dailyMode ? 'Daily challenge · ' + dailyPretty() : 'Field exam';
   $('quizQ').textContent = item.q;
   $('quizWhy').textContent = '';
   $('quizVisit').style.display = 'none';
@@ -3850,6 +3852,7 @@ function answerQ(btn, i, item) {
   $('quizNext').textContent = qIdx === qRound.length - 1 ? 'See result' : 'Next';
 }
 function quizResult() {
+  if (dailyMode) { dailyResult(); return; }
   const best = Math.max(store.get('mwa-best', 0), qScore);
   store.set('mwa-best', best);
   const rank = qScore === 8 ? 'Master Navigator' : qScore >= 6 ? 'Star Pilot'
@@ -3865,11 +3868,70 @@ function quizResult() {
   qIdx = -1;
 }
 $('quizNext').onclick = () => {
-  if (qIdx === -1) { startQuiz(); return; }
+  if (qIdx === -1) { dailyMode ? startDaily() : startQuiz(); return; }
   if (qIdx === qRound.length - 1) quizResult(); else { qIdx++; renderQ(); }
 };
 $('quizClose').onclick = endQuiz;
 $('quizBtn').onclick = startQuiz;
+
+/* ---------- daily challenge & streak ---------- */
+let dailyMode = false;
+const DAY_MS = 86400000;
+function isoOf(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+function todayISO() { return isoOf(new Date()); }
+function yesterdayISO() { return isoOf(new Date(Date.now() - DAY_MS)); }
+function dailyPretty() { return new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); }
+function dailySeed() { const d = new Date(); return d.getFullYear() * 372 + (d.getMonth() + 1) * 31 + d.getDate(); }
+function dailyPick() {                          // the same five questions for everyone, all day
+  const idx = QUIZ.map((_, i) => i), rnd = mulberry(dailySeed());
+  for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; }
+  return idx.slice(0, 5).map(i => QUIZ[i]);
+}
+function startDaily() {
+  dailyMode = true;
+  qRound = dailyPick();
+  qIdx = 0; qScore = 0;
+  $('quiz').classList.add('open');
+  renderQ();
+}
+function dailyResult() {
+  const today = todayISO(), already = store.get('mwa-daily-date', '') === today;
+  const passed = qScore >= 3;
+  let streak = store.get('mwa-streak', 0);
+  let note;
+  if (already) {
+    note = 'Already logged today — this run was just for the joy of it.';
+  } else if (passed) {
+    streak = (store.get('mwa-daily-date', '') === yesterdayISO()) ? streak + 1 : 1;
+    store.set('mwa-streak', streak);
+    store.set('mwa-daily-date', today);
+    note = 'Logged. Come back tomorrow to keep the run alive.';
+  } else {
+    note = 'Three of five keeps the streak. Revisit the map and try again — it still counts today.';
+  }
+  const rank = qScore === 5 ? 'Flawless' : qScore >= 4 ? 'Sharp' : qScore >= 3 ? 'Passed' : 'Not yet';
+  $('quizKicker').textContent = 'Daily challenge · ' + dailyPretty();
+  $('quizQ').textContent = `${qScore} / 5 — ${rank}`;
+  $('quizWhy').textContent = (streak > 0 ? `Streak: ${streak} day${streak === 1 ? '' : 's'} running. ` : '') + note;
+  $('quizOpts').innerHTML = '';
+  $('quizVisit').style.display = 'none';
+  $('quizScore').textContent = '';
+  $('quizNext').style.display = 'flex';
+  $('quizNext').textContent = 'Play again';
+  qIdx = -1;
+  syncDailyBtn();
+}
+function syncDailyBtn() {
+  const done = store.get('mwa-daily-date', '') === todayISO();
+  const streak = store.get('mwa-streak', 0);
+  $('dailyBtn').textContent = (done ? '✓ Daily' : '✦ Daily') + (streak > 0 ? ' · ' + streak : '');
+  $('dailyBtn').classList.toggle('on', done);
+  $('dailyBtn').title = done
+    ? `Today's challenge is done. Streak: ${streak} day${streak === 1 ? '' : 's'}. Come back tomorrow.`
+    : 'A fresh five-question challenge every day — keep your streak alive';
+}
+$('dailyBtn').onclick = startDaily;
+syncDailyBtn();
 
 /* ---------- other worlds: enterable exoplanet systems ---------- */
 const EXO_OBJS = CAT.filter(o => o.scene === 'exo');
