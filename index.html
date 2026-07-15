@@ -292,6 +292,37 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
 #hbSlider{width:min(520px,80vw);accent-color:var(--ember)}
 #hbScaleLbl{font-family:var(--mono);font-size:10px;color:var(--haze-dim);letter-spacing:.08em}
 
+/* ---------- how far? · light-travel explorer ---------- */
+#howfar{
+  position:fixed;inset:0;z-index:44;background:#04070f;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+#howfar.open{opacity:1;pointer-events:auto}
+#hfCanvas{position:absolute;inset:0;width:100%;height:100%}
+#hfBottom{
+  position:absolute;left:0;right:0;bottom:0;padding:12px 18px calc(16px + var(--sab));
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  background:linear-gradient(rgba(4,7,15,0),rgba(4,7,15,.88) 42%);
+}
+#hfCaption{
+  font-family:var(--mono);font-size:12px;color:var(--ember-hot);letter-spacing:.05em;
+  text-align:center;min-height:16px;
+}
+.hfRow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;max-width:900px}
+.hfLbl{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--ember);width:38px;text-align:right;flex:none;
+}
+.hfChips{display:flex;flex-wrap:wrap;gap:5px;justify-content:center}
+.hfChip{
+  font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--haze);background:var(--panel);border:var(--hairline);border-radius:3px;
+  padding:5px 9px;transition:color .15s,border-color .15s;
+}
+.hfChip:hover{color:var(--ember-hot);border-color:rgba(240,167,92,.45)}
+.hfChip.on{color:var(--ember-hot);border-color:rgba(240,167,92,.6);background:rgba(240,167,92,.1)}
+#hfRate{font-family:var(--mono);font-size:10px;color:var(--haze-dim);letter-spacing:.08em;min-height:13px}
+
 #quiz{
   position:fixed;inset:0;z-index:46;display:flex;align-items:center;justify-content:center;
   background:rgba(4,6,12,.74);backdrop-filter:blur(5px);padding:20px;
@@ -487,6 +518,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   <button class="ctl" id="tourBtn" title="Guided tours — pick a route">&#9672; Tours</button>
   <button class="ctl" id="skyBtn" title="The constellations, as seen from Earth">&#10038; Night sky</button>
   <button class="ctl" id="scaleBtn" title="Moon to Betelgeuse at true relative scale — the one honest view">&#9678; How big?</button>
+  <button class="ctl" id="farBtn" title="Watch light crawl between any two worlds — real light-travel times">&#10142; How far?</button>
   <button class="ctl" id="luckyBtn" title="Fly somewhere unexplored">&#10022; Surprise me</button>
   <button class="ctl on" id="lblBtn" title="Toggle labels">Labels</button>
   <button class="ctl" id="zoomOut" title="Zoom out">&minus;</button>
@@ -509,6 +541,24 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
     <div id="hbChips"></div>
     <input id="hbSlider" type="range" min="0" max="1000" value="0" aria-label="Zoom scale">
     <div id="hbScaleLbl"></div>
+  </div>
+</div>
+
+<div id="howfar" role="dialog" aria-modal="true" aria-label="How far? Light-travel times between worlds">
+  <canvas id="hfCanvas"></canvas>
+  <div id="hbTop">
+    <div>
+      <div class="k">How far?</div>
+      <h2>Nothing outruns light</h2>
+      <div class="sub">Pick a start and a destination &middot; watch a single photon make the crossing in real light-travel time</div>
+    </div>
+    <button id="hfClose" aria-label="Close light explorer">&times;</button>
+  </div>
+  <div id="hfBottom">
+    <div id="hfCaption"></div>
+    <div class="hfRow"><span class="hfLbl">From</span><div id="hfFromChips" class="hfChips"></div></div>
+    <div class="hfRow"><span class="hfLbl">To</span><div id="hfToChips" class="hfChips"></div></div>
+    <div id="hfRate"></div>
   </div>
 </div>
 
@@ -3000,6 +3050,7 @@ addEventListener('keydown', e => {
   if (e.target.tagName === 'INPUT') return;   // typing in the atlas search, not steering
   if (e.key === 'Escape') {
     if ($('howbig').classList.contains('open')) closeHowBig();
+    else if ($('howfar').classList.contains('open')) closeHowFar();
     else if ($('quiz').classList.contains('open')) endQuiz();
     else if (card.classList.contains('open')) closeCard();
     else if (atlasOpen) toggleAtlas(false);
@@ -4260,6 +4311,186 @@ hbCanvas.addEventListener('pointermove', e => {
 addEventListener('pointerup', () => { hbDrag = null; hbCanvas.classList.remove('dragging'); });
 addEventListener('resize', () => { if (hb.open) hbResize(); });
 
+/* ============ HOW FAR? · light-travel explorer ============
+   The companion to "How big?": pick two worlds and watch a single photon
+   crawl the real light-travel gap between them. Every distance is honest —
+   what bends is only the clock, sped up so a crossing fits in a few seconds.
+   Positions are treated as light-time outward from Earth; the journey shown
+   is the gap between the two chosen rungs of that ladder. */
+const HF_YR = 3.15576e7;                     // seconds in a year
+const FAR_OBJS = [                           // lt = light-travel time from Earth, in seconds
+  { key:'earth', name:'Earth', lt:0, col:'#9fc4ef' },
+  { key:'moon', name:'The Moon', lt:1.282, col:'#cfd6e4' },
+  { key:'sun', name:'The Sun', lt:499, col:'#ffd98e' },
+  { key:'mars', name:'Mars', lt:760, col:'#ff9d6b' },
+  { key:'jupiter', name:'Jupiter', lt:2595, col:'#e8cfa8' },
+  { key:'saturn', name:'Saturn', lt:4759, col:'#e8d8a8' },
+  { key:'voyager', name:'Voyager 1', lt:82800, col:'#f0a75c' },
+  { key:'proxima', name:'Proxima Centauri', lt:4.2465 * HF_YR, col:'#ff9d6b' },
+  { key:'sirius', name:'Sirius', lt:8.6 * HF_YR, col:'#eef4ff' },
+  { key:'betelgeuse', name:'Betelgeuse', lt:548 * HF_YR, col:'#ff9d6b' },
+  { key:'orion', name:'Orion Nebula', lt:1344 * HF_YR, col:'#e88fb8' },
+  { key:'sgr', name:'Galactic Centre', lt:26000 * HF_YR, col:'#b39cff' },
+  { key:'andromeda', name:'Andromeda Galaxy', lt:2.5e6 * HF_YR, col:'#c9a9e8' },
+];
+const HF_MAP = Object.fromEntries(FAR_OBJS.map(o => [o.key, o]));
+const HF_CROSS = 13, HF_PAUSE = 1.6, HF_CYCLE = HF_CROSS + HF_PAUSE;   // seconds of wall time
+const hf = { open: false, from: 'sun', to: 'proxima', t0: 0, raf: 0, inited: false };
+const hfCanvas = $('hfCanvas'), hfg = hfCanvas.getContext('2d');
+function hfResize() {
+  hfCanvas.width = innerWidth * DPR; hfCanvas.height = innerHeight * DPR;
+  hfg.setTransform(DPR, 0, 0, DPR, 0, 0);
+}
+function hfUnit(s) {                          // pick a human unit for a span of light-seconds
+  if (s < 90) return { div: 1, unit: 'light-seconds', dec: 1 };
+  if (s < 5400) return { div: 60, unit: 'light-minutes', dec: 1 };
+  if (s < 172800) return { div: 3600, unit: 'light-hours', dec: 1 };
+  if (s < HF_YR) return { div: 86400, unit: 'light-days', dec: 1 };
+  if (s < 1000 * HF_YR) return { div: HF_YR, unit: 'light-years', dec: s < 10 * HF_YR ? 2 : 0 };
+  if (s < 1e6 * HF_YR) return { div: 1000 * HF_YR, unit: 'thousand light-years', dec: 1 };
+  return { div: 1e6 * HF_YR, unit: 'million light-years', dec: 2 };
+}
+function hfNum(s, u) {
+  const v = s / u.div;
+  return (u.dec === 0 ? Math.round(v) : +v.toFixed(u.dec)).toLocaleString('en-US');
+}
+function hfFmt(s) { const u = hfUnit(s); return hfNum(s, u) + ' ' + u.unit; }
+function hfBuildChips() {
+  for (const [row, which] of [['hfFromChips', 'from'], ['hfToChips', 'to']]) {
+    const host = $(row); host.innerHTML = '';
+    for (const o of FAR_OBJS) {
+      const b = document.createElement('button');
+      b.className = 'hfChip'; b.dataset.key = o.key; b.textContent = o.name;
+      b.onclick = () => hfPick(which, o.key);
+      host.appendChild(b);
+    }
+  }
+}
+function hfSyncChips() {
+  $('hfFromChips').querySelectorAll('.hfChip').forEach(el => el.classList.toggle('on', el.dataset.key === hf.from));
+  $('hfToChips').querySelectorAll('.hfChip').forEach(el => el.classList.toggle('on', el.dataset.key === hf.to));
+}
+function hfPick(which, key) {
+  if (hf[which] === key) return;
+  hf[which] = key;
+  if (hf.from === hf.to) {                    // never a zero-length trip
+    const alt = FAR_OBJS.find(o => o.key !== key);
+    if (which === 'to') hf.from = alt.key; else hf.to = alt.key;
+  }
+  hf.t0 = performance.now();
+  hfSyncChips();
+  sfxOpen();
+}
+function hfFrame() {
+  if (!hf.open) return;
+  const W = innerWidth, H = innerHeight;
+  const from = HF_MAP[hf.from], to = HF_MAP[hf.to];
+  const total = Math.abs(to.lt - from.lt);
+  const elapsed = (performance.now() - hf.t0) / 1000;
+  let p;
+  if (REDUCED) p = 1;
+  else { const c = elapsed % HF_CYCLE; p = c < HF_CROSS ? c / HF_CROSS : 1; }
+  const eased = p;                             // linear: light does not accelerate
+  // backdrop
+  hfg.fillStyle = '#04070f'; hfg.fillRect(0, 0, W, H);
+  const rnd = mulberry(1337);
+  for (let i = 0; i < 130; i++) {
+    hfg.globalAlpha = .1 + rnd() * .5;
+    hfg.fillStyle = rnd() < .9 ? '#c8d4ea' : '#ffe9c9';
+    hfg.fillRect(rnd() * W, rnd() * H, 1, 1);
+  }
+  hfg.globalAlpha = 1;
+  const y = H * .5;
+  const x0 = Math.max(120, W * .16), x1 = W - Math.max(120, W * .16);
+  const px = x0 + eased * (x1 - x0);
+  // the track
+  hfg.strokeStyle = 'rgba(148,163,184,.2)'; hfg.lineWidth = 2;
+  hfg.beginPath(); hfg.moveTo(x0, y); hfg.lineTo(x1, y); hfg.stroke();
+  // travelled portion
+  const tg = hfg.createLinearGradient(x0, 0, px, 0);
+  tg.addColorStop(0, 'rgba(240,167,92,.25)'); tg.addColorStop(1, 'rgba(255,220,150,.9)');
+  hfg.strokeStyle = tg; hfg.lineWidth = 2.5;
+  hfg.beginPath(); hfg.moveTo(x0, y); hfg.lineTo(px, y); hfg.stroke();
+  // endpoints
+  const node = (x, o, label) => {
+    const gr = hfg.createRadialGradient(x, y, 0, x, y, 26);
+    gr.addColorStop(0, o.col); gr.addColorStop(1, o.col + '00');
+    hfg.fillStyle = gr; hfg.globalAlpha = .8;
+    hfg.beginPath(); hfg.arc(x, y, 26, 0, 6.283); hfg.fill(); hfg.globalAlpha = 1;
+    hfg.fillStyle = o.col; hfg.beginPath(); hfg.arc(x, y, 7, 0, 6.283); hfg.fill();
+    hfg.font = '600 13px ' + '"SF Mono", ui-monospace, Menlo, monospace';
+    hfg.fillStyle = 'rgba(207,224,255,.92)'; hfg.textAlign = 'center';
+    hfg.fillText(o.name.toUpperCase(), x, y + 46);
+    hfg.font = '10px ui-monospace, Menlo, monospace';
+    hfg.fillStyle = 'rgba(148,163,184,.6)';
+    hfg.fillText(label, x, y + 62);
+  };
+  node(x0, from, 'START');
+  node(x1, to, 'DESTINATION');
+  // the photon
+  if (!REDUCED || p < 1) {
+    const trail = hfg.createLinearGradient(px - 60, 0, px, 0);
+    trail.addColorStop(0, 'rgba(255,240,210,0)'); trail.addColorStop(1, 'rgba(255,240,210,.7)');
+    hfg.strokeStyle = trail; hfg.lineWidth = 2.5;
+    hfg.beginPath(); hfg.moveTo(Math.max(x0, px - 60), y); hfg.lineTo(px, y); hfg.stroke();
+  }
+  glowBlobAt(hfg, px, y, 15, 'rgba(255,245,220,.9)');
+  hfg.fillStyle = '#fffdf7'; hfg.beginPath(); hfg.arc(px, y, 3.5, 0, 6.283); hfg.fill();
+  // readout above the track
+  const u = hfUnit(total || 1);
+  hfg.textAlign = 'center';
+  hfg.font = '300 40px ' + '"SF Mono", ui-monospace, Menlo, monospace';
+  hfg.fillStyle = '#ffe9c9';
+  hfg.fillText(hfNum(total * p, u) + '  /  ' + hfNum(total, u), W / 2, y - 66);
+  hfg.font = '11px ui-monospace, Menlo, monospace';
+  hfg.fillStyle = 'rgba(240,167,92,.8)';
+  hfg.fillText(u.unit.toUpperCase() + ' OF LIGHT TRAVEL', W / 2, y - 44);
+  // the human line under the track
+  hfg.font = '13px ui-monospace, Menlo, monospace';
+  hfg.fillStyle = 'rgba(184,207,232,.75)';
+  const msg = total === 0 ? 'The same place — light needs no time at all.'
+    : p >= 1 ? 'Arrived. Light made the crossing in ' + hfFmt(total) + '.'
+      : 'If you left as light when this opened, you would be ' + Math.round(p * 100) + '% of the way there.';
+  hfg.fillText(msg, W / 2, y + 96);
+  hf.raf = requestAnimationFrame(hfFrame);
+}
+function glowBlobAt(g, x, y, r, col) {
+  const gr = g.createRadialGradient(x, y, 0, x, y, r);
+  gr.addColorStop(0, col); gr.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = gr; g.beginPath(); g.arc(x, y, r, 0, 6.283); g.fill();
+}
+function hfUpdateFoot() {
+  const from = HF_MAP[hf.from], to = HF_MAP[hf.to];
+  const total = Math.abs(to.lt - from.lt);
+  $('hfCaption').textContent = from.name + '  →  ' + to.name + '   ·   light takes ' + (total === 0 ? 'no time' : hfFmt(total));
+  $('hfRate').textContent = total === 0 ? '' : 'At this pace, one second on screen ≈ ' + hfFmt(total / HF_CROSS) + ' of real travel';
+}
+function openHowFar() {
+  if (!hf.inited) { hf.inited = true; hfBuildChips(); }
+  $('howfar').classList.add('open');
+  hfResize();
+  hfSyncChips();
+  hf.open = true; hf.t0 = performance.now();
+  setHash('#howfar');
+  sfxOpen();
+  cancelAnimationFrame(hf.raf);
+  const tick = () => { if (hf.open) { hfUpdateFoot(); } };
+  tick();
+  // keep the foot caption in step as the photon flips between travelling and arrived
+  clearInterval(hf._footTimer); hf._footTimer = setInterval(tick, 400);
+  hf.raf = requestAnimationFrame(hfFrame);
+}
+function closeHowFar() {
+  hf.open = false;
+  clearInterval(hf._footTimer);
+  cancelAnimationFrame(hf.raf);
+  $('howfar').classList.remove('open');
+  if (location.hash === '#howfar') setHash(location.pathname + location.search);
+}
+$('farBtn').onclick = openHowFar;
+$('hfClose').onclick = closeHowFar;
+addEventListener('resize', () => { if (hf.open) hfResize(); });
+
 /* ---------- boot ---------- */
 addEventListener('resize', resize);
 resize();
@@ -4292,6 +4523,7 @@ function hashTarget() {
 }
 addEventListener('hashchange', () => {
   if (location.hash === '#howbig') { if (!hb.open) openHowBig(); return; }
+  if (location.hash === '#howfar') { if (!hf.open) openHowFar(); return; }
   if (location.hash === '#sky') { if (state.scene !== 'sky') enterSky(); return; }
   if (location.hash === '#tonight') { openTonight(); return; }
   const o = hashTarget();
@@ -4304,6 +4536,9 @@ if (linked) {
 } else if (location.hash === '#howbig') {
   welcome.classList.add('hide');
   openHowBig();
+} else if (location.hash === '#howfar') {
+  welcome.classList.add('hide');
+  openHowFar();
 } else if (location.hash === '#sky') {          // PWA shortcut: straight to the chart
   welcome.classList.add('hide');
   store.set('mwa-welcomed', true);
