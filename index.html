@@ -946,6 +946,20 @@ const CAT = [
   blurb:'The rusted planet wears the scars of a warmer youth: dried river deltas, lake beds, and canyons carved by floods. Its day is almost exactly as long as ours, which is why more spacecraft have gone here than to any other planet.',
   facts:['Olympus Mons is the tallest volcano known — nearly three times the height of Everest, wide as France.','Valles Marineris is a canyon system as long as the United States is wide.','Its moon Phobos orbits so low it will crash into Mars or shred into a ring within ~50 million years.'] },
 
+{ id:'phobos', scene:'solar', group:'The Solar System', type:'moon', name:'Phobos',
+  kicker:'Mars I · the doomed moon', sub:'A tiny, cratered rock spiralling to its death',
+  parent:'mars', orbit:{r:10,periodDays:0.32,phase:1.0}, size:1.1, mark:4, plate:'p:phobos',
+  stats:[['Size','27 × 22 × 18 km — a potato'],['Orbit','7.6 hours — faster than Mars turns'],['Rises','In the west, sets in the east'],['Feature','Stickney, a crater 9 km wide'],['Fate','Torn into a ring in ~50 million yrs']],
+  blurb:'The larger and closer of Mars’s two little moons — a captured-asteroid-like lump of rock so near the planet that it whips around in under eight hours, faster than Mars itself rotates, so from the surface it would rise in the west and set in the east twice a Martian day. It is doomed: Mars’s gravity is slowly dragging it inward to shatter it into a ring.',
+  facts:['Its great crater Stickney is nearly a third of Phobos’s width; the impact left grooves radiating across the whole moon.','It orbits so low that from parts of Mars it never rises above the horizon at all.'] },
+
+{ id:'deimos', scene:'solar', group:'The Solar System', type:'moon', name:'Deimos',
+  kicker:'Mars II · the outer speck', sub:'The smaller Martian moon, smooth and distant',
+  parent:'mars', orbit:{r:15,periodDays:1.26,phase:4.5}, size:1.0, mark:4, plate:'p:deimos',
+  stats:[['Size','15 × 12 × 11 km'],['Orbit','30 hours'],['Surface','Smoothed by a blanket of dust'],['In the sky','Little more than a bright star'],['Named for','Dread, twin of Phobos (Fear)']],
+  blurb:'The outer and far smaller of Mars’s moons, a dark little lump barely a dozen kilometres across whose craters are half-buried under a smooth blanket of its own pulverised dust. From the Martian surface it would show no disk at all — just a bright moving point, sliding slowly across the sky over a couple of days.',
+  facts:['Phobos and Deimos — “fear” and “dread” — are named for the sons of the war god the planet honours.','Both moons are so small and dark they were not discovered until 1877, though Mars had been watched for millennia.'] },
+
 { id:'belt', scene:'solar', group:'The Solar System', type:'belt', name:'The Asteroid Belt',
   kicker:'Main belt · 2.2–3.2 AU', sub:'Rubble of a planet that never formed',
   orbit:{r:245,periodDays:1682,phase:2.9}, size:3, mark:4, plate:'belt', ring:[228,262],
@@ -959,6 +973,13 @@ const CAT = [
   stats:[['Diameter','940 km — a third of the Moon'],['Distance','2.77 AU average'],['Year','4.6 Earth yrs'],['Discovered','1801 — briefly called a planet'],['Visited','Dawn, 2015'],['Signature','Bright salt spots in Occator crater']],
   blurb:'The largest object in the asteroid belt and the only dwarf planet in the inner Solar System. When Dawn arrived in 2015 it found two dazzling bright spots on a dark world — deposits of salt left behind when briny water welled up from below and boiled away into space. Ceres is a rock with the memory of an ocean.',
   facts:['Discovered in 1801, it was called the eighth planet for half a century before being reclassed as an asteroid — then promoted to dwarf planet in 2006, the same year Pluto was demoted.','The bright carbonate spots in Occator crater are among the most reflective surfaces in the Solar System — sunlight on dried alien brine.','It may still hold a slushy layer of salty water beneath its crust today.'] },
+
+{ id:'vesta', scene:'solar', group:'The Solar System', type:'planet', name:'Vesta',
+  kicker:'Asteroid 4 · the brightest asteroid', sub:'A battered protoplanet that never quite grew up',
+  orbit:{r:240,periodDays:1325,phase:3.5}, size:2.2, mark:4, plate:'p:vesta',
+  stats:[['Diameter','525 km — 2nd largest asteroid'],['Distance','2.36 AU average'],['Year','3.6 Earth yrs'],['Feature','Rheasilvia, a giant south-pole crater'],['Visited','Dawn, 2011–2012'],['Brightness','The only asteroid visible to the naked eye']],
+  blurb:'The second-largest body in the asteroid belt and the only one bright enough, just barely, to glimpse with the naked eye. Vesta is not mere rubble but a battered protoplanet — a world that began to form layers like a true planet before Jupiter starved it of growth. A colossal impact near its south pole blasted out a crater almost as wide as Vesta itself, flinging debris that still rains on Earth as meteorites.',
+  facts:['About one in twenty meteorites found on Earth is a chip of Vesta, knocked loose by that giant south-pole impact.','The Dawn spacecraft orbited Vesta before flying on to Ceres — the first probe ever to circle two different worlds beyond Earth.'] },
 
 { id:'jupiter', scene:'solar', group:'The Solar System', type:'planet', name:'Jupiter',
   kicker:'Planet V · gas giant', sub:'The king — heavier than all other planets combined',
@@ -981,6 +1002,20 @@ const CAT = [
   blurb:'Beneath a cracked white shell of ice, Europa hides a saltwater ocean holding roughly twice the water of every sea on Earth — kept liquid for four billion years by the same tidal kneading that torments Io. Where there is water, energy and time, there may be chemistry. It is the Solar System’s most tantalising place to look for life.',
   facts:['The brown cracks webbing its surface are seams where the shell pulls apart and briny water wells up and freezes.','Europa is the smoothest solid body known — almost nothing sticks up more than a few hundred metres.','NASA’s Europa Clipper, launched in 2024, will make ~50 close flybys to sound the ocean through the ice.'] },
 
+{ id:'ganymede', scene:'solar', group:'The Solar System', type:'moon', name:'Ganymede',
+  kicker:'Jupiter III · king of moons', sub:'The largest moon in the Solar System — bigger than Mercury',
+  parent:'jupiter', orbit:{r:43,periodDays:7.15,phase:5.2}, size:2.4, mark:4, plate:'p:ganymede',
+  stats:[['Diameter','5,268 km — larger than Mercury'],['Rank','Biggest moon in the Solar System'],['Unique','The only moon with its own magnetic field'],['Hidden','A salty ocean under the ice'],['Orbit','7.2 days (drawn slower here)']],
+  blurb:'The giant among moons — larger than the planet Mercury, and the only one anywhere known to generate its own magnetic field, cocooned inside Jupiter’s. Its surface is a patchwork of dark, ancient cratered terrain and brighter grooved ice, and deep below lies a salty ocean, one more hidden sea in the outer Solar System.',
+  facts:['If it orbited the Sun instead of Jupiter, Ganymede would comfortably rank as a planet.','Its internal magnetic field creates shimmering aurorae, whose flickering betrayed the ocean sloshing beneath the ice.'] },
+
+{ id:'callisto', scene:'solar', group:'The Solar System', type:'moon', name:'Callisto',
+  kicker:'Jupiter IV · the old cratered world', sub:'The most heavily scarred surface in the Solar System',
+  parent:'jupiter', orbit:{r:55,periodDays:16.7,phase:1.1}, size:2.3, mark:4, plate:'p:callisto',
+  stats:[['Diameter','4,821 km — near Mercury’s size'],['Surface','The most cratered known'],['Age','~4 billion yrs, barely changed'],['Radiation','Low — outside Jupiter’s worst belts'],['Orbit','16.7 days (drawn slower here)']],
+  blurb:'The outermost of Jupiter’s four great moons, and the quietest: a dark, icy world so ancient and geologically dead that its surface is saturated with craters, a scarred record of four billion years of impacts with nothing to erase them. Sitting well outside Jupiter’s fiercest radiation, it is often named the most hospitable base for future explorers of the Jovian system.',
+  facts:['Its surface is the oldest and most cratered of any body yet mapped — a fossil from the Solar System’s violent youth.','It, too, may hide a briny ocean deep below, though buried under far more ice than Europa’s.'] },
+
 { id:'saturn', scene:'solar', group:'The Solar System', type:'planet', name:'Saturn',
   kicker:'Planet VI · gas giant', sub:'The ringed jewel — and moon-hoarding champion',
   orbit:{r:378,periodDays:10759,phase:3.8}, size:18, mark:7, plate:'p:saturn',
@@ -1002,12 +1037,54 @@ const CAT = [
   blurb:'The only moon with a real atmosphere — a nitrogen sky denser than Earth’s, hazed orange with hydrocarbon smog. Beneath it runs a complete weather cycle with methane playing the role of water: clouds, drizzle, rivers, deltas and polar seas. It is the most Earth-like landscape in the Solar System, built from entirely alien materials.',
   facts:['The Huygens probe touched down in 2005 — still the most distant landing ever made — and photographed rounded pebbles of rock-hard water ice.','In the low gravity and thick air, a human could strap wings to their arms and fly.','NASA’s Dragonfly, a nuclear-powered eight-rotor drone, will hop across Titan’s dunes in the 2030s.'] },
 
+{ id:'mimas', scene:'solar', group:'The Solar System', type:'moon', name:'Mimas',
+  kicker:'Saturn I · the Death Star moon', sub:'A little iceball with one enormous crater',
+  parent:'saturn', orbit:{r:20,periodDays:0.94,phase:2.1}, size:1.5, mark:4, plate:'p:mimas',
+  stats:[['Diameter','396 km'],['Signature','Herschel, a crater a third its width'],['Look-alike','The Death Star'],['Surprise','May hide a young ocean'],['Orbit','0.9 days (drawn slower here)']],
+  blurb:'A small moon of ice with one colossal crater, Herschel, nearly a third of Mimas’s own diameter — the scar of an impact that almost split it apart, and a resemblance to a certain space station that no one can unsee. Improbably, its gentle wobble hints that a liquid ocean may slosh beneath the frozen shell of even this tiny world.',
+  facts:['The impact that dug Herschel would have very nearly shattered the whole moon.','Its rotation wobbles just enough to suggest a hidden internal ocean — a “stealth” sea under kilometres of ice.'] },
+
+{ id:'dione', scene:'solar', group:'The Solar System', type:'moon', name:'Dione',
+  kicker:'Saturn IV · ice cliffs', sub:'An icy moon streaked with bright frozen cliffs',
+  parent:'saturn', orbit:{r:30,periodDays:2.7,phase:0.5}, size:1.7, mark:4, plate:'p:dione',
+  stats:[['Diameter','1,123 km'],['Feature','Bright “wispy” ice cliffs'],['Possible','A subsurface ocean'],['Trailing hemisphere','Fractured and streaked'],['Orbit','2.7 days (drawn slower here)']],
+  blurb:'A mid-sized moon of Saturn whose trailing side is laced with bright streaks — once mysterious, now known to be networks of towering ice cliffs, fractures in the crust catching the sunlight. Like several of Saturn’s moons, Dione may cradle a small ocean deep within, and it drifts through a whisper of oxygen given off by its own ice.',
+  facts:['The bright “wisps” Voyager saw from afar turned out, in Cassini’s close-ups, to be cliffs of fractured ice hundreds of metres high.','It shares its orbit with two tiny companion moons parked in gravitationally stable points ahead of and behind it.'] },
+
+{ id:'rhea', scene:'solar', group:'The Solar System', type:'moon', name:'Rhea',
+  kicker:'Saturn V · Saturn’s second moon', sub:'A frozen, cratered world that may wear a ring',
+  parent:'saturn', orbit:{r:35,periodDays:4.5,phase:3.3}, size:1.9, mark:4, plate:'p:rhea',
+  stats:[['Diameter','1,527 km — Saturn’s 2nd largest'],['Surface','Ancient, heavily cratered ice'],['Rumoured','Its own faint ring system'],['Air','A trace of oxygen and CO₂'],['Orbit','4.5 days (drawn slower here)']],
+  blurb:'The second-largest of Saturn’s moons, a heavily cratered ball of ice and rock that looks, at a glance, like a dirtier cousin of our own Moon rendered in frost. For a while it was suspected of being the only moon with its own ring — a possibility hinted at by Cassini data, never quite confirmed, and tantalising still.',
+  facts:['It is essentially a giant, ancient snowball: about three-quarters water ice by mass.','Cassini detected a thin veil of oxygen around it, split from its surface ice by radiation from Saturn.'] },
+
+{ id:'iapetus', scene:'solar', group:'The Solar System', type:'moon', name:'Iapetus',
+  kicker:'Saturn VIII · the yin-yang moon', sub:'One hemisphere black as tar, the other bright as snow',
+  parent:'saturn', orbit:{r:64,periodDays:79,phase:1.6}, size:1.8, mark:4, plate:'p:iapetus',
+  stats:[['Diameter','1,469 km'],['Two-toned','One dark side, one bright'],['Ridge','A 1,300 km wall along its equator'],['Distant','Saturn’s farthest big moon'],['Orbit','79 days (drawn slower here)']],
+  blurb:'The strangest of Saturn’s moons: one hemisphere is coated in material darker than coal, the other gleams with clean ice, so its brightness swings tenfold as it turns — a puzzle noticed as far back as 1671. Stranger still, a mountain ridge runs along much of its equator like the seam of a walnut, giving it the profile of a giant space walnut.',
+  facts:['The dark coating is dust it sweeps up in its orbit; sunlight then warms it, driving off ice and darkening it further in a runaway stain.','Its bizarre equatorial ridge, up to 20 km high, has no agreed explanation — a leftover ring that fell down, perhaps, or a frozen bulge from a faster-spinning past.'] },
+
 { id:'uranus', scene:'solar', group:'The Solar System', type:'planet', name:'Uranus',
   kicker:'Planet VII · ice giant', sub:'The sideways planet',
   orbit:{r:444,periodDays:30687,phase:5.1}, size:12, mark:6, plate:'p:uranus',
   stats:[['Diameter','50,724 km'],['Distance','19.2 AU · 2.87B km'],['Year','84 Earth yrs'],['Day','17.2 hours'],['Coldest reading','−224 °C'],['Moons','28']],
   blurb:'Something enormous hit Uranus long ago and knocked it onto its side: it rolls around the Sun with a 98° tilt, giving each pole a 42-year day followed by a 42-year night. It was the first planet ever discovered by telescope, in 1781.',
   facts:['Its moons are named for Shakespeare characters: Titania, Oberon, Miranda, Puck…','Despite being closer to the Sun than Neptune, it is often the coldest planet — it barely leaks internal heat.','Only one spacecraft has ever visited: Voyager 2, for a few hours in 1986.'] },
+
+{ id:'miranda', scene:'solar', group:'The Solar System', type:'moon', name:'Miranda',
+  kicker:'Uranus V · the Frankenstein moon', sub:'A little world that looks stitched together',
+  parent:'uranus', orbit:{r:18,periodDays:1.4,phase:0.7}, size:1.4, mark:4, plate:'p:miranda',
+  stats:[['Diameter','472 km'],['Feature','Verona Rupes, a ~20 km cliff'],['Surface','A patchwork of clashing terrains'],['Explored by','Voyager 2, 1986'],['Orbit','1.4 days (drawn slower here)']],
+  blurb:'The smallest of Uranus’s five major moons is also its weirdest — a jumbled patchwork of grooved ridges, chevron scars and cliffs that look bolted together from mismatched pieces. Among them stands Verona Rupes, thought to be the tallest cliff in the Solar System: a sheer drop of perhaps twenty kilometres. In the low gravity, a fall from its top would take minutes.',
+  facts:['Verona Rupes may plunge some 20 km — a stone dropped off the edge would fall for over ten minutes before landing.','Its Frankenstein look may come from a shattering impact whose pieces reassembled, or from an interrupted bout of internal heating.'] },
+
+{ id:'titania', scene:'solar', group:'The Solar System', type:'moon', name:'Titania',
+  kicker:'Uranus III · the queen moon', sub:'Uranus’s largest, cut by great canyons',
+  parent:'uranus', orbit:{r:30,periodDays:8.7,phase:4.0}, size:1.7, mark:4, plate:'p:titania',
+  stats:[['Diameter','1,578 km — Uranus’s largest'],['Feature','Canyons thousands of km long'],['Surface','Ice and rock, reddish'],['Named for','Shakespeare’s fairy queen'],['Orbit','8.7 days (drawn slower here)']],
+  blurb:'The largest moon of Uranus, a frozen world of ice and rock whose surface is riven by enormous canyons — great cracks thousands of kilometres long, opened when a subsurface ocean froze and expanded, splitting the crust from within. We have seen it just once and only in part, during Voyager 2’s single sideways glance at the Uranian system.',
+  facts:['Its canyon system dwarfs anything on Earth — evidence that the whole moon expanded and cracked as its interior water froze solid.','Voyager 2 caught only its southern half in sunlight; the rest of Titania remains, quite literally, unseen.'] },
 
 { id:'neptune', scene:'solar', group:'The Solar System', type:'planet', name:'Neptune',
   kicker:'Planet VIII · ice giant', sub:'A world found with a pen, not a telescope',
@@ -1029,6 +1106,13 @@ const CAT = [
   stats:[['Diameter','2,377 km — smaller than our Moon'],['Distance','39.5 AU average'],['Year','248 Earth yrs'],['Day','6.4 Earth days'],['Surface','−232 °C'],['Moons','5 — Charon is half its size']],
   blurb:'Demoted in 2006, redeemed in 2015: when New Horizons flew past, "boring" Pluto turned out to have mountains of water ice, a heart-shaped nitrogen glacier the size of Texas, and a hazy blue sky. Its moon Charon is so large the pair orbit each other like dance partners.',
   facts:['The heart — Sputnik Planitia — is a churning glacier of nitrogen ice, resurfacing itself with no craters at all.','Pluto hasn’t completed even one orbit since its 1930 discovery; that happens in 2178.','A dusting of Clyde Tombaugh’s ashes, its discoverer, flew past aboard New Horizons.'] },
+
+{ id:'charon', scene:'solar', group:'The Solar System', type:'moon', name:'Charon',
+  kicker:'Pluto I · the twin', sub:'A moon so big it and Pluto orbit each other',
+  parent:'pluto', orbit:{r:8,periodDays:6.4,phase:2.0}, size:1.7, mark:4, plate:'p:charon',
+  stats:[['Diameter','1,212 km — half of Pluto'],['Pairing','A true double world'],['Locked','Each shows the other one face, always'],['Feature','Mordor Macula, a dark red pole'],['Orbit','6.4 days (drawn slower here)']],
+  blurb:'Pluto’s largest moon is so big relative to its world — fully half Pluto’s width — that the two do not simply orbit one another; they waltz around a point in the empty space between them, a genuine double world. Both keep the same face permanently turned toward the other, so from one hemisphere of Pluto, Charon hangs motionless in the sky forever. Its north pole wears a strange dark-red cap of tholins drifted from Pluto’s air.',
+  facts:['Pluto and Charon are tidally locked to each other, so each would appear frozen in place in the other’s sky.','Its reddish polar stain, nicknamed Mordor, is thought to be gas that escaped Pluto, drifted to Charon, and was baked dark by sunlight.'] },
 
 { id:'eris', scene:'solar', group:'The Solar System', type:'planet', name:'Eris',
   kicker:'Dwarf planet · the world that demoted Pluto', sub:'A frozen twin on a wildly tilted, distant loop',
@@ -1333,6 +1417,79 @@ const SKY_EXT = [
   stats:[['Brightest star','Alderamin'],['Best seen','All year from the north; best Sep – Nov'],['Shape','A house with a steep roof'],['Resident','δ Cephei — the original standard candle'],['Also inside','The Garnet Star, reddest of all']],
   blurb:'King Cepheus, husband of boastful Cassiopeia — drawn in the sky as a lopsided house beside his wife’s W. The house shelters the most important variable star in history: δ Cephei, whose steady four-day pulse gave astronomy its measuring tape. Stars like it — Cepheids — are how we know the distance to other galaxies.',
   facts:['Henrietta Leavitt discovered that a Cepheid’s pulse rate reveals its true brightness — and therefore its distance. Hubble used exactly this to prove Andromeda was another galaxy.','The Garnet Star lives inside the house: a red supergiant so vast that, in the Sun’s place, it would reach past Jupiter — and so red that Herschel named it after the gem.','The roof-peak star Errai takes over as the North Star around the year 4000 — the crown moves house.'] },
+
+{ id:'c-umi', name:'Ursa Minor', kicker:'Constellation · the Little Bear',
+  sub:'The Little Dipper, hung from the North Star',
+  stars:[[2.530,89.26,1.98,'Polaris'],[14.845,74.16,2.07,'Kochab'],[15.345,71.83,3.00,'Pherkad'],
+    [17.537,86.59,4.36],[16.766,82.04,4.21],[15.734,77.79,4.29],[16.291,75.76,4.95]],
+  lines:[[0,3],[3,4],[4,5],[5,6],[6,2],[2,1],[1,5]],
+  stats:[['Brightest star','Polaris — the North Star'],['Best seen','All year from the north'],['Shape','A faint dipper, handle up'],['The pointers','Kochab & Pherkad, the “Guardians”'],['Use','Its bowl gauges how dark your sky is']],
+  blurb:'A dim dipper that most city-dwellers never fully see, yet the most useful figure in the northern sky: its handle ends at Polaris, the star that marks true north and never moves. The two stars at the end of its bowl, the Guardians of the Pole, wheel around Polaris through the night like the hands of a clock.',
+  facts:['Only Polaris and the two Guardians are easy to see; if you can make out all seven stars, your sky is genuinely dark.','Polaris is not fixed forever — Earth’s slow wobble handed it the pole only recently, and will pass the title on in a few thousand years.'] },
+
+{ id:'c-dra', name:'Draco', kicker:'Constellation · the Dragon',
+  sub:'A great serpent coiled around the northern pole',
+  stars:[[17.943,51.49,2.23,'Eltanin'],[17.507,52.30,2.79,'Rastaban'],[17.686,55.18,4.88],[17.892,56.87,3.75],
+    [19.209,67.66,3.07,'Altais'],[17.146,65.71,3.17],[16.400,61.51,2.73],[16.031,58.56,4.01],
+    [15.415,58.97,3.29,'Edasich'],[14.073,64.38,3.65,'Thuban'],[11.531,69.33,3.85],[12.558,69.79,3.82]],
+  lines:[[0,1],[1,2],[2,3],[3,0],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11]],
+  stats:[['Brightest star','Eltanin, the Dragon’s eye'],['Best seen','Northern summer, overhead'],['Wraps around','Ursa Minor and the pole'],['Once held','Thuban — pole star of the pyramid age'],['Length','One of the sky’s longest figures']],
+  blurb:'A long, winding chain of faint stars that snakes between the two Dippers and coils halfway around the celestial pole. Its head is a compact quadrilateral of stars low in the north, marked by the bright eye Eltanin; from there the body writhes up and over Ursa Minor and down toward the Big Dipper’s bowl.',
+  facts:['The star Thuban, midway along its coils, was the pole star when the Egyptians built the Great Pyramid — its shafts were aimed at it.','Because it curls around the pole, from northern latitudes the whole dragon never sets, circling overhead all night.'] },
+
+{ id:'c-aur', name:'Auriga', kicker:'Constellation · the Charioteer',
+  sub:'A bright pentagon wheeling through the winter Milky Way',
+  stars:[[5.278,45.998,0.08,'Capella'],[5.995,44.95,1.90,'Menkalinan'],[5.995,37.21,2.62],
+    [5.438,28.61,1.65,'Elnath'],[4.950,33.17,2.69],[5.033,43.82,3.03]],
+  lines:[[0,1],[1,2],[2,3],[3,4],[4,0],[0,5]],
+  stats:[['Brightest star','Capella, 6th brightest of all'],['Best seen','Winter, high overhead in the north'],['Shape','A rough pentagon'],['Shares a star','Elnath, borrowed from Taurus'],['Nearby','The “Kids”, a little triangle by Capella']],
+  blurb:'A brilliant pentagon riding high on winter evenings, anchored by golden Capella, the sixth-brightest star in the whole sky. One corner of its ring is a star it shares with Taurus next door — Elnath, the Bull’s northern horn. Beside Capella sits a small triangle of stars, the “Kids”, the charioteer’s goats.',
+  facts:['Capella looks like one star but is really a close pair of yellow giants — a sun much like ours, doubled.','The constellation straddles the Milky Way, so a sweep with binoculars turns up a string of rich star clusters within it.'] },
+
+{ id:'c-her', name:'Hercules', kicker:'Constellation · the Kneeler',
+  sub:'The strongman, marked by the Keystone and a great globular',
+  stars:[[17.244,14.39,3.48,'Rasalgethi',1],[16.503,21.49,2.77,'Kornephoros'],[17.251,24.84,3.12],
+    [16.688,31.60,2.81],[17.005,30.93,3.92],[17.251,36.81,3.16],[16.715,38.92,3.48]],
+  lines:[[3,4],[4,5],[5,6],[6,3],[3,1],[4,2],[1,0]],
+  marks:[{ra:16.694,dec:36.46,kind:'cluster',label:'M13'}],
+  stats:[['Brightest star','Kornephoros'],['Best seen','Northern summer, overhead'],['Signature','The Keystone, a lopsided square'],['Treasure','M13, the great Hercules Cluster'],['Odd','Drawn upside-down, kneeling']],
+  blurb:'A large but faint constellation whose heart is the Keystone — four stars in a lopsided square, easy to find once you know it. Hang on the Keystone’s western edge and you will find M13, the finest globular cluster in the northern sky, a swarm of hundreds of thousands of ancient suns. The hero himself is drawn upside-down, kneeling with one foot on the head of Draco.',
+  facts:['On the right edge of the Keystone glows M13 — a faint smudge to the eye, a blaze of stars in a telescope, and the target of humanity’s 1974 radio message.','Its brightest star, Rasalgethi, is a vast red giant that visibly changes in brightness as it pulses.'] },
+
+{ id:'c-oph', name:'Ophiuchus', kicker:'Constellation · the Serpent-Bearer',
+  sub:'The 13th zodiac figure the calendar leaves out',
+  stars:[[17.582,12.56,2.08,'Rasalhague'],[17.724,4.57,2.76,'Cebalrai'],[16.961,9.38,3.19],
+    [16.239,-3.69,2.74,'Yed Prior'],[16.304,-4.69,3.23],[16.619,-10.57,2.54],[17.173,-15.72,2.43,'Sabik']],
+  lines:[[0,2],[2,3],[3,5],[5,6],[6,1],[1,0],[3,4]],
+  stats:[['Brightest star','Rasalhague'],['Best seen','Summer, low in the south'],['Secret','The Sun crosses it each December'],['Holds','Serpens, the snake, in both hands'],['Nearby','Barnard’s Star, the fast-mover']],
+  blurb:'A huge constellation straddling the celestial equator, the Serpent-Bearer grips the snake Serpens in his hands. Though the Sun passes through it for about three weeks every December, astrology never counted it among the zodiac — making it the famous “13th sign” the horoscopes forgot. It is a rich hunting ground of globular clusters.',
+  facts:['The Sun spends more time in front of Ophiuchus than in front of neighbouring Scorpius, yet only the latter made the zodiac.','Within its borders lies Barnard’s Star, the fastest-moving star in our sky, and the site of Kepler’s famous 1604 supernova.'] },
+
+{ id:'c-hya', name:'Hydra', kicker:'Constellation · the Water Snake',
+  sub:'The longest constellation — a snake across a third of the sky',
+  stars:[[9.460,-8.66,1.98,'Alphard',1],[8.921,5.95,3.11],[8.779,6.42,3.38],[8.622,5.70,4.14],
+    [8.720,3.40,4.30],[10.828,-16.19,3.11],[13.315,-23.17,3.00],[14.106,-26.68,3.25]],
+  lines:[[3,2],[2,1],[1,4],[4,0],[0,5],[5,6],[6,7]],
+  stats:[['Brightest star','Alphard, “the solitary one”'],['Best seen','Spring, low across the south'],['Length','The largest constellation of all'],['Head','A little knot of stars west of Leo'],['Takes','Over six hours to fully rise']],
+  blurb:'The biggest constellation in the sky, a faint water-snake that stretches across more than a quarter of the way around the heavens — so long it takes over six hours to climb fully above the horizon. Its one bright star, orange Alphard, sits alone in a starless patch of sky, which earned it the Arabic name meaning “the solitary one”.',
+  facts:['From its head near Cancer to its tail past Libra, Hydra spans over 100 degrees — no other constellation comes close.','Alphard’s loneliness is real: it is the only bright star for a wide stretch of sky, a solitary orange beacon.'] },
+
+{ id:'c-cmi', name:'Canis Minor', kicker:'Constellation · the Little Dog',
+  sub:'Two stars, one of them brilliant Procyon',
+  stars:[[7.655,5.225,0.34,'Procyon'],[7.452,8.29,2.89,'Gomeisa']],
+  lines:[[0,1]],
+  stats:[['Brightest star','Procyon, 8th brightest of all'],['Best seen','Winter evenings'],['Size','Almost nothing — just two stars'],['Trianglemate','With Sirius & Betelgeuse'],['Follows','Orion across the sky, at his heel']],
+  blurb:'One of the sky’s smallest and simplest figures: essentially two stars, dominated by the brilliant Procyon, the eighth-brightest star in the night. It trots at the heels of Orion the Hunter as the smaller of his two dogs, and with Sirius and Betelgeuse its lead star completes the great Winter Triangle.',
+  facts:['Procyon is close — under twelve light-years off — which is why so faint a constellation carries so bright a star.','Its name means “before the dog”: it rises just ahead of Sirius, the Dog Star, heralding the greater dog’s arrival.'] },
+
+{ id:'c-crv', name:'Corvus', kicker:'Constellation · the Crow',
+  sub:'A little sail of four stars beside Virgo',
+  stars:[[12.263,-17.54,2.59,'Gienah'],[12.498,-16.52,2.95,'Algorab'],[12.573,-23.40,2.65,'Kraz'],
+    [12.168,-22.62,3.02],[12.140,-24.73,4.02,'Alchiba']],
+  lines:[[0,1],[1,2],[2,3],[3,0],[3,4]],
+  stats:[['Brightest star','Gienah'],['Best seen','Spring evenings, in the south'],['Shape','A small, tilted quadrilateral'],['Signpost','Points the way to Spica'],['Myth','The crow that failed the god Apollo']],
+  blurb:'A small but distinct quadrilateral of four moderately bright stars, easy to pick out low in the spring sky because nothing else is near it — a little crooked sail on the back of Hydra. In myth it is the crow sent by Apollo to fetch water, who dawdled and lied, and was flung into the sky forever thirsty, just out of reach of the cup beside it.',
+  facts:['The crow’s quadrilateral points down toward Spica, the bright star of neighbouring Virgo.','On its edge two galaxies, the Antennae, are colliding in a spectacular slow-motion wreck — invisible to the eye, a showpiece for telescopes.'] },
 ];
 
 for (const c of SKY_EXT) {
@@ -1475,6 +1632,119 @@ CAT.push(
   blurb:'Not remotely the brightest star — just the one that happens to sit almost exactly above Earth’s north pole, so the whole sky appears to wheel around it while it stands still. Find it and you know which way is north, and your latitude too.',
   facts:['Its altitude above the horizon equals your latitude — celestial navigation in one measurement.','It pulses in brightness every four days: a Cepheid, the kind of star used to measure the universe.','Thanks to precession it is a temporary appointment: Vega gets the job in ~12,000 years.'] },
 
+/* ---------- the named stars: a first constellation of them ---------- */
+{ id:'arcturus', scene:'galaxy', group:'Stars & other suns', type:'star', name:'Arcturus',
+  kicker:'α Boötis · orange giant', sub:'The old ember driving through the disk',
+  pos:s(-30,-22), mark:5, plate:'star:#ffb46e',
+  stats:[['Distance','36.7 ly'],['Type','K-giant, ~25× the Sun’s width'],['Age','~7 billion yrs'],['Brightness rank','4th in the night sky'],['Motion','Racing at 122 km/s across our line of sight']],
+  blurb:'Follow the arc of the Big Dipper’s handle and you arrive at Arcturus, a swollen orange giant near the end of its life. It is an interloper — part of an older population of stars diving through the galactic disk at a steep angle, so it will sweep past the Sun’s neighbourhood and be gone in half a million years.',
+  facts:['Its light was famously used to open the 1933 Chicago World’s Fair — chosen because it was then thought to be 40 light-years away, matching the previous fair of 1893.','It belongs to the Milky Way’s thick disk, an ancient stream of stars plunging through the plane rather than orbiting flat within it.'] },
+
+{ id:'antares', scene:'galaxy', group:'Stars & other suns', type:'star', name:'Antares',
+  kicker:'α Scorpii · red supergiant', sub:'The rival of Mars, the heart of the Scorpion',
+  pos:s(300,-460), mark:5, plate:'star:#ff8a5c',
+  stats:[['Distance','~550 ly'],['Radius','~700× the Sun — past Mars if swapped in'],['Colour','Deep red, like rusted Mars'],['Fate','Supernova, astronomically soon'],['Companion','A hot blue star, lost in the glare']],
+  blurb:'The blazing red heart of Scorpius, so like Mars in colour that the Greeks named it Anti-Ares, the rival of the war planet — and the two genuinely fool people when Mars wanders past. It is a red supergiant in Betelgeuse’s league: drop it where the Sun sits and its surface would reach beyond the orbit of Mars.',
+  facts:['When Mars passes near it every couple of years, the two rusty points of light sit side by side and observers squint to tell star from planet.','Like Betelgeuse, it is fusing heavier and heavier elements and is bound to explode as a supernova — possibly already gone, its last light still crossing the 550 light-years to us.'] },
+
+{ id:'rigel', scene:'galaxy', group:'Stars & other suns', type:'star', name:'Rigel',
+  kicker:'β Orionis · blue supergiant', sub:'Orion’s blue-white foot, a beacon of raw power',
+  pos:s(-380,770), mark:5, plate:'star:#cfe0ff',
+  stats:[['Distance','~860 ly'],['Luminosity','~120,000× the Sun'],['Surface','~12,000 °C — blue-white hot'],['System','At least four stars'],['Fate','Supernova, within a few million yrs']],
+  blurb:'The other titan of Orion, opposite Betelgeuse: where the shoulder burns cool and red, the foot blazes blue-white. Rigel pours out more than a hundred thousand Suns’ worth of light, most of it in ultraviolet we cannot even see. It is young, massive, and doomed — a supernova in waiting, just like its red rival across the constellation.',
+  facts:['To the naked eye it is a single brilliant star, but it is really a family of at least four, the brightest a blue supergiant with three smaller companions.','It outshines the Sun more than a hundred thousand times over — if it sat where Sirius does, it would cast shadows at night.'] },
+
+{ id:'aldebaran', scene:'galaxy', group:'Stars & other suns', type:'star', name:'Aldebaran',
+  kicker:'α Tauri · orange giant', sub:'The fiery eye of the Bull — a line-of-sight trick',
+  pos:s(-40,52), mark:4, plate:'star:#ffb877',
+  stats:[['Distance','65 ly'],['Type','Orange giant, ~44× the Sun’s width'],['In front of','The Hyades — but nearer, unrelated'],['Visited by','Pioneer 10, arriving in ~2 million yrs'],['Colour','Warm orange']],
+  blurb:'The glowing orange eye of Taurus glares out from the middle of the Bull’s V-shaped face — but it is a fraud. Aldebaran lies barely half as far as the Hyades cluster behind it; it simply happens to sit in the same direction. It is a dying star that has swelled into a giant, cooling to that distinctive ember hue.',
+  facts:['The Pioneer 10 probe, now silent, is drifting toward Aldebaran and will arrive in roughly two million years.','It is the fourteenth-brightest star in the sky, and the easiest orange giant for a beginner to name.'] },
+
+{ id:'deneb', scene:'galaxy', group:'Stars & other suns', type:'star', name:'Deneb',
+  kicker:'α Cygni · blue supergiant', sub:'A distant beacon at the tail of the Swan',
+  pos:s(2400,-900), mark:5, plate:'star:#dfe8ff',
+  stats:[['Distance','~2,600 ly — and still this bright'],['Luminosity','~100,000–200,000× the Sun'],['Role','Apex of the Summer Triangle'],['Type','Blue-white supergiant'],['Future pole star','Around the year 9800']],
+  blurb:'Most bright stars are bright because they are near. Deneb is bright despite being appallingly far — some 2,600 light-years away, yet it still marks the tail of Cygnus the Swan and the top of the Summer Triangle. To appear so luminous from that distance, it must be one of the most powerful stars the naked eye can see.',
+  facts:['It is the most distant star of the first magnitude — its light left it before the Roman Empire rose.','Precession will hand it the title of North Star around the year 9800, a role Polaris holds only briefly in cosmic terms.'] },
+
+{ id:'altair', scene:'galaxy', group:'Stars & other suns', type:'star', name:'Altair',
+  kicker:'α Aquilae · the flying eagle', sub:'A near neighbour spinning itself into an egg',
+  pos:s(14,-9), mark:4, plate:'star:#eef4ff',
+  stats:[['Distance','16.7 ly'],['Rotation','Once every ~9 hours'],['Shape','Flattened by its spin'],['Role','A corner of the Summer Triangle'],['Type','White main-sequence star']],
+  blurb:'One of the closest bright stars, Altair whirls so fast — a full rotation in about nine hours, against the Sun’s month — that centrifugal force has visibly squashed it into an egg, its equator bulging and cooler than its poles. It forms the southern corner of the Summer Triangle with Deneb and Vega.',
+  facts:['It was one of the first stars, other than the Sun, to have its actual disk imaged — revealing the flattening from its dizzy spin.','In Japan’s Tanabata festival, Altair and Vega are star-crossed lovers separated by the Milky Way, meeting one night a year.'] },
+
+{ id:'capella', scene:'galaxy', group:'Stars & other suns', type:'star', name:'Capella',
+  kicker:'α Aurigae · the Goat Star', sub:'Not one star but a pair of golden giants',
+  pos:s(-38,20), mark:4, plate:'star:#ffe6a8',
+  stats:[['Distance','43 ly'],['Really','Two yellow giants, plus two red dwarfs'],['Brightness rank','6th in the night sky'],['Colour','Warm gold, like the Sun aged'],['Best seen','Overhead on winter nights, far north']],
+  blurb:'The brilliant golden star high in the winter sky of the northern hemisphere is really two stars in one point of light: a pair of yellow giants, each a few times the Sun’s mass, circling each other every hundred days — with a distant second pair of red dwarfs bound to them. It is what our Sun and a twin might look like, grown old together.',
+  facts:['Its two giants orbit so closely that no telescope shows them apart; astronomers untangle them from their blended light.','At 43 light-years it is among the nearer bright stars, which is why it shines so boldly despite being past its prime.'] },
+
+{ id:'procyon', scene:'galaxy', group:'Stars & other suns', type:'star', name:'Procyon',
+  kicker:'α Canis Minoris · the Little Dog', sub:'A close neighbour with a dead companion',
+  pos:s(11,3), mark:4, plate:'star:#f2f0e8',
+  stats:[['Distance','11.5 ly'],['Companion','Procyon B, a white dwarf'],['Name','Greek for “before the Dog” — rises before Sirius'],['Brightness rank','8th in the night sky'],['Type','White-yellow subgiant']],
+  blurb:'The eighth-brightest star in the sky owes its glory almost entirely to its closeness — barely eleven light-years off. Like Sirius, it drags a burnt-out companion: Procyon B, a white dwarf, the cooling cinder of a star that died long ago. Its name means “before the dog”, for it rises just ahead of Sirius, the Dog Star.',
+  facts:['With Sirius and Betelgeuse it forms the Winter Triangle, an easy signpost of the cold-season sky.','Its white-dwarf companion was predicted from a wobble in Procyon’s motion decades before anyone glimpsed it.'] },
+
+{ id:'pollux', scene:'galaxy', group:'Stars & other suns', type:'star', name:'Pollux',
+  kicker:'β Geminorum · orange giant', sub:'The nearest giant star with a known planet',
+  pos:s(-20,27), mark:4, plate:'star:#ffcf8e',
+  stats:[['Distance','34 ly'],['Type','Orange giant'],['Planet','Thestias, a gas giant'],['Twin','Castor, its blue-white neighbour'],['Brightness','Slightly outshines Castor']],
+  blurb:'The brighter of Gemini’s twin head-stars, Pollux is a calm orange giant just 34 light-years away — close enough that in 2006 astronomers confirmed a planet more massive than Jupiter circling it, one of the nearest giant stars known to host a world. Its mythological twin Castor sits beside it, whiter and, despite the “alpha” label, fainter.',
+  facts:['Its planet, formally named Thestias, swings around the giant once every 590 days.','Castor next door looks like a single star but is really six stars bound together — three close pairs.'] },
+
+{ id:'spica', scene:'galaxy', group:'Stars & other suns', type:'star', name:'Spica',
+  kicker:'α Virginis · blue pair', sub:'Two hot stars so close they orbit in four days',
+  pos:s(240,-70), mark:4, plate:'star:#bcd0ff',
+  stats:[['Distance','~250 ly'],['Really','Two blue stars, egg-shaped by tides'],['Orbit','Around each other every 4 days'],['Colour','Blue-white, very hot'],['Find it','Drive the arc of the Dipper past Arcturus']],
+  blurb:'The lone bright star of Virgo is actually two, so close together that their mutual gravity has stretched each into an egg, and they whirl around one another every four days. Both are hot blue stars far larger than the Sun; one is massive enough to end, someday, as a supernova.',
+  facts:['“Arc to Arcturus, then spike to Spica” — the Big Dipper’s handle points the way to both.','Around 3200 BC its rising at dawn helped mark the seasons for temple-builders; the slow drift of its rising date is how Hipparchus first detected the precession of the equinoxes.'] },
+
+{ id:'regulus', scene:'galaxy', group:'Stars & other suns', type:'star', name:'Regulus',
+  kicker:'α Leonis · the Little King', sub:'A spinning blue star at the Lion’s heart',
+  pos:s(70,-36), mark:4, plate:'star:#dfe8ff',
+  stats:[['Distance','79 ly'],['Rotation','Once every ~16 hours'],['On the ecliptic','The Sun and Moon pass across it'],['System','Four stars in two pairs'],['Type','Blue-white main-sequence star']],
+  blurb:'The bright blue-white star at the base of Leo’s sickle sits almost exactly on the ecliptic, so the Moon regularly slides in front of it and the Sun passes it each August. Like Altair, it spins so fast it has flattened into an egg — a little faster still and it would fly apart. Its name, a diminutive of the Latin for king, made it the “Little King” of the zodiac.',
+  facts:['Because it lies on the Sun’s path, Regulus is one of the few first-magnitude stars the Moon can eclipse.','It headlines a family of four stars, including a white dwarf whose earlier life stole gas from Regulus and spun it up to its blistering rate.'] },
+
+{ id:'fomalhaut', scene:'galaxy', group:'Stars & other suns', type:'star', name:'Fomalhaut',
+  kicker:'α Piscis Austrini · the Lonely One', sub:'A young star ringed by a great dusty belt',
+  pos:s(18,17), mark:4, plate:'star:#eaf0ff',
+  stats:[['Distance','25 ly'],['Age','Only ~440 million yrs'],['Ringed by','A vast belt of comets and dust'],['Nickname','“The Loneliest Star” of autumn'],['Type','Young white star']],
+  blurb:'Low in the autumn sky, far from any bright neighbour, Fomalhaut shines alone — the “Lonely Star of Autumn”. It is young and girdled by an enormous, sharp-edged ring of icy debris, a solar system caught mid-construction. Astronomers have watched dust clouds and a possible shattered body drift within that belt in real time.',
+  facts:['Its debris ring is so crisp-edged that unseen planets are thought to be shepherding it, like Saturn’s moons tending its rings.','A point of light once hailed as the planet “Fomalhaut b” turned out to be an expanding cloud of debris from a collision — a planet’s aftermath rather than a planet.'] },
+
+{ id:'canopus', scene:'galaxy', group:'Stars & other suns', type:'star', name:'Canopus',
+  kicker:'α Carinae · the ship’s pilot', sub:'The second-brightest star, and a cosmic compass',
+  pos:s(120,-286), mark:5, plate:'star:#fff2d8',
+  stats:[['Distance','~310 ly'],['Luminosity','~10,000× the Sun'],['Brightness rank','2nd, after Sirius'],['Type','White supergiant'],['Used by','Spacecraft, as a guide star']],
+  blurb:'The second-brightest star in the whole sky, unknown to most northern observers because it hugs the southern horizon. Canopus is a genuine heavyweight — a white supergiant ten thousand times the Sun’s light — that only looks second to Sirius because it lies forty times farther away. Spacecraft from Mariner onward have used it as a fixed beacon to orient themselves in deep space.',
+  facts:['Because it lies far from the ecliptic and burns so steadily, it is a favourite “star tracker” target for navigating probes across the Solar System.','From the southern hemisphere it rides high and brilliant; from most of Europe and North America it never clears the horizon.'] },
+
+{ id:'barnard', scene:'galaxy', group:'Stars & other suns', type:'star', name:'Barnard’s Star',
+  kicker:'Red dwarf · the Runaway Star', sub:'The fastest-moving star in our sky',
+  pos:s(-5,-3), mark:4, plate:'star:#ff9d6b',
+  stats:[['Distance','5.96 ly — 4th nearest system'],['Type','Faint red dwarf'],['Proper motion','Fastest of any star'],['Planet','A sub-Earth, confirmed 2024'],['Age','~10 billion yrs — twice the Sun']],
+  blurb:'A dim red dwarf too faint to see without a telescope, yet famous: it crosses the sky faster than any other star, shifting a full Moon’s width every 180 years as it hurtles past at over 500,000 km/h. It is one of our very nearest neighbours, an ancient, frugal ember that will still be burning long after the Sun is gone.',
+  facts:['Its “proper motion” is so swift that photographs decades apart show it visibly sliding against the background stars.','In 2024 astronomers confirmed at least one small planet circling it — a rocky world barely a third of Earth’s mass, right next door.'] },
+
+{ id:'vy-cma', scene:'galaxy', group:'Stars & other suns', type:'star', name:'VY Canis Majoris',
+  kicker:'Red hypergiant · a near-largest star', sub:'A monster so big light needs hours to round it',
+  pos:s(1500,3500), mark:5, plate:'star:#ff7a4a',
+  stats:[['Distance','~3,800 ly'],['Radius','~1,400× the Sun'],['If swapped for the Sun','Its surface would reach near Saturn'],['State','Shedding itself in violent gusts'],['Fate','Supernova, or straight to a black hole']],
+  blurb:'One of the largest stars known — a red hypergiant so vast that, placed where the Sun is, its glowing surface would swallow the orbits of the planets out toward Saturn. Light, which crosses our Sun in a few seconds, would take hours to circle it. It is unstable and dying loudly, flinging off great clumps of gas and dust as it lurches toward oblivion.',
+  facts:['If you could fly a jet around its equator at cruising speed, the trip would take over a thousand years.','It is losing mass so violently that it has wrapped itself in a shroud of ejected material — a star visibly coming apart.'] },
+
+{ id:'mira', scene:'galaxy', group:'Stars & other suns', type:'star', name:'Mira',
+  kicker:'ο Ceti · the Wonderful Star', sub:'A dying star that vanishes and returns',
+  pos:s(160,255), mark:4, plate:'star:#ff9d6b',
+  stats:[['Distance','~300 ly'],['Cycle','Brightens and fades over ~332 days'],['Range','Naked-eye bright to invisible'],['Trailing','A 13-light-year tail of shed gas'],['Type','Pulsating red giant']],
+  blurb:'The first variable star ever recognised, named Mira — “the wonderful” — because it does something no fixed star should: it disappears. Over about eleven months this bloated red giant swells and shrinks, brightening to an easy naked-eye star and then fading entirely from view, a dying Sun-like star pulsing its outer layers in and out.',
+  facts:['It is a preview of the Sun’s far future — a red giant shuddering toward the puff of a planetary nebula.','Racing through space, it trails a comet-like tail of cast-off gas thirteen light-years long, seen only in ultraviolet light.'] },
+
 { id:'m31', scene:'galaxy', group:'Clusters & neighbours', type:'galaxy', name:'Andromeda Galaxy',
   kicker:'M31 · spiral galaxy', sub:'Our giant neighbour — and future dance partner',
   pos:[-42000,-52000], mark:6, plate:'satgal',
@@ -1488,6 +1758,92 @@ CAT.push(
   stats:[['True distance','2.7 million ly (drawn far nearer)'],['Stars','~40 billion'],['Local Group rank','No. 3, after Andromeda and us'],['Face-on','We see its spiral from directly above'],['Eye test','The faintest naked-eye object, on perfect nights'],['Resident','NGC 604 — a nursery 40× the Orion Nebula']],
   blurb:'Our corner of the universe — the Local Group — has exactly three spiral galaxies: Andromeda, the Milky Way, and this modest third sibling near Andromeda’s side. We happen to see it face-on, its pinwheel arms laid out flat like a diagram of what our own galaxy would look like from outside.',
   facts:['Under truly dark skies it is the most distant thing an unaided human eye can detect — a whisper of light from 2.7 million years ago.','It hosts NGC 604, one of the largest star nurseries known — the Orion Nebula would be a footnote inside it.','It may be a satellite of Andromeda, and will likely be swept up in the same merger that awaits the Milky Way.'] },
+
+/* ---------- more clusters ---------- */
+{ id:'double-cluster', scene:'galaxy', group:'Clusters & neighbours', type:'cluster', name:'The Double Cluster',
+  kicker:'h & χ Persei · open clusters', sub:'Two glittering swarms of young stars, side by side',
+  pos:s(3400,3600), mark:4, plate:'cluster',
+  stats:[['Distance','~7,500 ly'],['In','Perseus, near Cassiopeia'],['Pair','Two clusters almost touching'],['Age','~13 million yrs — very young'],['Naked eye','A twin glow in a dark sky']],
+  blurb:'Two rich clusters of hot young stars hang so close together in Perseus that the naked eye catches them as a pair of misty patches, and any small telescope explodes them into hundreds of blue-white suns. They were born together from the same cloud only about thirteen million years ago — infants, as stars go — and still drift side by side.',
+  facts:['Both clusters are dominated by brilliant blue supergiants, several of which will end as supernovae.','Hipparchus recorded the pair as a “cloudy spot” more than two thousand years ago; binoculars turn it into jewels.'] },
+
+{ id:'m22', scene:'galaxy', group:'Clusters & neighbours', type:'cluster', name:'Messier 22',
+  kicker:'M22 · globular cluster', sub:'One of the sky’s finest balls of ancient suns',
+  pos:s(1200,-9500), mark:4, plate:'cluster',
+  stats:[['Distance','~10,400 ly'],['In','Sagittarius, near the core'],['Stars','~70,000'],['Age','~12 billion yrs'],['Rarity','Hosts its own tiny planetary nebula']],
+  blurb:'Among the nearest and brightest globular clusters, M22 is a dense swarm of seventy thousand ancient stars in the direction of the galactic centre, easy in binoculars as a fuzzy star that a telescope resolves into a sphere of glittering points. It was one of the first globulars ever discovered, back in 1665.',
+  facts:['It is one of only a few globular clusters known to contain a planetary nebula — a dying star caught in the act among the ancients.','Astronomers have even found hints of small black holes hiding in its crowded core.'] },
+
+{ id:'wild-duck', scene:'galaxy', group:'Clusters & neighbours', type:'cluster', name:'Wild Duck Cluster',
+  kicker:'M11 · rich open cluster', sub:'A dense flock of stars in a V, like ducks in flight',
+  pos:s(1500,-5900), mark:4, plate:'cluster',
+  stats:[['Distance','~6,200 ly'],['In','Scutum, on the Milky Way’s glow'],['Stars','~2,900'],['Age','~220 million yrs'],['Shape','A fan, like a flight of ducks']],
+  blurb:'One of the richest and most compact open clusters in the sky — so densely packed it almost looks like a loose globular. Its brighter stars form a rough V that reminded a 19th-century observer of a flock of wild ducks in flight, and the name stuck. It floats against one of the brightest star-clouds of the Milky Way.',
+  facts:['With nearly three thousand stars it is among the most populous open clusters known to us.','It sits on the Scutum Star Cloud, a dazzling patch of the Milky Way that binocular-sweepers treasure.'] },
+
+{ id:'jewel-box', scene:'galaxy', group:'Clusters & neighbours', type:'cluster', name:'The Jewel Box',
+  kicker:'NGC 4755 · open cluster', sub:'A casket of coloured stars beside the Southern Cross',
+  pos:s(-3800,-5100), mark:4, plate:'cluster',
+  stats:[['Distance','~6,400 ly'],['In','Crux, the Southern Cross'],['Age','~14 million yrs — very young'],['Colours','Blue-white giants and one red'],['Named by','John Herschel, for its brilliance']],
+  blurb:'A small, brilliant cluster tucked beside the Southern Cross, so vivid through a telescope that John Herschel likened it to a casket of coloured gems. Most of its stars are hot blue-white youngsters, but among them glows one contrasting red supergiant — the single ruby in a box of sapphires.',
+  facts:['At only ~14 million years old it is one of the youngest clusters known — its most massive stars are already turning into red giants.','It is a southern-sky showpiece, invisible from most of the northern hemisphere.'] },
+
+{ id:'coma-cluster', scene:'galaxy', group:'Clusters & neighbours', type:'cluster', name:'Coma Star Cluster',
+  kicker:'Melotte 111 · nearby open cluster', sub:'A faint spray of stars that once was a queen’s hair',
+  pos:s(-180,-210), mark:4, plate:'cluster',
+  stats:[['Distance','~280 ly — very close'],['In','Coma Berenices'],['Members','~40 stars'],['Age','~450 million yrs'],['Best seen','With the naked eye or binoculars']],
+  blurb:'A loose, gentle scattering of stars so near that it spreads across several degrees of sky — too big and faint for most telescopes, but lovely to the naked eye under dark skies. In legend it is the shorn tresses of Queen Berenice, who sacrificed her famous hair and found it set among the stars.',
+  facts:['At under 300 light-years it is one of the closest star clusters to the Sun, second only to the Hyades and the Ursa Major group.','Its stars share a common drift through space — the fingerprint that marks them as siblings born together.'] },
+
+/* ---------- galaxies beyond the Local Group ---------- */
+{ id:'m81', scene:'galaxy', group:'Clusters & neighbours', type:'galaxy', name:'Bode’s Galaxy',
+  kicker:'M81 · grand-design spiral', sub:'A stately spiral locked in a slow dance',
+  pos:[40000,-30000], mark:5, plate:'spiral',
+  stats:[['True distance','~12 million ly (drawn at the rim)'],['Type','Grand-design spiral'],['Pair','Interacting with M82 nearby'],['Black hole','~70 million Suns'],['Find it','Near the Big Dipper’s bowl']],
+  blurb:'A magnificent spiral in Ursa Major, its arms wound tight and symmetrical — a textbook grand-design galaxy. It is the dominant member of a nearby group and is locked in a gravitational tug-of-war with its neighbour M82; a close pass hundreds of millions of years ago rippled through both, stirring M81’s arms and setting M82 ablaze.',
+  facts:['Its arms are so orderly because a recent gravitational encounter squeezed them into shape.','It anchors the M81 Group, one of the nearest galaxy groups to our own Local Group.'] },
+
+{ id:'m82', scene:'galaxy', group:'Clusters & neighbours', type:'galaxy', name:'Cigar Galaxy',
+  kicker:'M82 · starburst galaxy', sub:'A galaxy on fire, blasting a fountain of gas',
+  pos:[43500,-24000], mark:5, plate:'edgeon',
+  stats:[['True distance','~12 million ly (drawn at the rim)'],['Type','Edge-on starburst'],['Star birth','~10× the Milky Way’s rate'],['Superwind','Gas erupting from the core'],['Trigger','A close pass by M81']],
+  blurb:'Seen edge-on as a thin cigar of light, this galaxy is undergoing a frenzy of star formation — a “starburst” — after a brush with its larger neighbour M81 compressed its gas. So many stars are being born and dying at its centre that their combined winds and supernovae blow a vast fountain of glowing gas straight out of the galaxy’s core, top and bottom.',
+  facts:['It forms stars roughly ten times faster than the entire Milky Way — a burst that cannot last.','The red plumes erupting from its middle are a galactic-scale superwind, gas driven out by the fury of the starburst.'] },
+
+{ id:'m101', scene:'galaxy', group:'Clusters & neighbours', type:'galaxy', name:'Pinwheel Galaxy',
+  kicker:'M101 · face-on spiral', sub:'A giant pinwheel, lopsided by an old encounter',
+  pos:[52000,-14000], mark:5, plate:'spiral',
+  stats:[['True distance','~21 million ly (drawn at the rim)'],['Type','Face-on spiral, larger than ours'],['Diameter','~170,000 ly'],['Feature','Asymmetric, ragged arms'],['In','Ursa Major']],
+  blurb:'A huge spiral seen face-on, nearly twice the width of the Milky Way, its arms flung out like a pinwheel caught mid-spin. The disk is noticeably lopsided — one side more open than the other — the lingering scar of a gravitational encounter that also triggered chains of brilliant star-forming regions along its arms.',
+  facts:['It is one of the largest disk galaxies in our cosmic neighbourhood, spanning some 170,000 light-years.','A bright supernova flared in it in 2011, one of the nearest of recent decades, studied intensely as it faded.'] },
+
+{ id:'centaurus-a', scene:'galaxy', group:'Clusters & neighbours', type:'galaxy', name:'Centaurus A',
+  kicker:'NGC 5128 · active galaxy', sub:'A wrecked galaxy firing jets from a giant black hole',
+  pos:[52000,20000], mark:5, plate:'edgeon',
+  stats:[['True distance','~12 million ly (drawn at the rim)'],['Type','Elliptical, slashed by a dust lane'],['Black hole','~55 million Suns'],['Emits','Powerful radio jets'],['Origin','A galaxy that ate a spiral']],
+  blurb:'The nearest active galaxy — a great elliptical bisected by a thick, dark band of dust, the swallowed remains of a spiral galaxy it collided with and consumed. Deep in its heart, a supermassive black hole feeds on the wreckage and fires jets of particles far out into space, making it one of the brightest radio sources in the entire sky.',
+  facts:['Its distinctive dark lane is the shredded disk of a spiral galaxy caught in the act of being devoured.','Its black hole launches jets over a million light-years long, glowing in radio and X-rays far beyond the visible galaxy.'] },
+
+{ id:'black-eye', scene:'galaxy', group:'Clusters & neighbours', type:'galaxy', name:'Black Eye Galaxy',
+  kicker:'M64 · the Evil Eye', sub:'A spiral with a dark bruise and backward-spinning gas',
+  pos:[40000,40000], mark:4, plate:'spiral',
+  stats:[['True distance','~17 million ly (drawn at the rim)'],['Type','Spiral with a dark dust band'],['Signature','A “black eye” of dust'],['Oddity','Its outer gas spins backwards'],['In','Coma Berenices']],
+  blurb:'A bright spiral marked by a spectacular dark band of dust curving across its glowing core — the “black eye” that names it. Stranger still, its inner and outer regions rotate in opposite directions: the outer gas spins one way, the inner disk the other, the leftover evidence of a smaller galaxy it absorbed long ago.',
+  facts:['The counter-rotating gas is a slow-motion collision zone, where opposing streams pile up and ignite bursts of new stars.','The dark “eye” is a great cloud of dust silhouetted against the galaxy’s brilliant central light.'] },
+
+{ id:'sculptor-gal', scene:'galaxy', group:'Clusters & neighbours', type:'galaxy', name:'Sculptor Galaxy',
+  kicker:'NGC 253 · the Silver Coin', sub:'A dusty starburst spiral seen nearly edge-on',
+  pos:[18000,-54000], mark:4, plate:'edgeon',
+  stats:[['True distance','~11 million ly (drawn at the rim)'],['Type','Edge-on starburst spiral'],['Nickname','The Silver Coin'],['Feature','Mottled with dust and star birth'],['In','Sculptor, far south']],
+  blurb:'One of the brightest galaxies beyond our Local Group, tilted almost edge-on so its dusty disk shows as a long silver sliver flecked with dark lanes. It is a starburst galaxy, birthing stars at a furious pace across its middle, and one of the easiest galaxies of its kind to see through a modest telescope from southern skies.',
+  facts:['It is the largest member of the Sculptor Group, one of the nearest galaxy groups to our own.','Its rapid star formation drives hot gas out of the disk, much like the Cigar Galaxy on a gentler scale.'] },
+
+{ id:'m32', scene:'galaxy', group:'Clusters & neighbours', type:'galaxy', name:'Messier 32',
+  kicker:'M32 · dwarf elliptical', sub:'Andromeda’s little companion — and its victim',
+  pos:[-38000,-56000], mark:4, plate:'satgal',
+  stats:[['True distance','~2.65 million ly (drawn at the rim)'],['Type','Compact dwarf elliptical'],['Orbits','The Andromeda Galaxy'],['Stars','Old, densely packed'],['Likely','The stripped core of a larger galaxy']],
+  blurb:'A small, dense ball of old stars pressed right up against the Andromeda Galaxy — one of its close satellites, and probably a casualty of the association. Many astronomers think M32 was once a much larger galaxy whose outer stars Andromeda has stripped away over billions of years, leaving only its tightly bound core.',
+  facts:['It is a textbook compact elliptical: small on the sky but with a fiercely crowded centre of ancient stars.','As Andromeda bears down on the Milky Way, its little companions like M32 come along for the collision.'] },
 
 { id:'m51', scene:'galaxy', group:'Clusters & neighbours', type:'galaxy', name:'Whirlpool Galaxy',
   kicker:'M51 · grand-design spiral', sub:'The first galaxy ever seen to have arms',
@@ -1530,6 +1886,77 @@ CAT.push(
   stats:[['Distance','~1,360 ly'],['In','Vulpecula, the little fox'],['Discovered','1764, by Charles Messier'],['Age of shell','~10,000 yrs'],['Centre','A hot white-dwarf ember'],['Best in','A small telescope']],
   blurb:'When Charles Messier logged this fuzzy patch in 1764 he became the first person to record a planetary nebula — the exhaled outer atmosphere of a dying Sun-like star, glowing as its bare core bakes it from within. Through a small telescope it shows the pinched, two-lobed shape of an apple core or a dumbbell.',
   facts:['It is a preview of the Sun’s distant future: in five billion years our star will puff off a shell just like this.','“Planetary” is a 1780s misnomer — small telescopes made these round glows look like the disk of a planet.','At the centre sits one of the largest known white dwarfs, the fading heart of the star that made the cloud.'] },
+
+/* ---------- more nebulae & remnants ---------- */
+{ id:'horsehead', scene:'galaxy', group:'Star nurseries & remnants', type:'nebula', name:'Horsehead Nebula',
+  kicker:'Barnard 33 · dark nebula', sub:'A knight of cold dust reared against the glow',
+  pos:s(480,1420), mark:5, plate:'nebula:#c85a6a:#4a2f42',
+  stats:[['Distance','~1,375 ly'],['In','Orion, below the belt'],['Type','Dark dust cloud on a red backdrop'],['Shape','A rearing horse’s head'],['Discovered','1888, on a photographic plate']],
+  blurb:'One of the most recognisable shapes in the sky is made of nothing at all — a pillar of cold, opaque dust silhouetted against the red glow of hydrogen behind it, curled into the unmistakable profile of a horse’s head and neck. It sits just below Orion’s belt, and it is genuinely hard to see: it took photography to reveal it.',
+  facts:['It shows up only because a bright emission nebula glows behind it — the horse is a shadow, not a light.','Inside the dark column, hidden from view, new stars are slowly condensing; in a few million years their radiation will erode the whole figure away.'] },
+
+{ id:'flame', scene:'galaxy', group:'Star nurseries & remnants', type:'nebula', name:'Flame Nebula',
+  kicker:'NGC 2024 · star-forming region', sub:'A bonfire of newborn stars beside Orion’s belt',
+  pos:s(560,1330), mark:4, plate:'nebula:#f0a060:#8a5030',
+  stats:[['Distance','~1,400 ly'],['In','Orion, by the belt star Alnitak'],['Powered by','Hidden hot young stars'],['Split by','A dark lane of dust'],['Neighbour','The Horsehead, just nearby']],
+  blurb:'Right beside Alnitak, the eastern star of Orion’s belt, a cloud of gas blazes orange and is cut through by dark, branching lanes of dust — so it looks for all the world like the flames of a campfire. Buried inside, invisible to the eye behind the dust, a cluster of hot newborn stars lights the whole thing up.',
+  facts:['The dark tendrils dividing the “flames” are foreground dust, not gaps in the fire.','Its brilliance comes from a young star so hot its ultraviolet light tears electrons off the surrounding hydrogen, which glows as they recombine.'] },
+
+{ id:'trifid', scene:'galaxy', group:'Star nurseries & remnants', type:'nebula', name:'Trifid Nebula',
+  kicker:'M20 · nursery, split three ways', sub:'A rare nebula that glows, reflects and hides at once',
+  pos:s(1050,-3900), mark:4, plate:'nebula:#e88fb8:#8fb8e8',
+  stats:[['Distance','~4,100 ly'],['In','Sagittarius, near the Lagoon'],['Name','“Trifid” — divided in three'],['Shows','Pink emission + blue reflection + dark lanes'],['Age','Only ~300,000 yrs']],
+  blurb:'A young, photogenic nebula near the Lagoon that does three things at once: a pink cloud of hydrogen glowing under a hot central star, a blue haze of dust reflecting starlight, and dark rifts of dust that split the pink glow into three lobes — the “trifid” look that names it. It is one of the youngest star nurseries we can point a telescope at.',
+  facts:['Its three-part appearance packs the sky’s two nebula types — emission and reflection — into a single object.','At its heart a knot of newborn stars is carving a cavity and firing jets into the surrounding gas.'] },
+
+{ id:'rosette', scene:'galaxy', group:'Star nurseries & remnants', type:'nebula', name:'Rosette Nebula',
+  kicker:'NGC 2237 · a flower of gas', sub:'A cluster of newborns clearing a rose-shaped hole',
+  pos:s(2600,2400), mark:4, plate:'nebula:#f0788f:#8fb8e8',
+  stats:[['Distance','~5,000 ly'],['In','Monoceros, the Unicorn'],['Width','~130 ly'],['At its centre','The young cluster NGC 2244'],['Shape','A rose, or a skull — take your pick']],
+  blurb:'A great circular bloom of glowing hydrogen with a hole punched clean through its middle — because a knot of hot young stars at the centre has blown the gas outward with their winds and radiation, hollowing out a rose. The petals are still being lit and eroded by the very stars they gave birth to.',
+  facts:['The central cluster is only a few million years old — the stars are still settling in as they clear their nursery.','Backyard cameras capture it beautifully in red; to the eye at the telescope it is a faint ghost, its colour beyond our night vision.'] },
+
+{ id:'veil', scene:'galaxy', group:'Star nurseries & remnants', type:'remnant', name:'Veil Nebula',
+  kicker:'Cygnus Loop · supernova remnant', sub:'The lacework wreckage of an ancient blast',
+  pos:s(2100,-1100), mark:5, plate:'nebula:#8fd8c9:#c9a9e8',
+  stats:[['Distance','~2,400 ly'],['In','Cygnus, the Swan'],['Exploded','~10,000–20,000 yrs ago'],['Width','~110 ly and expanding'],['Appearance','Delicate glowing filaments']],
+  blurb:'Ten or twenty thousand years ago a star in Cygnus detonated, and its shockwave is still tearing outward through space — a vast, ghostly bubble whose rim we see edge-on as impossibly delicate ribbons of glowing gas. The filaments are the shock front lighting up as it slams into the thin gas between the stars.',
+  facts:['Prehistoric humans would have seen the supernova itself blazing in the sky — though no record survives.','The whole loop spans six full Moons across the sky, yet is so faint it went unnoticed until the era of long-exposure photography.'] },
+
+{ id:'helix', scene:'galaxy', group:'Star nurseries & remnants', type:'nebula', name:'Helix Nebula',
+  kicker:'NGC 7293 · planetary nebula', sub:'The “Eye of God” — the nearest dying Sun-like star',
+  pos:s(300,560), mark:4, plate:'nebula:#8fd8c9:#e88fb8',
+  stats:[['Distance','~650 ly — the nearest of its kind'],['In','Aquarius'],['Appearance','A vast glowing eye'],['Centre','A white-dwarf ember'],['Age','~10,600 yrs']],
+  blurb:'One of the closest planetary nebulae to Earth, so near and large that it spans half the width of the full Moon: a Sun-like star’s exhaled outer layers, seen almost face-on as a great glowing ring around a tiny white-hot core. Long-exposure images gave it its nickname — the Eye of God — an iris of blue-green gas rimmed in red.',
+  facts:['Because it is so close, telescopes resolve thousands of comet-shaped knots of gas within it, each larger than our Solar System.','It is a snapshot of the Sun’s own destiny, some five billion years from now.'] },
+
+{ id:'north-america', scene:'galaxy', group:'Star nurseries & remnants', type:'nebula', name:'North America Nebula',
+  kicker:'NGC 7000 · a continent of gas', sub:'A glowing cloud shaped like a familiar coastline',
+  pos:s(2500,-780), mark:4, plate:'nebula:#f0788f:#8fb8e8',
+  stats:[['Distance','~2,600 ly'],['In','Cygnus, near Deneb'],['Shape','The continent of North America'],['Width','~100 ly'],['“Gulf of Mexico”','A dark dust lane']],
+  blurb:'A huge cloud of glowing hydrogen near Deneb whose ragged edge, carved by foreground dust, traces the coastline of North America so faithfully that the resemblance names it — complete with a dark “Gulf of Mexico” where a lane of dust blocks the light. It is a sprawling star-forming region, bigger in the sky than a dozen full Moons.',
+  facts:['The dark “Gulf” is not empty space but a curtain of dust hiding the glowing gas behind it.','Which star lights it up was a long mystery, since dust hides the culprit; it appears to be a hot young star buried in the “Gulf” region.'] },
+
+{ id:'cats-eye', scene:'galaxy', group:'Star nurseries & remnants', type:'nebula', name:'Cat’s Eye Nebula',
+  kicker:'NGC 6543 · planetary nebula', sub:'One of the most intricate deaths of a star',
+  pos:s(-900,-3200), mark:4, plate:'nebula:#8fd8c9:#c9a9e8',
+  stats:[['Distance','~3,300 ly'],['In','Draco, the Dragon'],['Structure','Nested shells, jets and knots'],['Centre','A hot dying star'],['Studied since','1786']],
+  blurb:'When Hubble photographed this small planetary nebula it revealed staggering complexity: concentric bubbles, twisting jets, and swirling knots of gas, layered like the structure of an eye. It is the outer atmosphere of a dying star being flung off not in one smooth puff but in a series of pulses, perhaps shaped by a hidden companion star.',
+  facts:['It was the first planetary nebula ever to have its spectrum examined, in 1864 — the observation that proved nebulae are glowing gas, not unresolved stars.','Its neat concentric rings suggest the dying star coughed out shells of gas every ~1,500 years before its final collapse.'] },
+
+{ id:'tarantula', scene:'galaxy', group:'Star nurseries & remnants', type:'nebula', name:'Tarantula Nebula',
+  kicker:'30 Doradus · monster nursery', sub:'The most violent star factory known',
+  pos:[27000,52000], mark:5, plate:'nebula:#f0788f:#c9a9e8',
+  stats:[['True distance','~163,000 ly (in the LMC, drawn near it)'],['Width','~600 ly'],['Contains','Hundreds of thousands of stars'],['At its heart','R136, a cluster of giants'],['If as close as Orion','It would cast shadows']],
+  blurb:'The largest and most furious star-forming region in the whole Local Group — not even in our galaxy, but next door in the Large Magellanic Cloud. At its core sits R136, a dense knot packed with the most massive stars known, some over a hundred times the Sun. Were the Tarantula as close to us as the Orion Nebula, it would fill the sky and cast shadows on the ground.',
+  facts:['It hosts several of the heaviest stars ever weighed — monsters near the theoretical limit of how big a star can be.','It sits in the Large Magellanic Cloud, which is why it is drawn out here at the galaxy’s edge rather than in the disk.'] },
+
+{ id:'bubble', scene:'galaxy', group:'Star nurseries & remnants', type:'nebula', name:'Bubble Nebula',
+  kicker:'NGC 7635 · a wind-blown sphere', sub:'A single hot star inflating a shell of gas',
+  pos:s(3200,3400), mark:4, plate:'nebula:#8fb8e8:#f0a0b0',
+  stats:[['Distance','~7,100 ly'],['In','Cassiopeia'],['Bubble width','~7 ly'],['Blown by','One massive, ferociously hot star'],['Wall','Where the star’s wind hits denser gas']],
+  blurb:'A near-perfect sphere of glowing gas seven light-years across, blown outward by the shrieking wind of a single enormous star — a star so hot and luminous that its outflow rams into the surrounding cloud and piles it up into a luminous shell. The star sits slightly off-centre inside its own bubble, which only deepens the mystery of how it stays so round.',
+  facts:['The whole bubble is the work of one star roughly forty-five times the Sun’s mass, shedding its outer layers in a gale.','That star is living fast and will end as a supernova, blowing its tidy bubble apart within a few million years.'] },
 
 { id:'halley', scene:'solar', group:'The Solar System', type:'comet', name:'Halley’s Comet',
   kicker:'1P/Halley · periodic comet', sub:'The once-in-a-lifetime visitor',
@@ -2292,6 +2719,60 @@ const PLANET_PAINTERS = {
     c.save(); c.rotate(-.25);                                 // its thin dark ring
     c.strokeStyle = 'rgba(120,120,130,.55)'; c.lineWidth = r * .12;
     c.beginPath(); c.ellipse(0, 0, r * 1.9, r * .5, 0, 0, 6.283); c.stroke();
+    c.restore(); },
+  ganymede:(c, r) => { shadeBall(c, r, '#cabfa9', '#918775', '#443f34');
+    c.save(); c.beginPath(); c.arc(0, 0, r, 0, 6.283); c.clip();
+    c.fillStyle = 'rgba(70,64,54,.4)';                        // dark ancient terrain
+    c.beginPath(); c.ellipse(-r * .35, r * .2, r * .5, r * .7, .5, 0, 6.283); c.fill();
+    c.restore(); },
+  callisto:(c, r) => { shadeBall(c, r, '#a99c88', '#6c6254', '#302c25');
+    c.save(); c.beginPath(); c.arc(0, 0, r, 0, 6.283); c.clip();
+    c.fillStyle = 'rgba(240,238,230,.5)';                     // bright impact scars
+    for (const [dx, dy] of [[-.3, -.3], [.35, .1], [.1, .45], [-.15, .25]])
+      { c.beginPath(); c.arc(dx * r, dy * r, r * .07, 0, 6.283); c.fill(); }
+    c.restore(); },
+  rhea:    (c, r) => { shadeBall(c, r, '#e2e6ec', '#b0b6c0', '#5c616a');
+    c.fillStyle = 'rgba(80,84,92,.4)';
+    c.beginPath(); c.arc(-r * .25, -r * .15, r * .18, 0, 6.283); c.fill();
+    c.beginPath(); c.arc(r * .3, r * .25, r * .12, 0, 6.283); c.fill(); },
+  iapetus: (c, r) => {                                        // two-faced: one dark, one bright
+    shadeBall(c, r, '#e6e2da', '#c0bab0', '#6a655c');
+    c.save(); c.beginPath(); c.arc(0, 0, r, 0, 6.283); c.clip();
+    c.fillStyle = 'rgba(40,32,26,.72)';
+    c.beginPath(); c.ellipse(r * .55, 0, r * .7, r * 1.05, 0, 0, 6.283); c.fill();
+    c.restore(); },
+  mimas:   (c, r) => { shadeBall(c, r, '#d6dae0', '#a6abb4', '#565a62');
+    c.save(); c.beginPath(); c.arc(0, 0, r, 0, 6.283); c.clip();
+    c.strokeStyle = 'rgba(70,74,82,.6)'; c.lineWidth = r * .1;   // the huge Herschel crater
+    c.fillStyle = 'rgba(70,74,82,.3)';
+    c.beginPath(); c.arc(r * .32, -r * .18, r * .3, 0, 6.283); c.fill(); c.stroke();
+    c.restore(); },
+  dione:   (c, r) => { shadeBall(c, r, '#e0e4ea', '#b0b6c0', '#5a5e66');
+    c.save(); c.beginPath(); c.arc(0, 0, r, 0, 6.283); c.clip();
+    c.strokeStyle = 'rgba(240,244,250,.5)'; c.lineWidth = r * .05;   // wispy ice cliffs
+    c.beginPath(); c.arc(r * .5, r * .2, r * .8, 2.2, 4.2); c.stroke();
+    c.restore(); },
+  titania: (c, r) => { shadeBall(c, r, '#d2c6bc', '#9a8d82', '#4c453e');
+    c.fillStyle = 'rgba(60,52,46,.35)';
+    c.beginPath(); c.arc(r * .2, -r * .2, r * .16, 0, 6.283); c.fill(); },
+  miranda: (c, r) => { shadeBall(c, r, '#cfd4da', '#98a0a8', '#484e54');
+    c.save(); c.beginPath(); c.arc(0, 0, r, 0, 6.283); c.clip();
+    c.strokeStyle = 'rgba(60,66,72,.5)'; c.lineWidth = r * .08;   // chevron of giant cliffs
+    c.beginPath(); c.moveTo(-r * .5, r * .4); c.lineTo(0, -r * .1); c.lineTo(r * .5, r * .4); c.stroke();
+    c.restore(); },
+  charon:  (c, r) => { shadeBall(c, r, '#cfc8c0', '#9a938a', '#524b44');
+    c.save(); c.beginPath(); c.arc(0, 0, r, 0, 6.283); c.clip();
+    c.fillStyle = 'rgba(90,54,52,.55)';                        // the reddish north pole, Mordor
+    c.beginPath(); c.ellipse(0, -r * .78, r * .7, r * .35, 0, 0, 6.283); c.fill();
+    c.restore(); },
+  phobos:  (c, r) => { shadeBall(c, r * 1.05, '#8c8278', '#5e564e', '#2c2824');
+    c.fillStyle = 'rgba(30,26,22,.6)';                         // the big Stickney crater
+    c.beginPath(); c.arc(-r * .3, -r * .2, r * .32, 0, 6.283); c.fill(); },
+  deimos:  (c, r) => { shadeBall(c, r, '#9a9088', '#6e655c', '#332f2a'); },
+  vesta:   (c, r) => { shadeBall(c, r, '#c2b8a6', '#8f8674', '#463f38');
+    c.save(); c.beginPath(); c.arc(0, 0, r, 0, 6.283); c.clip();
+    c.fillStyle = 'rgba(60,54,46,.4)';                         // the great south-pole basin
+    c.beginPath(); c.arc(0, r * .55, r * .5, 0, 6.283); c.fill();
     c.restore(); },
 };
 
