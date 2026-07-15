@@ -946,6 +946,20 @@ const CAT = [
   blurb:'The rusted planet wears the scars of a warmer youth: dried river deltas, lake beds, and canyons carved by floods. Its day is almost exactly as long as ours, which is why more spacecraft have gone here than to any other planet.',
   facts:['Olympus Mons is the tallest volcano known — nearly three times the height of Everest, wide as France.','Valles Marineris is a canyon system as long as the United States is wide.','Its moon Phobos orbits so low it will crash into Mars or shred into a ring within ~50 million years.'] },
 
+{ id:'phobos', scene:'solar', group:'The Solar System', type:'moon', name:'Phobos',
+  kicker:'Mars I · the doomed moon', sub:'A tiny, cratered rock spiralling to its death',
+  parent:'mars', orbit:{r:10,periodDays:0.32,phase:1.0}, size:1.1, mark:4, plate:'p:phobos',
+  stats:[['Size','27 × 22 × 18 km — a potato'],['Orbit','7.6 hours — faster than Mars turns'],['Rises','In the west, sets in the east'],['Feature','Stickney, a crater 9 km wide'],['Fate','Torn into a ring in ~50 million yrs']],
+  blurb:'The larger and closer of Mars’s two little moons — a captured-asteroid-like lump of rock so near the planet that it whips around in under eight hours, faster than Mars itself rotates, so from the surface it would rise in the west and set in the east twice a Martian day. It is doomed: Mars’s gravity is slowly dragging it inward to shatter it into a ring.',
+  facts:['Its great crater Stickney is nearly a third of Phobos’s width; the impact left grooves radiating across the whole moon.','It orbits so low that from parts of Mars it never rises above the horizon at all.'] },
+
+{ id:'deimos', scene:'solar', group:'The Solar System', type:'moon', name:'Deimos',
+  kicker:'Mars II · the outer speck', sub:'The smaller Martian moon, smooth and distant',
+  parent:'mars', orbit:{r:15,periodDays:1.26,phase:4.5}, size:1.0, mark:4, plate:'p:deimos',
+  stats:[['Size','15 × 12 × 11 km'],['Orbit','30 hours'],['Surface','Smoothed by a blanket of dust'],['In the sky','Little more than a bright star'],['Named for','Dread, twin of Phobos (Fear)']],
+  blurb:'The outer and far smaller of Mars’s moons, a dark little lump barely a dozen kilometres across whose craters are half-buried under a smooth blanket of its own pulverised dust. From the Martian surface it would show no disk at all — just a bright moving point, sliding slowly across the sky over a couple of days.',
+  facts:['Phobos and Deimos — “fear” and “dread” — are named for the sons of the war god the planet honours.','Both moons are so small and dark they were not discovered until 1877, though Mars had been watched for millennia.'] },
+
 { id:'belt', scene:'solar', group:'The Solar System', type:'belt', name:'The Asteroid Belt',
   kicker:'Main belt · 2.2–3.2 AU', sub:'Rubble of a planet that never formed',
   orbit:{r:245,periodDays:1682,phase:2.9}, size:3, mark:4, plate:'belt', ring:[228,262],
@@ -959,6 +973,13 @@ const CAT = [
   stats:[['Diameter','940 km — a third of the Moon'],['Distance','2.77 AU average'],['Year','4.6 Earth yrs'],['Discovered','1801 — briefly called a planet'],['Visited','Dawn, 2015'],['Signature','Bright salt spots in Occator crater']],
   blurb:'The largest object in the asteroid belt and the only dwarf planet in the inner Solar System. When Dawn arrived in 2015 it found two dazzling bright spots on a dark world — deposits of salt left behind when briny water welled up from below and boiled away into space. Ceres is a rock with the memory of an ocean.',
   facts:['Discovered in 1801, it was called the eighth planet for half a century before being reclassed as an asteroid — then promoted to dwarf planet in 2006, the same year Pluto was demoted.','The bright carbonate spots in Occator crater are among the most reflective surfaces in the Solar System — sunlight on dried alien brine.','It may still hold a slushy layer of salty water beneath its crust today.'] },
+
+{ id:'vesta', scene:'solar', group:'The Solar System', type:'planet', name:'Vesta',
+  kicker:'Asteroid 4 · the brightest asteroid', sub:'A battered protoplanet that never quite grew up',
+  orbit:{r:240,periodDays:1325,phase:3.5}, size:2.2, mark:4, plate:'p:vesta',
+  stats:[['Diameter','525 km — 2nd largest asteroid'],['Distance','2.36 AU average'],['Year','3.6 Earth yrs'],['Feature','Rheasilvia, a giant south-pole crater'],['Visited','Dawn, 2011–2012'],['Brightness','The only asteroid visible to the naked eye']],
+  blurb:'The second-largest body in the asteroid belt and the only one bright enough, just barely, to glimpse with the naked eye. Vesta is not mere rubble but a battered protoplanet — a world that began to form layers like a true planet before Jupiter starved it of growth. A colossal impact near its south pole blasted out a crater almost as wide as Vesta itself, flinging debris that still rains on Earth as meteorites.',
+  facts:['About one in twenty meteorites found on Earth is a chip of Vesta, knocked loose by that giant south-pole impact.','The Dawn spacecraft orbited Vesta before flying on to Ceres — the first probe ever to circle two different worlds beyond Earth.'] },
 
 { id:'jupiter', scene:'solar', group:'The Solar System', type:'planet', name:'Jupiter',
   kicker:'Planet V · gas giant', sub:'The king — heavier than all other planets combined',
@@ -981,6 +1002,20 @@ const CAT = [
   blurb:'Beneath a cracked white shell of ice, Europa hides a saltwater ocean holding roughly twice the water of every sea on Earth — kept liquid for four billion years by the same tidal kneading that torments Io. Where there is water, energy and time, there may be chemistry. It is the Solar System’s most tantalising place to look for life.',
   facts:['The brown cracks webbing its surface are seams where the shell pulls apart and briny water wells up and freezes.','Europa is the smoothest solid body known — almost nothing sticks up more than a few hundred metres.','NASA’s Europa Clipper, launched in 2024, will make ~50 close flybys to sound the ocean through the ice.'] },
 
+{ id:'ganymede', scene:'solar', group:'The Solar System', type:'moon', name:'Ganymede',
+  kicker:'Jupiter III · king of moons', sub:'The largest moon in the Solar System — bigger than Mercury',
+  parent:'jupiter', orbit:{r:43,periodDays:7.15,phase:5.2}, size:2.4, mark:4, plate:'p:ganymede',
+  stats:[['Diameter','5,268 km — larger than Mercury'],['Rank','Biggest moon in the Solar System'],['Unique','The only moon with its own magnetic field'],['Hidden','A salty ocean under the ice'],['Orbit','7.2 days (drawn slower here)']],
+  blurb:'The giant among moons — larger than the planet Mercury, and the only one anywhere known to generate its own magnetic field, cocooned inside Jupiter’s. Its surface is a patchwork of dark, ancient cratered terrain and brighter grooved ice, and deep below lies a salty ocean, one more hidden sea in the outer Solar System.',
+  facts:['If it orbited the Sun instead of Jupiter, Ganymede would comfortably rank as a planet.','Its internal magnetic field creates shimmering aurorae, whose flickering betrayed the ocean sloshing beneath the ice.'] },
+
+{ id:'callisto', scene:'solar', group:'The Solar System', type:'moon', name:'Callisto',
+  kicker:'Jupiter IV · the old cratered world', sub:'The most heavily scarred surface in the Solar System',
+  parent:'jupiter', orbit:{r:55,periodDays:16.7,phase:1.1}, size:2.3, mark:4, plate:'p:callisto',
+  stats:[['Diameter','4,821 km — near Mercury’s size'],['Surface','The most cratered known'],['Age','~4 billion yrs, barely changed'],['Radiation','Low — outside Jupiter’s worst belts'],['Orbit','16.7 days (drawn slower here)']],
+  blurb:'The outermost of Jupiter’s four great moons, and the quietest: a dark, icy world so ancient and geologically dead that its surface is saturated with craters, a scarred record of four billion years of impacts with nothing to erase them. Sitting well outside Jupiter’s fiercest radiation, it is often named the most hospitable base for future explorers of the Jovian system.',
+  facts:['Its surface is the oldest and most cratered of any body yet mapped — a fossil from the Solar System’s violent youth.','It, too, may hide a briny ocean deep below, though buried under far more ice than Europa’s.'] },
+
 { id:'saturn', scene:'solar', group:'The Solar System', type:'planet', name:'Saturn',
   kicker:'Planet VI · gas giant', sub:'The ringed jewel — and moon-hoarding champion',
   orbit:{r:378,periodDays:10759,phase:3.8}, size:18, mark:7, plate:'p:saturn',
@@ -1002,12 +1037,54 @@ const CAT = [
   blurb:'The only moon with a real atmosphere — a nitrogen sky denser than Earth’s, hazed orange with hydrocarbon smog. Beneath it runs a complete weather cycle with methane playing the role of water: clouds, drizzle, rivers, deltas and polar seas. It is the most Earth-like landscape in the Solar System, built from entirely alien materials.',
   facts:['The Huygens probe touched down in 2005 — still the most distant landing ever made — and photographed rounded pebbles of rock-hard water ice.','In the low gravity and thick air, a human could strap wings to their arms and fly.','NASA’s Dragonfly, a nuclear-powered eight-rotor drone, will hop across Titan’s dunes in the 2030s.'] },
 
+{ id:'mimas', scene:'solar', group:'The Solar System', type:'moon', name:'Mimas',
+  kicker:'Saturn I · the Death Star moon', sub:'A little iceball with one enormous crater',
+  parent:'saturn', orbit:{r:20,periodDays:0.94,phase:2.1}, size:1.5, mark:4, plate:'p:mimas',
+  stats:[['Diameter','396 km'],['Signature','Herschel, a crater a third its width'],['Look-alike','The Death Star'],['Surprise','May hide a young ocean'],['Orbit','0.9 days (drawn slower here)']],
+  blurb:'A small moon of ice with one colossal crater, Herschel, nearly a third of Mimas’s own diameter — the scar of an impact that almost split it apart, and a resemblance to a certain space station that no one can unsee. Improbably, its gentle wobble hints that a liquid ocean may slosh beneath the frozen shell of even this tiny world.',
+  facts:['The impact that dug Herschel would have very nearly shattered the whole moon.','Its rotation wobbles just enough to suggest a hidden internal ocean — a “stealth” sea under kilometres of ice.'] },
+
+{ id:'dione', scene:'solar', group:'The Solar System', type:'moon', name:'Dione',
+  kicker:'Saturn IV · ice cliffs', sub:'An icy moon streaked with bright frozen cliffs',
+  parent:'saturn', orbit:{r:30,periodDays:2.7,phase:0.5}, size:1.7, mark:4, plate:'p:dione',
+  stats:[['Diameter','1,123 km'],['Feature','Bright “wispy” ice cliffs'],['Possible','A subsurface ocean'],['Trailing hemisphere','Fractured and streaked'],['Orbit','2.7 days (drawn slower here)']],
+  blurb:'A mid-sized moon of Saturn whose trailing side is laced with bright streaks — once mysterious, now known to be networks of towering ice cliffs, fractures in the crust catching the sunlight. Like several of Saturn’s moons, Dione may cradle a small ocean deep within, and it drifts through a whisper of oxygen given off by its own ice.',
+  facts:['The bright “wisps” Voyager saw from afar turned out, in Cassini’s close-ups, to be cliffs of fractured ice hundreds of metres high.','It shares its orbit with two tiny companion moons parked in gravitationally stable points ahead of and behind it.'] },
+
+{ id:'rhea', scene:'solar', group:'The Solar System', type:'moon', name:'Rhea',
+  kicker:'Saturn V · Saturn’s second moon', sub:'A frozen, cratered world that may wear a ring',
+  parent:'saturn', orbit:{r:35,periodDays:4.5,phase:3.3}, size:1.9, mark:4, plate:'p:rhea',
+  stats:[['Diameter','1,527 km — Saturn’s 2nd largest'],['Surface','Ancient, heavily cratered ice'],['Rumoured','Its own faint ring system'],['Air','A trace of oxygen and CO₂'],['Orbit','4.5 days (drawn slower here)']],
+  blurb:'The second-largest of Saturn’s moons, a heavily cratered ball of ice and rock that looks, at a glance, like a dirtier cousin of our own Moon rendered in frost. For a while it was suspected of being the only moon with its own ring — a possibility hinted at by Cassini data, never quite confirmed, and tantalising still.',
+  facts:['It is essentially a giant, ancient snowball: about three-quarters water ice by mass.','Cassini detected a thin veil of oxygen around it, split from its surface ice by radiation from Saturn.'] },
+
+{ id:'iapetus', scene:'solar', group:'The Solar System', type:'moon', name:'Iapetus',
+  kicker:'Saturn VIII · the yin-yang moon', sub:'One hemisphere black as tar, the other bright as snow',
+  parent:'saturn', orbit:{r:64,periodDays:79,phase:1.6}, size:1.8, mark:4, plate:'p:iapetus',
+  stats:[['Diameter','1,469 km'],['Two-toned','One dark side, one bright'],['Ridge','A 1,300 km wall along its equator'],['Distant','Saturn’s farthest big moon'],['Orbit','79 days (drawn slower here)']],
+  blurb:'The strangest of Saturn’s moons: one hemisphere is coated in material darker than coal, the other gleams with clean ice, so its brightness swings tenfold as it turns — a puzzle noticed as far back as 1671. Stranger still, a mountain ridge runs along much of its equator like the seam of a walnut, giving it the profile of a giant space walnut.',
+  facts:['The dark coating is dust it sweeps up in its orbit; sunlight then warms it, driving off ice and darkening it further in a runaway stain.','Its bizarre equatorial ridge, up to 20 km high, has no agreed explanation — a leftover ring that fell down, perhaps, or a frozen bulge from a faster-spinning past.'] },
+
 { id:'uranus', scene:'solar', group:'The Solar System', type:'planet', name:'Uranus',
   kicker:'Planet VII · ice giant', sub:'The sideways planet',
   orbit:{r:444,periodDays:30687,phase:5.1}, size:12, mark:6, plate:'p:uranus',
   stats:[['Diameter','50,724 km'],['Distance','19.2 AU · 2.87B km'],['Year','84 Earth yrs'],['Day','17.2 hours'],['Coldest reading','−224 °C'],['Moons','28']],
   blurb:'Something enormous hit Uranus long ago and knocked it onto its side: it rolls around the Sun with a 98° tilt, giving each pole a 42-year day followed by a 42-year night. It was the first planet ever discovered by telescope, in 1781.',
   facts:['Its moons are named for Shakespeare characters: Titania, Oberon, Miranda, Puck…','Despite being closer to the Sun than Neptune, it is often the coldest planet — it barely leaks internal heat.','Only one spacecraft has ever visited: Voyager 2, for a few hours in 1986.'] },
+
+{ id:'miranda', scene:'solar', group:'The Solar System', type:'moon', name:'Miranda',
+  kicker:'Uranus V · the Frankenstein moon', sub:'A little world that looks stitched together',
+  parent:'uranus', orbit:{r:18,periodDays:1.4,phase:0.7}, size:1.4, mark:4, plate:'p:miranda',
+  stats:[['Diameter','472 km'],['Feature','Verona Rupes, a ~20 km cliff'],['Surface','A patchwork of clashing terrains'],['Explored by','Voyager 2, 1986'],['Orbit','1.4 days (drawn slower here)']],
+  blurb:'The smallest of Uranus’s five major moons is also its weirdest — a jumbled patchwork of grooved ridges, chevron scars and cliffs that look bolted together from mismatched pieces. Among them stands Verona Rupes, thought to be the tallest cliff in the Solar System: a sheer drop of perhaps twenty kilometres. In the low gravity, a fall from its top would take minutes.',
+  facts:['Verona Rupes may plunge some 20 km — a stone dropped off the edge would fall for over ten minutes before landing.','Its Frankenstein look may come from a shattering impact whose pieces reassembled, or from an interrupted bout of internal heating.'] },
+
+{ id:'titania', scene:'solar', group:'The Solar System', type:'moon', name:'Titania',
+  kicker:'Uranus III · the queen moon', sub:'Uranus’s largest, cut by great canyons',
+  parent:'uranus', orbit:{r:30,periodDays:8.7,phase:4.0}, size:1.7, mark:4, plate:'p:titania',
+  stats:[['Diameter','1,578 km — Uranus’s largest'],['Feature','Canyons thousands of km long'],['Surface','Ice and rock, reddish'],['Named for','Shakespeare’s fairy queen'],['Orbit','8.7 days (drawn slower here)']],
+  blurb:'The largest moon of Uranus, a frozen world of ice and rock whose surface is riven by enormous canyons — great cracks thousands of kilometres long, opened when a subsurface ocean froze and expanded, splitting the crust from within. We have seen it just once and only in part, during Voyager 2’s single sideways glance at the Uranian system.',
+  facts:['Its canyon system dwarfs anything on Earth — evidence that the whole moon expanded and cracked as its interior water froze solid.','Voyager 2 caught only its southern half in sunlight; the rest of Titania remains, quite literally, unseen.'] },
 
 { id:'neptune', scene:'solar', group:'The Solar System', type:'planet', name:'Neptune',
   kicker:'Planet VIII · ice giant', sub:'A world found with a pen, not a telescope',
@@ -1029,6 +1106,13 @@ const CAT = [
   stats:[['Diameter','2,377 km — smaller than our Moon'],['Distance','39.5 AU average'],['Year','248 Earth yrs'],['Day','6.4 Earth days'],['Surface','−232 °C'],['Moons','5 — Charon is half its size']],
   blurb:'Demoted in 2006, redeemed in 2015: when New Horizons flew past, "boring" Pluto turned out to have mountains of water ice, a heart-shaped nitrogen glacier the size of Texas, and a hazy blue sky. Its moon Charon is so large the pair orbit each other like dance partners.',
   facts:['The heart — Sputnik Planitia — is a churning glacier of nitrogen ice, resurfacing itself with no craters at all.','Pluto hasn’t completed even one orbit since its 1930 discovery; that happens in 2178.','A dusting of Clyde Tombaugh’s ashes, its discoverer, flew past aboard New Horizons.'] },
+
+{ id:'charon', scene:'solar', group:'The Solar System', type:'moon', name:'Charon',
+  kicker:'Pluto I · the twin', sub:'A moon so big it and Pluto orbit each other',
+  parent:'pluto', orbit:{r:8,periodDays:6.4,phase:2.0}, size:1.7, mark:4, plate:'p:charon',
+  stats:[['Diameter','1,212 km — half of Pluto'],['Pairing','A true double world'],['Locked','Each shows the other one face, always'],['Feature','Mordor Macula, a dark red pole'],['Orbit','6.4 days (drawn slower here)']],
+  blurb:'Pluto’s largest moon is so big relative to its world — fully half Pluto’s width — that the two do not simply orbit one another; they waltz around a point in the empty space between them, a genuine double world. Both keep the same face permanently turned toward the other, so from one hemisphere of Pluto, Charon hangs motionless in the sky forever. Its north pole wears a strange dark-red cap of tholins drifted from Pluto’s air.',
+  facts:['Pluto and Charon are tidally locked to each other, so each would appear frozen in place in the other’s sky.','Its reddish polar stain, nicknamed Mordor, is thought to be gas that escaped Pluto, drifted to Charon, and was baked dark by sunlight.'] },
 
 { id:'eris', scene:'solar', group:'The Solar System', type:'planet', name:'Eris',
   kicker:'Dwarf planet · the world that demoted Pluto', sub:'A frozen twin on a wildly tilted, distant loop',
@@ -2562,6 +2646,60 @@ const PLANET_PAINTERS = {
     c.save(); c.rotate(-.25);                                 // its thin dark ring
     c.strokeStyle = 'rgba(120,120,130,.55)'; c.lineWidth = r * .12;
     c.beginPath(); c.ellipse(0, 0, r * 1.9, r * .5, 0, 0, 6.283); c.stroke();
+    c.restore(); },
+  ganymede:(c, r) => { shadeBall(c, r, '#cabfa9', '#918775', '#443f34');
+    c.save(); c.beginPath(); c.arc(0, 0, r, 0, 6.283); c.clip();
+    c.fillStyle = 'rgba(70,64,54,.4)';                        // dark ancient terrain
+    c.beginPath(); c.ellipse(-r * .35, r * .2, r * .5, r * .7, .5, 0, 6.283); c.fill();
+    c.restore(); },
+  callisto:(c, r) => { shadeBall(c, r, '#a99c88', '#6c6254', '#302c25');
+    c.save(); c.beginPath(); c.arc(0, 0, r, 0, 6.283); c.clip();
+    c.fillStyle = 'rgba(240,238,230,.5)';                     // bright impact scars
+    for (const [dx, dy] of [[-.3, -.3], [.35, .1], [.1, .45], [-.15, .25]])
+      { c.beginPath(); c.arc(dx * r, dy * r, r * .07, 0, 6.283); c.fill(); }
+    c.restore(); },
+  rhea:    (c, r) => { shadeBall(c, r, '#e2e6ec', '#b0b6c0', '#5c616a');
+    c.fillStyle = 'rgba(80,84,92,.4)';
+    c.beginPath(); c.arc(-r * .25, -r * .15, r * .18, 0, 6.283); c.fill();
+    c.beginPath(); c.arc(r * .3, r * .25, r * .12, 0, 6.283); c.fill(); },
+  iapetus: (c, r) => {                                        // two-faced: one dark, one bright
+    shadeBall(c, r, '#e6e2da', '#c0bab0', '#6a655c');
+    c.save(); c.beginPath(); c.arc(0, 0, r, 0, 6.283); c.clip();
+    c.fillStyle = 'rgba(40,32,26,.72)';
+    c.beginPath(); c.ellipse(r * .55, 0, r * .7, r * 1.05, 0, 0, 6.283); c.fill();
+    c.restore(); },
+  mimas:   (c, r) => { shadeBall(c, r, '#d6dae0', '#a6abb4', '#565a62');
+    c.save(); c.beginPath(); c.arc(0, 0, r, 0, 6.283); c.clip();
+    c.strokeStyle = 'rgba(70,74,82,.6)'; c.lineWidth = r * .1;   // the huge Herschel crater
+    c.fillStyle = 'rgba(70,74,82,.3)';
+    c.beginPath(); c.arc(r * .32, -r * .18, r * .3, 0, 6.283); c.fill(); c.stroke();
+    c.restore(); },
+  dione:   (c, r) => { shadeBall(c, r, '#e0e4ea', '#b0b6c0', '#5a5e66');
+    c.save(); c.beginPath(); c.arc(0, 0, r, 0, 6.283); c.clip();
+    c.strokeStyle = 'rgba(240,244,250,.5)'; c.lineWidth = r * .05;   // wispy ice cliffs
+    c.beginPath(); c.arc(r * .5, r * .2, r * .8, 2.2, 4.2); c.stroke();
+    c.restore(); },
+  titania: (c, r) => { shadeBall(c, r, '#d2c6bc', '#9a8d82', '#4c453e');
+    c.fillStyle = 'rgba(60,52,46,.35)';
+    c.beginPath(); c.arc(r * .2, -r * .2, r * .16, 0, 6.283); c.fill(); },
+  miranda: (c, r) => { shadeBall(c, r, '#cfd4da', '#98a0a8', '#484e54');
+    c.save(); c.beginPath(); c.arc(0, 0, r, 0, 6.283); c.clip();
+    c.strokeStyle = 'rgba(60,66,72,.5)'; c.lineWidth = r * .08;   // chevron of giant cliffs
+    c.beginPath(); c.moveTo(-r * .5, r * .4); c.lineTo(0, -r * .1); c.lineTo(r * .5, r * .4); c.stroke();
+    c.restore(); },
+  charon:  (c, r) => { shadeBall(c, r, '#cfc8c0', '#9a938a', '#524b44');
+    c.save(); c.beginPath(); c.arc(0, 0, r, 0, 6.283); c.clip();
+    c.fillStyle = 'rgba(90,54,52,.55)';                        // the reddish north pole, Mordor
+    c.beginPath(); c.ellipse(0, -r * .78, r * .7, r * .35, 0, 0, 6.283); c.fill();
+    c.restore(); },
+  phobos:  (c, r) => { shadeBall(c, r * 1.05, '#8c8278', '#5e564e', '#2c2824');
+    c.fillStyle = 'rgba(30,26,22,.6)';                         // the big Stickney crater
+    c.beginPath(); c.arc(-r * .3, -r * .2, r * .32, 0, 6.283); c.fill(); },
+  deimos:  (c, r) => { shadeBall(c, r, '#9a9088', '#6e655c', '#332f2a'); },
+  vesta:   (c, r) => { shadeBall(c, r, '#c2b8a6', '#8f8674', '#463f38');
+    c.save(); c.beginPath(); c.arc(0, 0, r, 0, 6.283); c.clip();
+    c.fillStyle = 'rgba(60,54,46,.4)';                         // the great south-pole basin
+    c.beginPath(); c.arc(0, r * .55, r * .5, 0, 6.283); c.fill();
     c.restore(); },
 };
 
