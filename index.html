@@ -895,12 +895,19 @@ const CAT = [
   blurb:'The rusted planet wears the scars of a warmer youth: dried river deltas, lake beds, and canyons carved by floods. Its day is almost exactly as long as ours, which is why more spacecraft have gone here than to any other planet.',
   facts:['Olympus Mons is the tallest volcano known — nearly three times the height of Everest, wide as France.','Valles Marineris is a canyon system as long as the United States is wide.','Its moon Phobos orbits so low it will crash into Mars or shred into a ring within ~50 million years.'] },
 
-{ id:'belt', scene:'solar', group:'The Solar System', type:'belt', name:'Asteroid Belt & Ceres',
+{ id:'belt', scene:'solar', group:'The Solar System', type:'belt', name:'The Asteroid Belt',
   kicker:'Main belt · 2.2–3.2 AU', sub:'Rubble of a planet that never formed',
   orbit:{r:245,periodDays:1682,phase:2.9}, size:3, mark:4, plate:'belt', ring:[228,262],
   stats:[['Span','2.2–3.2 AU'],['Total mass','~4 % of the Moon'],['Largest member','Ceres, 940 km — a dwarf planet'],['Typical gap between rocks','~1 million km']],
   blurb:'Jupiter’s gravity never let a planet gather here, leaving a belt of leftovers. Forget the movies: the rocks are on average a million kilometres apart — spacecraft fly through without aiming. Queen of the belt is Ceres, a dwarf planet hiding salty brine beneath its crust.',
-  facts:['All the asteroids combined weigh far less than our Moon.','Bright spots on Ceres are salt deposits from subsurface brine that seeped up and dried — signs of a hidden ocean’s remains.'] },
+  facts:['All the asteroids combined weigh far less than our Moon.','The belt was the Solar System’s failed planet — Jupiter kept stirring the rubble until it could never coalesce.'] },
+
+{ id:'ceres', scene:'solar', group:'The Solar System', type:'planet', name:'Ceres',
+  kicker:'Dwarf planet · king of the belt', sub:'A tiny world with the ghost of an ocean',
+  orbit:{r:250,periodDays:1682,phase:0.4}, size:2.6, mark:4, plate:'p:ceres',
+  stats:[['Diameter','940 km — a third of the Moon'],['Distance','2.77 AU average'],['Year','4.6 Earth yrs'],['Discovered','1801 — briefly called a planet'],['Visited','Dawn, 2015'],['Signature','Bright salt spots in Occator crater']],
+  blurb:'The largest object in the asteroid belt and the only dwarf planet in the inner Solar System. When Dawn arrived in 2015 it found two dazzling bright spots on a dark world — deposits of salt left behind when briny water welled up from below and boiled away into space. Ceres is a rock with the memory of an ocean.',
+  facts:['Discovered in 1801, it was called the eighth planet for half a century before being reclassed as an asteroid — then promoted to dwarf planet in 2006, the same year Pluto was demoted.','The bright carbonate spots in Occator crater are among the most reflective surfaces in the Solar System — sunlight on dried alien brine.','It may still hold a slushy layer of salty water beneath its crust today.'] },
 
 { id:'jupiter', scene:'solar', group:'The Solar System', type:'planet', name:'Jupiter',
   kicker:'Planet V · gas giant', sub:'The king — heavier than all other planets combined',
@@ -971,6 +978,27 @@ const CAT = [
   stats:[['Diameter','2,377 km — smaller than our Moon'],['Distance','39.5 AU average'],['Year','248 Earth yrs'],['Day','6.4 Earth days'],['Surface','−232 °C'],['Moons','5 — Charon is half its size']],
   blurb:'Demoted in 2006, redeemed in 2015: when New Horizons flew past, "boring" Pluto turned out to have mountains of water ice, a heart-shaped nitrogen glacier the size of Texas, and a hazy blue sky. Its moon Charon is so large the pair orbit each other like dance partners.',
   facts:['The heart — Sputnik Planitia — is a churning glacier of nitrogen ice, resurfacing itself with no craters at all.','Pluto hasn’t completed even one orbit since its 1930 discovery; that happens in 2178.','A dusting of Clyde Tombaugh’s ashes, its discoverer, flew past aboard New Horizons.'] },
+
+{ id:'eris', scene:'solar', group:'The Solar System', type:'planet', name:'Eris',
+  kicker:'Dwarf planet · the world that demoted Pluto', sub:'A frozen twin on a wildly tilted, distant loop',
+  kepler:{a:607,e:0.226,periodDays:204000,phase:0.5,rot:2.2,dir:1}, size:2.8, mark:5, plate:'p:eris',
+  stats:[['Diameter','2,326 km — a hair smaller than Pluto'],['Mass','27 % more than Pluto'],['Distance','38–98 AU — very eccentric'],['Year','558 Earth yrs'],['Surface','−240 °C, bright methane ice'],['Moon','Dysnomia']],
+  blurb:'Found in 2005 far beyond Pluto, Eris is almost exactly Pluto’s size but noticeably heavier — and its discovery forced the question no one could dodge: if Pluto is a planet, why not this? The answer, in 2006, was to invent the "dwarf planet" and reclass them both. Eris is the most massive dwarf planet known, wrapped in a frost so reflective it is nearly as bright as fresh snow.',
+  facts:['Its discovery directly triggered the 2006 vote that cut the Solar System’s planets from nine to eight.','It is so far away and cold that its atmosphere freezes solid onto the surface, then sublimates back as it swings sunward.','It was informally nicknamed "Xena" before receiving the name of the Greek goddess of discord — fittingly, for the world that caused so much of it.'] },
+
+{ id:'makemake', scene:'solar', group:'The Solar System', type:'planet', name:'Makemake',
+  kicker:'Dwarf planet · Kuiper Belt', sub:'A reddish ice world named for a creator god',
+  orbit:{r:648,periodDays:112000,phase:5.1}, size:2.3, mark:4, plate:'p:makemake',
+  stats:[['Diameter','~1,430 km'],['Distance','45.4 AU average'],['Year','306 Earth yrs'],['Surface','Frozen methane, red-brown'],['Named for','The creator god of Rapa Nui'],['Moon','One, tiny and dark']],
+  blurb:'One of the four accepted dwarf planets beyond Neptune, discovered in 2005 just after Easter and nicknamed "Easterbunny" until it was formally named for the creator god of Easter Island. Its surface is coated in frozen methane tinted red-brown by sunlight — a deep-freeze relic from the Solar System’s birth.',
+  facts:['It is one of the brightest Kuiper Belt objects, though still far too faint for the naked eye.','Its methane frost forms pellets up to a centimetre across, unlike the fine snows of its neighbours.','A dark little moon, spotted in 2016, helped astronomers weigh it.'] },
+
+{ id:'haumea', scene:'solar', group:'The Solar System', type:'planet', name:'Haumea',
+  kicker:'Dwarf planet · the spinning egg', sub:'A ringed world stretched by its own dizzying spin',
+  orbit:{r:628,periodDays:103800,phase:2.0}, size:2.5, mark:4, plate:'p:haumea',
+  stats:[['Shape','Egg-shaped, ~2,100 × 1,160 km'],['Distance','43 AU average'],['Year','284 Earth yrs'],['Day','Just 3.9 hours — fastest of any large body'],['Rings','Yes — first found on a dwarf planet'],['Moons','Two, Hiʻiaka and Namaka']],
+  blurb:'Haumea spins so fast — one full turn every four hours — that it has stretched into the shape of an egg, or a squashed rugby ball. The whirl is likely the fossil of an ancient collision that also gave it two moons and a family of icy shards. In 2017 it became the first object beyond Neptune found to wear a ring.',
+  facts:['A day on Haumea is under four hours — the fastest rotation of any body in the Solar System larger than 100 km.','Its surface is nearly pure crystalline water ice, unusually bright and clean for so cold a world.','The collision that spun it up scattered a "family" of icy fragments that still share its orbit.'] },
 
 { id:'kuiper', scene:'solar', group:'The Solar System', type:'belt', name:'Kuiper Belt',
   kicker:'30–55 AU · icy frontier', sub:'The Solar System’s deep-freeze attic',
@@ -1457,7 +1485,28 @@ CAT.push(
   kepler:{a:352.5,e:0.7305,periodDays:27740,phase:2.6,rot:-0.55,dir:-1}, size:3.5, mark:5, plate:'comet',
   stats:[['Period','~76 years'],['Last visit','1986'],['Next visit','Mid-2061'],['Nucleus','15 × 8 km, darker than coal'],['Orbit','Retrograde — against the planets'],['Recorded since','240 BC']],
   blurb:'The comet that taught humanity comets return. Edmond Halley noticed the visitors of 1531, 1607 and 1682 shared an orbit and predicted a 1758 return — it appeared, sixteen years after his death, and carries his name forever.',
-  facts:['It rides its stretched orbit backwards — opposite to every planet — from inside Venus’s orbit out past Neptune’s.','Every year Earth crosses its debris trail twice, giving the Eta Aquariid (May) and Orionid (October) meteor showers.','Mark Twain was born at its 1835 visit and predicted he would “go out with it” — he died the day after its 1910 perihelion.'] }
+  facts:['It rides its stretched orbit backwards — opposite to every planet — from inside Venus’s orbit out past Neptune’s.','Every year Earth crosses its debris trail twice, giving the Eta Aquariid (May) and Orionid (October) meteor showers.','Mark Twain was born at its 1835 visit and predicted he would “go out with it” — he died the day after its 1910 perihelion.'] },
+
+{ id:'hale-bopp', scene:'solar', group:'The Solar System', type:'comet', name:'Comet Hale–Bopp',
+  kicker:'C/1995 O1 · great comet of 1997', sub:'The comet half the planet stopped to watch',
+  kepler:{a:415,e:0.687,periodDays:925000,phase:3.05,rot:1.9,dir:1}, size:3.2, mark:5, plate:'comet',
+  stats:[['Visible to the eye','A record ~18 months'],['Perihelion','1 April 1997'],['Nucleus','~60 km — unusually huge'],['Two tails','Blue gas and white dust'],['Next return','~4385'],['Discovered','1995, independently by two observers']],
+  blurb:'For a year and a half in 1996–97 a brilliant comet hung in the evening sky, bright enough to see from city centres — the most widely observed comet in history. Its nucleus was a giant, perhaps sixty kilometres across, which is why it blazed so long and so far from the Sun. It will not pass this way again until the human world is unrecognisable, around the year 4385.',
+  facts:['It stayed visible to the naked eye for about 18 months — longer than any comet on record.','Two tails streamed from it: a blue one of gas pushed straight out by the solar wind, and a curved white one of dust.','Its long orbit means the people who saw it in 1997 shared a once-in-a-hundred-generations event.'] },
+
+{ id:'neowise', scene:'solar', group:'The Solar System', type:'comet', name:'Comet NEOWISE',
+  kicker:'C/2020 F3 · great comet of 2020', sub:'The lockdown comet, found by a space telescope',
+  kepler:{a:440,e:0.74,periodDays:2470000,phase:3.1,rot:-2.4,dir:1}, size:2.8, mark:4, plate:'comet',
+  stats:[['Discovered','March 2020, by the NEOWISE telescope'],['Perihelion','3 July 2020'],['Nucleus','~5 km'],['Best seen','July 2020, evening sky'],['Next return','~8800'],['Survived','A close solar passage that destroys most comets']],
+  blurb:'Discovered by an infrared space telescope in March 2020, this comet swept close past the Sun and — unlike most, which crumble — held together, emerging to grace the July evening sky as the finest naked-eye comet in a generation for the northern hemisphere. Millions, housebound that strange summer, stepped outside to find it hanging beneath the Big Dipper.',
+  facts:['It was named for the NASA space telescope that spotted it, not a person — a modern way to find comets.','Comets this bright are rare from the northern hemisphere: the last comparable one was Hale–Bopp, 23 years earlier.','Its orbit is so long it will not return for roughly 6,800 years.'] },
+
+{ id:'67p', scene:'solar', group:'The Solar System', type:'comet', name:'Comet 67P',
+  kicker:'67P/Churyumov–Gerasimenko · we landed here', sub:'The rubber-duck comet a robot touched down on',
+  kepler:{a:227,e:0.34,periodDays:2352,phase:1.0,rot:0.8,dir:1}, size:2.6, mark:4, plate:'comet',
+  stats:[['Period','6.4 years'],['Shape','Two lobes — a "rubber duck"'],['Nucleus','~4 km'],['Orbited by','Rosetta, 2014–2016'],['Landed on','Philae, 12 Nov 2014'],['A first','The first soft landing on a comet']],
+  blurb:'In 2014 the Rosetta spacecraft caught up with this small comet, flew alongside it for two years, and dropped a lander named Philae onto its surface — humanity’s first touchdown on a comet. Up close, 67P proved to be a bizarre double-lobed world, like a rubber duck of ice and dust, hissing jets of gas as the Sun warmed it. Unlike the great comets, it loops back every six years and actually moves visibly on this map.',
+  facts:['Philae bounced twice on landing and came to rest in a shadowed crack, but still returned data from the surface of a comet — a first in history.','Rosetta found the comet’s water is chemically unlike Earth’s oceans, a clue that comets may not have delivered our water after all.','The two lobes are probably two separate objects that drifted together gently in the early Solar System.'] }
 );
 
 /* ============ OTHER WORLDS · enterable exoplanet systems ============
@@ -1944,12 +1993,14 @@ function drawSolar(dt) {
     ctx.strokeStyle = state.selected === o.id ? 'rgba(240,167,92,.4)' : 'rgba(148,163,184,.1)';
     ctx.beginPath(); ctx.arc(pp[0], pp[1], o.orbit.r, 0, 6.283); ctx.stroke();
   }
-  // Halley's stretched, retrograde orbit
-  const hk = SOLAR_OBJS.find(b => b.id === 'halley');
-  if (hk) {
+  // stretched, eccentric orbits: comets and scattered-disk dwarf planets
+  for (const hk of SOLAR_OBJS) {
+    if (!hk.kepler) continue;
     const k = hk.kepler, b2 = k.a * Math.sqrt(1 - k.e * k.e), c2 = k.a * k.e;
-    ctx.save(); ctx.rotate(k.rot);
-    ctx.strokeStyle = state.selected === 'halley' ? 'rgba(240,167,92,.45)' : 'rgba(159,216,232,.18)';
+    const cometish = hk.type === 'comet';
+    ctx.save(); ctx.rotate(k.rot || 0);
+    ctx.strokeStyle = state.selected === hk.id ? 'rgba(240,167,92,.45)'
+      : cometish ? 'rgba(159,216,232,.18)' : 'rgba(148,163,184,.14)';
     ctx.setLineDash([3 / z, 4 / z]);
     ctx.beginPath(); ctx.ellipse(-c2, 0, k.a, b2, 0, 0, 6.283); ctx.stroke();
     ctx.setLineDash([]); ctx.restore();
@@ -2167,6 +2218,30 @@ const PLANET_PAINTERS = {
     c.arc(-r * .16, r * .1, r * .22, 2.5, 6.0);
     c.arc(r * .18, r * .1, r * .22, 3.4, 0.7);
     c.lineTo(0, r * .62); c.closePath(); c.fill(); },
+  ceres:   (c, r) => { shadeBall(c, r, '#b8b0a4', '#8a8278', '#464038');
+    c.save(); c.beginPath(); c.arc(0, 0, r, 0, 6.283); c.clip();
+    c.fillStyle = 'rgba(60,55,50,.4)';                        // craters
+    for (const [dx, dy, rr] of [[-.3, -.2, .16], [.35, .15, .12], [.05, .4, .1]])
+      { c.beginPath(); c.arc(dx * r, dy * r, rr * r, 0, 6.283); c.fill(); }
+    c.fillStyle = 'rgba(255,250,240,.95)';                    // the Occator bright spots
+    c.beginPath(); c.arc(-.1 * r, -.05 * r, r * .07, 0, 6.283); c.fill();
+    c.restore(); },
+  eris:    (c, r) => { shadeBall(c, r, '#fbfdff', '#d6dee8', '#7c8894');   // brilliant white ice
+    c.strokeStyle = 'rgba(210,225,240,.35)'; c.lineWidth = r * .1;
+    c.beginPath(); c.arc(0, 0, r * 1.1, 0, 6.283); c.stroke(); },
+  makemake:(c, r) => { shadeBall(c, r, '#e0a074', '#b06840', '#5a2c18');   // reddish tholin frost
+    c.save(); c.beginPath(); c.arc(0, 0, r, 0, 6.283); c.clip();
+    c.fillStyle = 'rgba(255,225,200,.28)';
+    c.beginPath(); c.ellipse(-r * .2, -r * .25, r * .5, r * .3, .4, 0, 6.283); c.fill();
+    c.restore(); },
+  haumea:  (c, r) => {                                        // an egg spun so fast it bulged
+    c.save(); c.scale(1.5, .82);
+    shadeBall(c, r, '#f4f2ee', '#cdc7bd', '#6c665e');
+    c.restore();
+    c.save(); c.rotate(-.25);                                 // its thin dark ring
+    c.strokeStyle = 'rgba(120,120,130,.55)'; c.lineWidth = r * .12;
+    c.beginPath(); c.ellipse(0, 0, r * 1.9, r * .5, 0, 0, 6.283); c.stroke();
+    c.restore(); },
 };
 
 /* ============ ENGINE · plate art, UI, input, main loop ============ */
