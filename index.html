@@ -816,6 +816,42 @@ const CAT = [
   blurb:'A dead white dwarf circles a bloated red giant, siphoning off its gas. The stolen hydrogen piles up on the dwarf’s surface for about eighty years — then detonates in a thermonuclear flash that briefly makes the system ten thousand times brighter. It last blew in 1946. Astronomers are watching it nightly, because the next eruption is due any year now.',
   facts:['Unlike a supernova, the star survives: the same white dwarf has been erupting on schedule for centuries, and will keep doing it.','When it goes, an apparently new star will appear in the constellation Corona Borealis for several nights — check the news, then look up.','Records suggest earlier outbursts were spotted in 1217 and 1787.'] },
 
+/* ---------- black holes & the extreme ---------- */
+{ id:'m87', scene:'galaxy', group:'Black holes & the extreme', type:'blackhole', name:'M87*',
+  kicker:'Supermassive black hole · first ever photographed', sub:'The monster whose shadow we finally saw',
+  pos:[-46000,-30000], mark:6, plate:'bhjet',
+  stats:[['True distance','53 million ly (drawn at the rim)'],['Mass','6.5 billion Suns'],['First image','10 April 2019 (EHT)'],['Event horizon','~40 billion km'],['Jet','A beam ~5,000 ly long'],['Host','Galaxy M87, in Virgo']],
+  blurb:'For a century black holes were a prediction on paper. Then in 2019 a planet-sized network of radio dishes stared at the heart of the giant galaxy M87 and returned a picture: a ring of light around a circle of absolute dark — the shadow of an object weighing six and a half billion Suns. It lies fifty million light-years away and is drawn here at the galaxy’s edge, a signpost far beyond our own.',
+  facts:['The Event Horizon Telescope had to link dishes from Hawaii to the South Pole to build a lens effectively the size of Earth.','This black hole fires a jet of plasma five thousand light-years long — a searchlight first noticed in 1918, before anyone knew what a black hole was.','Its shadow is so large that our entire Solar System would fit inside the black circle several times over.'] },
+
+{ id:'3c273', scene:'galaxy', group:'Black holes & the extreme', type:'blackhole', name:'3C 273',
+  kicker:'Quasar · the first ever recognised', sub:'A black hole outshining a trillion Suns',
+  pos:[-56000,4000], mark:6, plate:'quasar',
+  stats:[['True distance','2.4 billion ly (drawn at the rim)'],['Luminosity','~4 trillion Suns'],['Powered by','A black hole ~900 million Suns'],['Identified','1963, by Maarten Schmidt'],['Jet','A plume ~200,000 ly long'],['Apparent brightness','Visible in a backyard telescope']],
+  blurb:'In 1963 astronomers puzzled over a "star" with a spectrum nobody could read. Maarten Schmidt realised the lines were simply shifted enormously toward the red — the object was billions of light-years away, and to be visible at all it had to be blazing brighter than a whole galaxy. It was the first quasar: gas heated white-hot as it spirals into a supermassive black hole, the brightest kind of steady beacon in the universe.',
+  facts:['Despite lying 2.4 billion light-years off, it is bright enough to glimpse through an amateur telescope — the most distant thing many stargazers ever see.','A "quasar" is the feeding frenzy of a black hole: matter queuing to fall in glows hotter than any star.','Its jet was one of the first ever imaged, shooting from the core across a fifth of a million light-years.'] },
+
+{ id:'ton618', scene:'galaxy', group:'Black holes & the extreme', type:'blackhole', name:'TON 618',
+  kicker:'Ultramassive black hole', sub:'Very nearly the largest thing weighed in the universe',
+  pos:[-52000,34000], mark:6, plate:'quasar',
+  stats:[['True distance','~18 billion light-travel-years'],['Mass','~66 billion Suns'],['Event horizon','~1,300 AU across'],['Luminosity','~140 trillion Suns'],['Type','Hyperluminous quasar'],['Light left it','When the cosmos was young']],
+  blurb:'If M87* is a monster, this is a leviathan. Sixty-six billion times the mass of the Sun, TON 618 is among the heaviest black holes ever weighed — its event horizon alone is wider than the Solar System’s orbit around the galaxy would be, a sphere of no-return some 1,300 times the Earth–Sun distance across. We see it as a brilliant quasar whose light has been travelling toward us since the universe was a fraction of its present age.',
+  facts:['Its event horizon is so vast that light would take weeks just to cross it.','To shine as a quasar, it may be swallowing the equivalent of dozens of Suns every year.','Objects this heavy strain our theories: it is hard to build a black hole so large so early in cosmic history.'] },
+
+{ id:'gw150914', scene:'galaxy', group:'Black holes & the extreme', type:'blackhole', name:'GW150914',
+  kicker:'Black-hole merger · first gravitational wave', sub:'The day we first heard spacetime ring',
+  pos:[-30000,-50000], mark:5, plate:'merger',
+  stats:[['True distance','~1.3 billion ly (drawn at the rim)'],['Detected','14 September 2015 (LIGO)'],['The pair','36 + 29 Suns'],['Merged into','A single 62-Sun black hole'],['Lost to waves','~3 Suns of pure energy'],['Signal length','0.2 seconds']],
+  blurb:'This is not an object but an event — the first time humanity felt gravity itself move. Over a billion years ago, two black holes spiralled together and merged, and for a fifth of a second radiated more power than all the stars in the observable universe combined, entirely as ripples in spacetime. On 14 September 2015 those ripples reached Earth and stretched the LIGO detectors by less than the width of a proton. We heard a chirp.',
+  facts:['Einstein predicted gravitational waves in 1916 and doubted they would ever be measurable; it took a century and two four-kilometre laser instruments.','The three Suns’ worth of mass that vanished into waves is why the merged hole weighs less than the sum of its parents.','The discovery won the 2017 Nobel Prize and opened a new way to observe the universe — by listening, not looking.'] },
+
+{ id:'v404cyg', scene:'galaxy', group:'Black holes & the extreme', type:'blackhole', name:'V404 Cygni',
+  kicker:'Microquasar · a black hole feeding nearby', sub:'A stellar black hole with a companion on the menu',
+  pos:s(7600,-1400), mark:5, plate:'microquasar',
+  stats:[['Distance','~7,800 ly — in our galaxy'],['Black hole','~9 Suns'],['Companion','A star slightly smaller than the Sun'],['Outbursts','1938, 1989, 2015'],['Jets','Blobs flung at near light-speed'],['Type','Low-mass X-ray binary']],
+  blurb:'A black hole nine times the Sun’s mass circles an ordinary star close enough to steal its gas. The stolen matter piles into a searing disk and, every few decades, dumps inward all at once — and the system erupts. In 2015 it woke up after 26 years of quiet and, for two weeks, its jets flung glowing clots of plasma outward at almost the speed of light: a quasar’s violence in miniature, right in our own galaxy.',
+  facts:['During the 2015 outburst it briefly became one of the brightest X-ray sources in the sky, and amateur astronomers watched it flicker in mere seconds.','Because it is so close, astronomers can study a black hole feeding in detail impossible for a distant quasar.','Between tantrums it sits dark and quiet, its stolen gas slowly refilling the reservoir for the next eruption.'] },
+
 /* ================= SOLAR SCENE ================= */
 { id:'sol', scene:'solar', group:'The Solar System', type:'star', name:'The Sun',
   kicker:'Sol · G2V yellow dwarf', sub:'The engine of everything you have ever known',
@@ -2139,6 +2175,76 @@ function drawPlate(o) {
     g.fillStyle = '#01020a'; g.beginPath(); g.arc(0, 0, 62, 0, 6.283); g.fill();
     g.strokeStyle = 'rgba(255,220,170,.95)'; g.lineWidth = 4;
     g.beginPath(); g.arc(0, 0, 66, 0, 6.283); g.stroke();
+  } else if (kind === 'bhjet') {          // a supermassive black hole firing one great jet
+    g.save(); g.rotate(-.9);
+    const jet = g.createLinearGradient(0, 0, 40, -260);   // relativistic beam
+    jet.addColorStop(0, 'rgba(200,220,255,.9)'); jet.addColorStop(1, 'rgba(150,120,255,0)');
+    g.fillStyle = jet; g.beginPath();
+    g.moveTo(-6, 0); g.lineTo(28, -260); g.lineTo(58, -252); g.lineTo(10, 0);
+    g.closePath(); g.fill();
+    const rnd = mulberry(o.name.length * 5);              // knots in the jet
+    for (let i = 0; i < 7; i++) { const t = i / 7; glowBlob(g, 4 + t * 40, -t * 250, 8 + rnd() * 6, 'rgba(210,225,255,.7)', .5); }
+    g.restore();
+    glowBlob(g, 0, 0, 210, 'rgba(179,156,255,.32)', .8);
+    g.save(); g.rotate(-.3);                              // glowing accretion ring
+    const gr = g.createLinearGradient(-170, 0, 170, 0);
+    gr.addColorStop(0, 'rgba(120,90,255,.1)'); gr.addColorStop(.5, 'rgba(255,190,120,.95)'); gr.addColorStop(1, 'rgba(120,90,255,.1)');
+    g.strokeStyle = gr; g.lineWidth = 22;
+    g.beginPath(); g.ellipse(0, 0, 150, 40, 0, 0, 6.283); g.stroke(); g.restore();
+    g.fillStyle = '#01020a'; g.beginPath(); g.arc(0, 0, 58, 0, 6.283); g.fill();
+    g.strokeStyle = 'rgba(255,220,170,.95)'; g.lineWidth = 4;
+    g.beginPath(); g.arc(0, 0, 62, 0, 6.283); g.stroke();
+  } else if (kind === 'quasar') {         // host galaxy + blinding core beacon + jet
+    const rnd = mulberry(o.name.length * 9);
+    g.save(); g.rotate(.4);                               // faint tilted host galaxy
+    for (let i = 0; i < 260; i++) {
+      const r = Math.abs(gauss(rnd)) * 150, a = rnd() * 6.283;
+      g.fillStyle = rnd() < .7 ? '#c9b8e0' : '#e8d0b8'; g.globalAlpha = .12 + rnd() * .3;
+      g.fillRect(Math.cos(a) * r * 1.6, Math.sin(a) * r * .55, 1, 1);
+    }
+    g.globalAlpha = 1; g.restore();
+    g.save(); g.rotate(-1.15);                            // a long thin jet
+    const jet = g.createLinearGradient(0, 0, 0, -250);
+    jet.addColorStop(0, 'rgba(190,210,255,.8)'); jet.addColorStop(1, 'rgba(160,130,255,0)');
+    g.fillStyle = jet; g.beginPath();
+    g.moveTo(-4, 0); g.lineTo(-14, -240); g.lineTo(14, -240); g.lineTo(4, 0); g.closePath(); g.fill();
+    g.restore();
+    glowBlob(g, 0, 0, 140, 'rgba(255,240,210,.85)', .95);  // core beacon
+    glowBlob(g, 0, 0, 46, 'rgba(255,255,255,1)', 1);
+    g.strokeStyle = 'rgba(255,250,235,.8)'; g.lineWidth = 2;   // lens-flare spikes
+    for (const [dx, dy] of [[210, 0], [-210, 0], [0, 150], [0, -150]]) {
+      g.beginPath(); g.moveTo(0, 0); g.lineTo(dx, dy); g.stroke();
+    }
+  } else if (kind === 'merger') {         // two black holes + spacetime ripples
+    for (let i = 6; i >= 1; i--) {                        // expanding ripple rings
+      g.strokeStyle = 'rgba(150,180,255,' + (.05 + (6 - i) * .03) + ')'; g.lineWidth = 2;
+      g.beginPath(); g.ellipse(0, 0, i * 44, i * 30, 0, 0, 6.283); g.stroke();
+    }
+    for (const dir of [1, -1]) {                          // the two holes, mid-inspiral
+      const x = dir * 42, y = dir * 10;
+      glowBlob(g, x, y, 46, 'rgba(255,190,120,.6)', .8);
+      g.fillStyle = '#01020a'; g.beginPath(); g.arc(x, y, 22, 0, 6.283); g.fill();
+      g.strokeStyle = 'rgba(255,220,170,.9)'; g.lineWidth = 3;
+      g.beginPath(); g.arc(x, y, 24, 0, 6.283); g.stroke();
+    }
+  } else if (kind === 'microquasar') {    // companion star bleeding gas into a disk + twin jets
+    glowBlob(g, -150, -30, 90, 'rgba(255,210,150,.55)', .9);   // the donor star
+    shadeBall2(g, -150, -30, 40, '#fff2d0', '#ffcf8e', '#5a4020');
+    g.strokeStyle = 'rgba(255,200,140,.5)'; g.lineWidth = 3;   // stolen-gas stream
+    g.beginPath(); g.moveTo(-118, -20); g.quadraticCurveTo(-40, 30, 55, 6); g.stroke();
+    g.save(); g.translate(70, 0); g.rotate(.5);          // twin jets from the compact object
+    for (const dir of [1, -1]) {
+      const jet = g.createLinearGradient(0, 0, 0, dir * 150);
+      jet.addColorStop(0, 'rgba(200,220,255,.85)'); jet.addColorStop(1, 'rgba(160,130,255,0)');
+      g.fillStyle = jet; g.beginPath();
+      g.moveTo(-4, 0); g.lineTo(-12, dir * 150); g.lineTo(12, dir * 150); g.lineTo(4, 0); g.closePath(); g.fill();
+    }
+    const gr = g.createLinearGradient(-46, 0, 46, 0);    // hot accretion disk
+    gr.addColorStop(0, 'rgba(120,90,255,.15)'); gr.addColorStop(.5, 'rgba(255,200,140,.95)'); gr.addColorStop(1, 'rgba(120,90,255,.15)');
+    g.strokeStyle = gr; g.lineWidth = 10;
+    g.beginPath(); g.ellipse(0, 0, 42, 12, 0, 0, 6.283); g.stroke();
+    g.fillStyle = '#01020a'; g.beginPath(); g.arc(0, 0, 12, 0, 6.283); g.fill();
+    g.restore();
   } else if (kind === 'pulsar') {
     glowBlob(g, 0, 0, 130, 'rgba(168,228,240,.4)', .9);
     g.save(); g.rotate(.55);
@@ -2405,7 +2511,8 @@ $('cardClose').onclick = closeCard;
 
 /* ---------- atlas index ---------- */
 const GROUP_ORDER = ['Home', 'Heart of the galaxy', 'Spiral arms', 'Star nurseries & remnants',
-  'Clusters & neighbours', 'Stars & other suns', 'The night sky', 'Meteor showers', 'The Solar System', 'Other worlds'];
+  'Clusters & neighbours', 'Stars & other suns', 'Black holes & the extreme',
+  'The night sky', 'Meteor showers', 'The Solar System', 'Other worlds'];
 function buildAtlas() {
   const list = $('atlasList'); list.innerHTML = '';
   for (const grp of GROUP_ORDER) {
