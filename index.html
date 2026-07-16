@@ -136,6 +136,13 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
 }
 #atlasList h3 .gc{letter-spacing:.08em;font-variant-numeric:tabular-nums;flex:none}
 #atlasList h3.done .gc{color:var(--ember)}
+.legendRow{
+  display:flex;align-items:baseline;gap:10px;padding:4px 16px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.02em;
+}
+.legendRow .swatch{width:7px;height:7px;border-radius:50%;flex:none;align-self:center}
+.legendRow .lg-nm{color:var(--starlight);flex:none;min-width:86px}
+.legendRow .lg-ds{color:var(--haze);font-size:10.5px;line-height:1.45}
 .atlasItem{
   width:100%;display:flex;align-items:center;gap:10px;text-align:left;
   padding:7px 16px;color:var(--haze);font-size:13px;
@@ -521,6 +528,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   <button class="ctl" id="scaleBtn" title="Moon to Betelgeuse at true relative scale — the one honest view">&#9678; How big?</button>
   <button class="ctl" id="farBtn" title="Watch light crawl between any two worlds — real light-travel times">&#10142; How far?</button>
   <button class="ctl" id="luckyBtn" title="Fly somewhere unexplored">&#10022; Surprise me</button>
+  <button class="ctl" id="gridBtn" title="Galactic coordinate grid — longitude from the Sun, distance rings from the core">Grid</button>
   <button class="ctl on" id="lblBtn" title="Toggle labels">Labels</button>
   <button class="ctl" id="zoomOut" title="Zoom out">&minus;</button>
   <button class="ctl" id="zoomIn" title="Zoom in">+</button>
@@ -584,6 +592,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   <button class="tourOpt" data-tour="grand"><b>The grand tour</b><span>The whole atlas — highlights of every scene</span></button>
   <button class="tourOpt" data-tour="deaths"><b>Deaths of stars</b><span>How suns end: gently, violently, strangely</span></button>
   <button class="tourOpt" data-tour="life"><b>Could life be there?</b><span>The ocean moons and other Earths</span></button>
+  <button class="tourOpt" data-tour="bones"><b>Bones of the galaxy</b><span>The anatomy: core, bar, arms, bubbles, streams, halo</span></button>
 </div>
 
 <div id="hopbar">
@@ -2113,7 +2122,78 @@ CAT.push(
   pos:[-45900,-3200], mark:4, plate:'stream',
   stats:[['Extent','Loops the entire Milky Way'],['Source','The Sagittarius Dwarf'],['Torn out over','Billions of years, orbit by orbit'],['Carries','Stars and kidnapped globular clusters'],['Used for','Weighing the dark-matter halo']],
   blurb:'The faint ring of old stars you can trace looping around the rim of this map is a crime scene: the unravelling body of the Sagittarius Dwarf, pulled apart strand by strand on every orbit and left wrapped around the Milky Way like thread on a spool. Streams like this are galactic archaeology — each one is the fossil record of a meal our galaxy has eaten.',
-  facts:['Its stars wrap the galaxy more than once, in separate leading and trailing ribbons that took two decades to map.','The stream’s shape is one of the best tools we have for weighing the Milky Way’s invisible dark-matter halo — the ribbon bends to gravity we cannot otherwise see.','On this flat map it is drawn as a rim loop; in truth it arcs over and under the disc in a nearly polar ring.'] }
+  facts:['Its stars wrap the galaxy more than once, in separate leading and trailing ribbons that took two decades to map.','The stream’s shape is one of the best tools we have for weighing the Milky Way’s invisible dark-matter halo — the ribbon bends to gravity we cannot otherwise see.','On this flat map it is drawn as a rim loop; in truth it arcs over and under the disc in a nearly polar ring.'] },
+
+/* ---------- study-grade census: clusters, remnants, structures ---------- */
+{ id:'m4', scene:'galaxy', group:'Clusters & neighbours', type:'cluster', name:'Messier 4',
+  kicker:'Nearest globular cluster', sub:'The closest ancient swarm — home of the oldest planet',
+  pos:s(3300,-5000), mark:4, plate:'cluster',
+  stats:[['Distance','~6,000 ly — nearest globular'],['Age','~12.7 billion yrs'],['In the sky','Beside Antares, in Scorpius'],['Celebrity','“Methuselah” — the oldest known planet'],['Used for','Ageing the universe via white dwarfs']],
+  blurb:'The nearest of the ancient star-swarms, close enough that a small telescope splits it into stars — find Antares and it sits right alongside. Deep inside, a planet of two and a half Jupiters circles a pulsar and a white dwarf: nicknamed Methuselah, it condensed almost thirteen billion years ago, when the universe was barely a billion years old. Planets, it turns out, have been forming nearly since the beginning.',
+  facts:['Methuselah (PSR B1620−26 b) is roughly three times older than Earth — proof planet-building began in the universe’s first billion years.','Hubble measured the temperatures of M4’s coolest white dwarfs — stellar embers cooling for 12.7 billion years — and used them as a clock to age the universe itself.'] },
+
+{ id:'m15', scene:'galaxy', group:'Clusters & neighbours', type:'cluster', name:'Messier 15',
+  kicker:'Core-collapsed globular', sub:'A cluster whose heart has fallen in on itself',
+  pos:s(29500,-13700), mark:4, plate:'cluster',
+  stats:[['Distance','~33,600 ly'],['Age','~12.5 billion yrs — among the oldest'],['Core','Collapsed — the densest known'],['Inside it','Pease 1, a planetary nebula'],['Suspected','An intermediate-mass black hole']],
+  blurb:'Most clusters are crowded; this one has imploded. M15’s core has undergone “core collapse” — its heaviest stars sank inward over billions of years until the centre packed thousands of suns into a space smaller than the gap between us and Alpha Centauri. Whether a middleweight black hole lurks at the bottom of that pit is still argued.',
+  facts:['It hosts Pease 1, the first planetary nebula ever found inside a globular cluster — a dying star’s last breath amid ancient neighbours.','Core collapse is gravity’s sorting machine: heavy stars sink, light ones get flung outward, and the centre runs away toward infinite density until close encounters halt it.'] },
+
+{ id:'m54', scene:'galaxy', group:'Clusters & neighbours', type:'cluster', name:'Messier 54',
+  kicker:'Stolen globular · another galaxy’s heart', sub:'The captured nucleus of the Sagittarius Dwarf',
+  pos:[2600,-44200], mark:4, plate:'cluster',
+  stats:[['True distance','~87,000 ly (drawn with its dwarf)'],['Belongs to','The Sagittarius Dwarf, not us'],['Likely is','That galaxy’s nuclear star cluster'],['Catalogued','1778, by Messier — as one of ours'],['Realised foreign','1994']],
+  blurb:'For two centuries this sat in the catalogues as an ordinary Milky Way globular. Then in 1994 astronomers discovered the Sagittarius Dwarf galaxy behind the core — and M54 sits exactly at its centre. It is almost certainly that dying galaxy’s own nucleus: the first globular cluster ever catalogued that belongs to another galaxy, soon to be the Milky Way’s war trophy.',
+  facts:['When the dwarf finally dissolves into the Sagittarius Stream, M54 will survive — adopted into our halo like several other clusters the dwarf brought with it.','Messier logged it in 1778 with no way of knowing he had discovered the heart of another galaxy.'] },
+
+{ id:'kepler-sn', scene:'galaxy', group:'Star nurseries & remnants', type:'remnant', name:'Kepler’s Star',
+  kicker:'SN 1604 · the last one seen', sub:'No one has watched a Milky Way supernova since',
+  pos:s(1500,-19500), mark:4, plate:'nebula:#e8b88f:#a8e4f0',
+  stats:[['Exploded','Seen 9 October 1604'],['Distance','~20,000 ly'],['Type','Ia — a white dwarf detonation'],['Peak','Brighter than Jupiter, seen 18 months'],['Since then','420+ years of silence']],
+  blurb:'In October 1604 a new star appeared in Ophiuchus, outshining Jupiter, and Johannes Kepler tracked it for a year. It was a white dwarf detonating twenty thousand light-years away — and it is the last supernova anyone has ever seen explode in our galaxy. Four centuries of telescopes, and the Milky Way has not offered another.',
+  facts:['Statistically the galaxy should produce a couple of supernovae per century; dust hides most — Cassiopeia A blew around 1680 and almost nobody noticed.','Kepler used the new star in his argument that the heavens were not unchangeable — five years before he published his laws of planetary motion.','When the next one comes, neutrino detectors will hear it minutes before any telescope sees it.'] },
+
+{ id:'coalsack', scene:'galaxy', group:'Star nurseries & remnants', type:'nebula', name:'The Coalsack',
+  kicker:'Dark nebula · a hole in the stars', sub:'The sky’s most famous patch of nothing',
+  pos:s(-570,-180), mark:4, minLabelZoom:.1, plate:'darkneb',
+  stats:[['Distance','~590 ly'],['Width','~60 ly'],['Appears as','A black gap in the Milky Way, by eye'],['Actually','Dust so cold and thick it blocks starlight'],['In Aboriginal sky lore','The head of the Emu']],
+  blurb:'Beside the Southern Cross the Milky Way simply stops — a black hole-shaped absence you can see with the naked eye. It is not a gap but a wall: a cloud of dust and cold gas thick enough to swallow the light of everything behind it. Clouds like this are stars in waiting; in a few million years the Coalsack may light up from the inside.',
+  facts:['In the astronomy of many Aboriginal Australian peoples it forms the head of the Emu in the Sky, a constellation drawn from darkness instead of stars.','Every star on this map condensed inside a cloud like this — dark nebulae are nurseries that have not switched on yet.'] },
+
+{ id:'cygnus-x', scene:'galaxy', group:'Star nurseries & remnants', type:'nebula', name:'Cygnus X',
+  kicker:'Star-forming complex', sub:'Our arm’s own giant star factory, hidden by a rift of dust',
+  pos:s(4300,-1600), mark:4, plate:'nebula:#8fb8e8:#ffb3c8',
+  stats:[['Distance','~4,600 ly'],['Span','~600 ly of nurseries'],['Powered by','Cygnus OB2 — dozens of O-type giants'],['Hidden by','The Great Rift’s foreground dust'],['Rank','Richest complex near the Sun']],
+  blurb:'Look toward the Swan and the Milky Way splits in two — the Great Rift, a lane of foreground dust. Directly behind it hides the mightiest star-forming complex in our neighbourhood of the galaxy: six hundred light-years of nebulae powered by Cygnus OB2, an association holding dozens of the rare O-type giants. If the dust were swept aside, Cygnus would blaze like nothing else in the northern sky.',
+  facts:['Cygnus OB2 packs so many massive stars that some call it a young globular cluster in the making.','Infrared and radio telescopes see straight through the rift — in their maps, Cygnus X outshines nearly everything along the local arm.'] },
+
+{ id:'sco-cen', scene:'galaxy', group:'Clusters & neighbours', type:'cluster', name:'Scorpius–Centaurus',
+  kicker:'Nearest OB association', sub:'The young giants next door — and the Local Bubble’s culprits',
+  pos:s(-150,-430), mark:4, minLabelZoom:.1, plate:'cluster',
+  stats:[['Distance','~450 ly — nearest of its kind'],['Age','5–15 million yrs, in subgroups'],['Members','Thousands, including Antares'],['Travelling','Together, as one drifting family'],['Guilty of','The supernovae that blew the Local Bubble']],
+  blurb:'The nearest association of young, massive stars — a loose family thousands strong, born together and still drifting through space in formation. Antares is its reddest and most famous member. Over the past fifteen million years its heaviest stars have gone off one by one as supernovae, and those blasts are what hollowed out the Local Bubble the Sun now sails through.',
+  facts:['Associations are clusters too sparse to hold together; in another hundred million years its stars will have scattered beyond recognition.','Radioactive iron-60 in Earth’s deep-sea crusts is fallout traced to its recent supernovae — local galactic history, recorded in our seabed.'] },
+
+{ id:'arm-3kpc', scene:'galaxy', group:'Spiral arms', type:'region', name:'3-kpc Arms',
+  kicker:'Twin inner arms · expanding', sub:'Two gas arms bracketing the bar, racing outward',
+  pos:[-6500,7500], mark:4, plate:'arm',
+  stats:[['Distance from core','~10,000 ly each side'],['Motion','Expanding outward at ~50 km/s'],['Near arm found','1957, by radio telescopes'],['Far twin found','2008 — hidden behind the core'],['Oddity','Almost no star formation']],
+  blurb:'Wrapped tight around the galactic bar are two arms unlike the others: they are not spiralling, they are expanding, driven outward at fifty kilometres a second by the bar ploughing through the inner galaxy’s gas. The near one was picked up by radio telescopes in 1957; its mirror twin on the far side of the core took another half-century to find.',
+  facts:['Their symmetry — one near, one far, both expanding — is some of the best evidence that the bar stirs the whole inner galaxy.','Strangely, almost no stars form in them: the gas is moving too violently to settle and collapse.'] },
+
+{ id:'warp', scene:'galaxy', group:'Spiral arms', type:'region', name:'The Galactic Warp',
+  kicker:'The bent rim of the disc', sub:'Out here, the galaxy stops lying flat',
+  pos:[46000,8000], mark:4, plate:'warp',
+  stats:[['Starts','Beyond the Sun’s orbit'],['Bend','Thousands of ly up one side, down the other'],['Mapped by','Thousands of Cepheid stars, 2019'],['Suspect','Torque from the satellite galaxies'],['And it','Slowly precesses, like a wobbling plate']],
+  blurb:'This map draws the Milky Way flat, and near the core that is honest — but out past the Sun’s orbit the disc bends like the brim of a hat, thousands of light-years upward on one side and downward on the other. Astronomers traced the bend star by star using Cepheids, pulsing beacons whose true brightness is known. A face-on map cannot show it; consider this marker the cartographer’s confession.',
+  facts:['The warp slowly swivels around the galaxy — precessing like a coin settling on a table — which points to a living cause, probably the tug of the satellite galaxies.','Most spiral galaxies are warped; seen edge-on from far away, the Milky Way would look gently S-shaped.'] },
+
+{ id:'gaia-enceladus', scene:'galaxy', group:'Clusters & neighbours', type:'galaxy', name:'Gaia–Enceladus',
+  kicker:'Ghost of the last great merger', sub:'The galaxy we swallowed ten billion years ago',
+  pos:[27000,-33000], mark:4, plate:'satgal',
+  stats:[['Merged','~10 billion yrs ago'],['Then','~A quarter the Milky Way’s size'],['Now','Most of the inner stellar halo'],['Found','2018, in Gaia’s star-motion maps'],['Brought along','Several globular clusters']],
+  blurb:'The biggest thing the Milky Way ever ate. Ten billion years ago a galaxy a quarter our size fell in, and the collision was so thorough that nothing of it survives as an object — no core, no disk, only motion. In 2018 the Gaia spacecraft measured the orbits of a billion stars and found the wreck: a vast population of halo stars still swinging on the strange, plunging paths of their dead parent galaxy.',
+  facts:['This marker is a courtesy — Gaia–Enceladus is not in one place; its stars are strewn through the entire halo, all around you on this map.','The impact likely puffed up the Milky Way’s thick disk and reset the young galaxy’s structure.','It was found not by looking at stars but at how they move — galactic archaeology, done with orbits for fossils.'] }
 );
 
 /* ============ OTHER WORLDS · enterable exoplanet systems ============
@@ -2251,6 +2331,7 @@ const state = {
   hover: null,
   follow: null,
   labels: true,
+  grid: false,                      // galactic coordinate overlay (galaxy scene)
   timeScale: 1,                     // solar orbit speed multiplier
   simDays: 0,
   fade: 0, fadeDir: 0, fadeCb: null,
@@ -2527,6 +2608,7 @@ function drawGalaxy() {
   }
   ctx.restore();
 
+  if (state.grid) drawGrid();
   for (const o of GALAXY_OBJS) drawMarker(o);
   // labels afterwards, important objects claim space first
   const placed = [];
@@ -2536,6 +2618,50 @@ function drawGalaxy() {
 }
 function pri(o) {
   return (state.selected === o.id ? 100 : 0) + (state.hover === o.id ? 50 : 0) + o.mark;
+}
+
+/* ---------- galactic coordinate grid · study overlay ----------
+   Rings: galactocentric distance every 10,000 ly (dashed: the solar circle).
+   Spokes: galactic longitude as seen from the Sun — ℓ = 0° toward the core,
+   90° with the direction of rotation (Cygnus), 180° the anticentre. */
+function drawGrid() {
+  const z = state.cam.z;
+  const [cx, cy] = w2s(0, 0), [sx, sy] = w2s(...SUN);
+  const C = 'rgba(127,149,201,';
+  ctx.save();
+  ctx.lineWidth = 1;
+  ctx.font = '9.5px ui-monospace, Menlo, Consolas, monospace';
+
+  // galactocentric rings
+  for (let R = 10000; R <= 50000; R += 10000) {
+    ctx.strokeStyle = C + '.22)';
+    ctx.beginPath(); ctx.arc(cx, cy, R * z, 0, 6.283); ctx.stroke();
+    ctx.fillStyle = C + '.7)'; ctx.textAlign = 'left';
+    ctx.fillText((R / 1000) + ',000 ly', cx + R * z * .7071 + 4, cy + R * z * .7071 - 4);
+  }
+  // the solar circle — the Sun's own orbit around the core
+  ctx.setLineDash([5, 6]);
+  ctx.strokeStyle = C + '.4)';
+  ctx.beginPath(); ctx.arc(cx, cy, 26000 * z, 0, 6.283); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = C + '.8)'; ctx.textAlign = 'right';
+  ctx.fillText('solar circle · 26,000 ly', cx - 26000 * z * .7071 - 6, cy - 26000 * z * .7071 - 4);
+
+  // longitude spokes from the Sun, every 30°
+  for (let l = 0; l < 360; l += 30) {
+    const major = l % 90 === 0;
+    const dx = Math.sin(l * Math.PI / 180), dy = -Math.cos(l * Math.PI / 180);
+    ctx.strokeStyle = C + (major ? '.32)' : '.15)');
+    ctx.beginPath();
+    ctx.moveTo(sx + dx * 900 * z, sy + dy * 900 * z);
+    ctx.lineTo(sx + dx * 78000 * z, sy + dy * 78000 * z);
+    ctx.stroke();
+    if (major) {
+      ctx.fillStyle = C + '.85)'; ctx.textAlign = 'center';
+      ctx.fillText('ℓ ' + l + '°', sx + dx * 33000 * z, sy + dy * 33000 * z - 5);
+    }
+  }
+  ctx.restore();
 }
 
 const MARKER_GLYPHS = { region: 'ring', galaxy: 'ring', belt: 'ring' };
@@ -3143,6 +3269,34 @@ function drawPlate(o) {
     g.globalAlpha = 1;
     const da = -1.05;                     // the dwarf itself, still shedding stars
     glowBlob(g, Math.cos(da) * 360, 300 + Math.sin(da) * 360, 34, 'rgba(201,169,232,.55)', .85);
+  } else if (kind === 'darkneb') {        // a hole in the stars: cold dust blotting out the field
+    const rnd = mulberry(o.name.length * 31);
+    for (let i = 0; i < 480; i++) {       // the rich Milky Way field behind
+      g.fillStyle = rnd() < .7 ? '#eef4ff' : rnd() < .5 ? '#cfe0ff' : '#ffe9c9';
+      g.globalAlpha = .3 + rnd() * .6;
+      g.fillRect((rnd() - .5) * 400, (rnd() - .5) * 240, rnd() > .9 ? 2 : 1, 1.5);
+    }
+    g.globalAlpha = 1;
+    for (let i = 0; i < 9; i++) {         // the cloud itself — layered darkness
+      const a = rnd() * 6.283, d = rnd() * 46;
+      glowBlob(g, Math.cos(a) * d * 1.4, Math.sin(a) * d * .8, 70 + rnd() * 60, 'rgba(3,5,10,1)', .85);
+    }
+    glowBlob(g, 0, 0, 130, 'rgba(3,5,10,1)', .95);
+    g.strokeStyle = 'rgba(127,149,201,.14)'; g.lineWidth = 1.5;   // the faintest rim
+    g.beginPath(); g.ellipse(0, 0, 118, 74, .3, 0, 6.283); g.stroke();
+  } else if (kind === 'warp') {           // the disc edge-on, rim bent like a hat brim
+    const rnd = mulberry(o.name.length * 37);
+    glowBlob(g, 0, 0, 110, 'rgba(255,240,215,.55)', .9);          // central bulge glow
+    for (let i = 0; i < 1100; i++) {
+      const x = (rnd() * 2 - 1) * 210;
+      const bend = Math.pow(Math.abs(x) / 210, 3) * 52 * Math.sign(x);
+      const y = gauss(rnd) * (15 - Math.abs(x) * .045) - bend;
+      g.fillStyle = rnd() < .6 ? '#f0e6d0' : '#cfe0ff';
+      g.globalAlpha = .2 + rnd() * .55;
+      g.fillRect(x, y, rnd() > .93 ? 2 : 1, 1);
+    }
+    g.globalAlpha = 1;
+    shadeBall2(g, 0, 0, 42, '#fff6df', '#f0d9a8', '#6a5836');     // the bulge itself
   } else if (kind === 'satgal') {
     const rnd = mulberry(5);
     glowBlob(g, 0, 0, 170, 'rgba(201,169,232,.25)', 1);
@@ -3412,6 +3566,28 @@ function buildAtlas() {
       list.appendChild(b);
     }
   }
+  /* ---------- legend: how to read the markers ---------- */
+  const lh = document.createElement('h3'); lh.textContent = 'Reading the map';
+  list.appendChild(lh);
+  const LEGEND = [
+    ['home',      'Home',        'The Sun and everything that orbits it'],
+    ['star',      'Star',        'A single sun, near enough to have a name'],
+    ['exo',       'Planet host', 'A star with known worlds around it'],
+    ['nebula',    'Nebula',      'Glowing gas — a stellar nursery, or a shroud'],
+    ['cluster',   'Cluster',     'Stars travelling as a gravitationally bound crowd'],
+    ['remnant',   'Remnant',     'What a supernova left behind'],
+    ['blackhole', 'Black hole',  'Matter collapsed past the point of return'],
+    ['region',    'Structure',   'Geography: an arm, bar, bubble or stream'],
+    ['galaxy',    'Galaxy',      'A separate island of stars beyond our own'],
+  ];
+  for (const [type, nm, ds] of LEGEND) {
+    const d = document.createElement('div');
+    d.className = 'legendRow';
+    d.dataset.search = ('legend ' + nm + ' ' + ds).toLowerCase();
+    d.innerHTML = `<span class="swatch" style="background:${TYPE_COLORS[type]}"></span>
+      <span class="lg-nm">${nm}</span><span class="lg-ds">${ds}</span>`;
+    list.appendChild(d);
+  }
   refreshAtlas();
 }
 function refreshAtlas() {
@@ -3503,6 +3679,7 @@ function syncSceneUI() {
   $('tonightBtn').style.display = sky ? 'flex' : 'none';
   $('latBtn').style.display = sky ? 'flex' : 'none';
   $('hopBtn').style.display = sky ? 'flex' : 'none';
+  $('gridBtn').style.display = (solar || sky || exo) ? 'none' : 'flex';
   if (!sky && $('hopbar').classList.contains('show')) endHop();
   $('crumbTxt').textContent = exo ? EXO_SYSTEMS[state.system].label
     : sky ? 'Night sky · seen from Earth'
@@ -3713,6 +3890,10 @@ $('resetBtn').onclick = () => {
 $('lblBtn').onclick = () => {
   state.labels = !state.labels;
   $('lblBtn').classList.toggle('on', state.labels);
+};
+$('gridBtn').onclick = () => {
+  state.grid = !state.grid;
+  $('gridBtn').classList.toggle('on', state.grid);
 };
 $('luckyBtn').onclick = () => {
   const pool0 = CAT.filter(o => !state.visited.has(o.id));
@@ -4487,6 +4668,11 @@ const QUIZ = [
 { q:'The star S5-HVS1 is leaving the galaxy forever because…', c:['The central black hole flung it out at 1,755 km/s','Its fuel ran out','It exploded','Dark matter pushed it'], a:0, ref:'s5-hvs1', why:'It strayed too close to Sagittarius A* as a binary; its twin was captured and it was hurled away — the Hills mechanism in action.' },
 { q:'The gas cloud Sagittarius B2, near the galactic centre, contains…', c:['The molecule that gives raspberries their flavour','Breathable oxygen','Liquid water oceans','Gold dust'], a:0, ref:'sgr-b2', why:'Ethyl formate — raspberry flavour, rum smell — drifting through three million Suns’ worth of gas.' },
 { q:'The Sagittarius Stream, looping around the whole galaxy, is…', c:['Stars torn from a dwarf galaxy being devoured','A river of gas from the Sun','A ring of comets','An optical illusion'], a:0, ref:'sgr-stream', why:'The unravelled body of the Sagittarius Dwarf, wrapped around the Milky Way like thread on a spool.' },
+{ q:'“Methuselah”, the oldest known planet, orbits…', c:['A pulsar and white dwarf inside a globular cluster','A young blue star','The star Vega','Nothing — it drifts free'], a:0, ref:'m4', why:'It formed ~12.7 billion years ago in M4 — planets have existed almost since the universe began.' },
+{ q:'The last supernova seen exploding in our galaxy was in…', c:['1604','1054','1885','1987'], a:0, ref:'kepler-sn', why:'Kepler’s Star. 1054 made the Crab; 1987’s was in the LMC next door. We are four centuries overdue.' },
+{ q:'The Coalsack looks like a hole in the Milky Way because…', c:['Cold dust blocks the starlight behind it','No stars ever formed there','A black hole swallowed the light','It is a camera artefact'], a:0, ref:'coalsack', why:'A dark nebula — a wall of dust, and a stellar nursery that has not switched on yet.' },
+{ q:'Gaia–Enceladus is…', c:['The wreck of a galaxy ours swallowed ~10 billion years ago','A moon of Saturn','A space telescope','A comet'], a:0, ref:'gaia-enceladus', why:'Found in 2018 from stellar orbits: most of the inner halo is debris of this one ancient merger. (Saturn’s moon shares the giant’s name.)' },
+{ q:'Out at its rim, the Milky Way’s disc is…', c:['Warped — bent up on one side, down on the other','Perfectly flat','A solid ring','Missing entirely'], a:0, ref:'warp', why:'Traced by Cepheid stars in 2019: the outer disc bends like a hat brim and slowly wobbles.' },
 ];
 let qRound = [], qIdx = 0, qScore = 0, qDone = false;
 function shuffle(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
@@ -4853,6 +5039,8 @@ const TOURS = {
     'shower-ori','sol','saturn','pluto','voyager','halley'] },
   deaths: { label: 'Deaths of stars', ids: ['m57','betelgeuse','m1','vela','sgr1806','t-crb','cyg-x1','sgr-a'] },
   life: { label: 'Could life be there?', ids: ['earth','mars','europa','enceladus','titan','trappist','kepler186','prox-b'] },
+  bones: { label: 'Bones of the galaxy', ids: ['sgr-a','nsc','bar','arm-3kpc','fermi-bubbles','arm-scu',
+    'arm-per','orion-spur','radcliffe','local-bubble','warp','sgr-stream','gaia-enceladus'] },
 };
 let curTour = TOURS.grand, tourIdx = -1;
 function tourGo() {
