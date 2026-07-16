@@ -1987,6 +1987,128 @@ CAT.push(
   facts:['Philae bounced twice on landing and came to rest in a shadowed crack, but still returned data from the surface of a comet — a first in history.','Rosetta found the comet’s water is chemically unlike Earth’s oceans, a clue that comets may not have delivered our water after all.','The two lobes are probably two separate objects that drifted together gently in the early Solar System.'] }
 );
 
+/* ============ GALAXY DEPTHS EXTENSION ============
+   Filling the map's empty quarters: the crowded core, the far disc,
+   the halo, and the structures the Sun itself swims through. */
+CAT.push(
+/* ---------- the Sun's own neighbourhood ---------- */
+{ id:'local-bubble', scene:'galaxy', group:'Home', type:'region', name:'The Local Bubble',
+  kicker:'Supernova-blown cavity · we live inside it', sub:'A 1,000 ly hole in the galaxy, with the Sun adrift in the middle',
+  pos:s(-330,-240), mark:4, minLabelZoom:.05, plate:'shell',
+  stats:[['Width','~1,000 ly'],['Carved by','~15 supernovae over 14 million yrs'],['Contents','Million-degree gas, vanishingly thin'],['Sun entered','~5 million yrs ago — by chance'],['Its wall','Where nearly all nearby stars now form']],
+  blurb:'Point in any direction from the Sun and for hundreds of light-years there is almost nothing: we live inside a cavity hollowed out of the galaxy by a chain of supernovae that began detonating fourteen million years ago. The Sun wandered in by pure luck five million years ago and is now passing near the centre. The action is all at the walls — as the bubble ploughed outward it swept gas up like snow before a shovel, and nearly every young star within 500 light-years of us was born on that shell.',
+  facts:['In 2022 astronomers mapped it well enough to show the nearest star nurseries — Taurus, Ophiuchus, Lupus, Chamaeleon — all sit on the bubble’s surface. Star formation here happens on the skin of an explosion.','The gas inside is around a million degrees yet thousands of times thinner than the interstellar gas outside — a glowing near-vacuum.','Earth keeps a souvenir of the blasts: radioactive iron-60 from nearby supernovae, found buried in deep-sea crusts and Antarctic snow.'] },
+
+{ id:'radcliffe', scene:'galaxy', group:'Home', type:'nebula', name:'The Radcliffe Wave',
+  kicker:'Gas wave · found 2020', sub:'A 9,000 ly ripple of star-stuff passing our door',
+  pos:s(700,700), mark:4, minLabelZoom:.02, plate:'arm',
+  stats:[['Length','~9,000 ly'],['Width','Only ~400 ly'],['Shape','Undulates above & below the disc'],['Nearest approach','~500 ly from the Sun'],['Contains','Orion, Taurus, Perseus & Cepheus clouds'],['Discovered','2020, in 3-D dust maps']],
+  blurb:'In 2020, astronomers building a three-dimensional map of nearby dust found something enormous hiding in plain sight: the star nurseries of Orion, Taurus, Perseus and Cepheus are not scattered at random but strung along a single narrow ribbon of gas 9,000 light-years long, undulating above and below the galactic plane like a wave frozen mid-crest. It is the largest coherent structure in our corner of the galaxy, and nobody had noticed — because we are practically inside it.',
+  facts:['Follow-up work in 2024 showed the wave really is waving: the whole ribbon oscillates slowly through the disc, a flag rippling in millions-of-years slow motion.','The Orion Nebula — the most familiar nursery in the sky — is one bead on this string.','What set it rippling is unknown; a collision with a gas cloud, or a dwarf galaxy punching through the disc, are the prime suspects.'] },
+
+/* ---------- the crowded core ---------- */
+{ id:'nsc', scene:'galaxy', group:'Heart of the galaxy', type:'cluster', name:'Nuclear Star Cluster',
+  kicker:'The core’s inner millions', sub:'The densest swarm of stars in the galaxy',
+  pos:[-90,140], mark:4, minLabelZoom:.04, plate:'cluster',
+  stats:[['Radius','~25 ly holds half its light'],['Mass','~25 million Suns'],['Density','Millions of times our neighbourhood'],['Hosts','The S-stars skimming the black hole'],['Found in','Most big galaxies — ours is resolvable']],
+  blurb:'Take every star you can see on a dark night — a couple of thousand — and then pack ten million more into the space between here and the nearest few stars: that is the neighbourhood around Sagittarius A*. The Nuclear Star Cluster is the most crowded place in the Milky Way, a swarm of ancient suns and newborn giants whirling around the central black hole, all of it squeezed into a region smaller than the gap between the Sun and its closest neighbours.',
+  facts:['Stars there routinely pass within a solar system’s width of one another — close enough to strip a planetary system bare.','Nearly every large galaxy hides a cluster like this at its heart; ours is simply the only one near enough to resolve star by star.'] },
+
+{ id:'arches', scene:'galaxy', group:'Heart of the galaxy', type:'cluster', name:'Arches Cluster',
+  kicker:'Densest cluster known', sub:'Thousands of suns knotted beside the black hole',
+  pos:[340,-260], mark:4, minLabelZoom:.04, plate:'cluster',
+  stats:[['Distance','26,000 ly — ~100 ly from Sgr A*'],['Age','~2.5 million yrs'],['Mass','Tens of thousands of Suns'],['O-type giants','~160 — more than anywhere else'],['Life expectancy','~10 million yrs before tides shred it']],
+  blurb:'A hundred-odd light-years from the black hole, gripped by the fiercest tides in the galaxy, sits the densest star cluster we know: tens of thousands of suns packed into a knot barely a light-year across, including more of the rare blue O-type giants than any other place in the Milky Way. It is only a couple of million years old and will not get much older — the core’s gravity is already combing it out into a stream.',
+  facts:['Dust toward the galactic centre dims its visible light roughly a trillionfold; it was only discovered in the 1990s, in infrared.','Clusters this deep in the core are torn apart within ten million years or so — the Arches is a temporary jewel.'] },
+
+{ id:'quintuplet', scene:'galaxy', group:'Heart of the galaxy', type:'cluster', name:'Quintuplet Cluster',
+  kicker:'Home of the Pistol Star', sub:'Five dusty cocoons and one impossible lantern',
+  pos:[480,120], mark:4, minLabelZoom:.04, plate:'cluster',
+  stats:[['Distance','26,000 ly — near Sgr A*'],['Age','~4 million yrs'],['Named for','Five dust-swaddled infrared stars'],['Celebrity','The Pistol Star, ~1.6 million Suns of light'],['Pistol Nebula','~10 Suns of gas it already coughed up']],
+  blurb:'Neighbour to the Arches and slightly older, this cluster is named for the five brilliant, dust-shrouded points that first showed up on infrared images. Its celebrity is the Pistol Star, a bloated, unstable giant blazing with over a million Suns’ worth of light — one of the most luminous stars known. It has already thrown off nearly ten Suns of its own substance into the surrounding Pistol Nebula, and it is not finished: stars like this end as supernovae, or worse.',
+  facts:['Set in the Sun’s place, the Pistol Star’s surface would reach roughly to Earth’s orbit.','The five “quintuplet” stars turned out to be pairs of Wolf–Rayet stars whose colliding winds spin dust into pinwheel spirals — smoke rings a light-year wide.'] },
+
+{ id:'sgr-b2', scene:'galaxy', group:'Heart of the galaxy', type:'nebula', name:'Sagittarius B2',
+  kicker:'Giant molecular cloud', sub:'Three million Suns of gas — and raspberry flavouring',
+  pos:[-390,-300], mark:4, minLabelZoom:.04, plate:'nebula:#b8a98f:#e88fb8',
+  stats:[['Distance from core','~400 ly'],['Mass','~3 million Suns of gas'],['Width','~150 ly'],['Famous molecule','Ethyl formate — flavour of raspberries'],['Status','The galaxy’s best-stocked chemistry set']],
+  blurb:'The most massive single cloud in the central region: three million Suns of cold gas and dust, 150 light-years across, waiting to collapse into clusters. Point a radio telescope at it and molecules announce themselves by the thousands of spectral lines — alcohols, sugars-in-waiting, and famously ethyl formate, the compound that gives raspberries their flavour and rum part of its smell. It is the closest thing the galaxy has to a planetary-chemistry warehouse.',
+  facts:['Roughly half of all molecules ever identified in interstellar space were first spotted in this one cloud.','It contains billions of litres’ worth of alcohol — spread one molecule at a time through clouds so thin it will never trouble anyone.','Clouds like this are the raw material of clusters like the Arches next door.'] },
+
+{ id:'fermi-bubbles', scene:'galaxy', group:'Heart of the galaxy', type:'region', name:'Fermi Bubbles',
+  kicker:'Gamma-ray lobes · the core’s exhaust', sub:'Two 25,000 ly bubbles blown straight out of this map',
+  pos:[-2600,-2200], mark:5, plate:'fermi',
+  stats:[['Height','~25,000 ly each, above & below the disc'],['Discovered','2010, Fermi gamma-ray telescope'],['Gas','Millions of degrees, razor-sharp edges'],['Age','A few million years'],['Likely cause','An outburst of Sagittarius A*']],
+  blurb:'In 2010 the Fermi gamma-ray telescope revealed that the Milky Way is blowing bubbles: two colossal lobes of scalding gas towering some 25,000 light-years above and below the galactic centre — half the span of this whole map, rising perpendicular to it. They are the exhaust of something violent a few million years ago, most likely a feeding binge by Sagittarius A* when the now-quiet black hole briefly flared like a quasar.',
+  facts:['They rise straight out of this flat map, so the marker here can only point at their roots around the core.','The flare that likely made them happened while our australopith ancestors walked Africa — gas far outside the galaxy still glows from the flash.','In 2020 the eROSITA X-ray telescope found even larger bubbles wrapped around them, like one explosion nested in another.'] },
+
+/* ---------- the far disc ---------- */
+{ id:'ngc3603', scene:'galaxy', group:'Star nurseries & remnants', type:'nebula', name:'NGC 3603',
+  kicker:'Giant nursery · a starburst in miniature', sub:'The most luminous nebula you can see in visible light',
+  pos:s(-19500,-6000), mark:4, plate:'nebula:#8fb8e8:#e8b88f',
+  stats:[['Distance','~22,000 ly'],['Home arm','Carina, far down-stream'],['Core cluster','Thousands of stars in a few ly'],['Heaviest resident','A binary of ~120 + 90 Suns'],['Role','Our galaxy’s pocket starburst']],
+  blurb:'Follow the Carina arm far beyond the Carina Nebula and you reach the brightest star factory visible in optical light anywhere in the galaxy. Its core packs thousands of stars into a few light-years around some of the heaviest stars ever weighed — a furious knot of star birth that astronomers treat as a pocket-sized stand-in for the starburst galaxies of the early universe.',
+  facts:['Its central binary, NGC 3603-A1, gave astronomers their first direct weighing of a star above one hundred solar masses — the two giants eclipse each other and betray their bulk.','It shines with the power of a small galaxy’s worth of newborn stars, yet hides 22,000 ly away behind the dust of the disc.'] },
+
+{ id:'w43', scene:'galaxy', group:'Star nurseries & remnants', type:'nebula', name:'W43',
+  kicker:'Westerhout 43 · mini-starburst', sub:'Where the bar crashes into an arm, stars ignite',
+  pos:[-11500,5900], mark:4, plate:'nebula:#e8b88f:#8fd8c9',
+  stats:[['Distance','~20,000 ly'],['Location','Bar meets the Scutum–Centaurus arm'],['Gas reserve','~7 million Suns of molecular clouds'],['Engine','A cluster of Wolf–Rayet and O stars'],['Nickname','The mini-starburst']],
+  blurb:'Where the tip of the galactic bar ploughs into the Scutum–Centaurus arm, gas piles up like water at the bow of a ship — and ignites. W43 is the pile-up itself: a complex holding seven million Suns of raw molecular gas, forging stars at one of the highest rates anywhere in the Milky Way, all of it hidden behind the dust of the disc and mapped by radio and infrared light.',
+  facts:['Its central engine — a tight cluster of Wolf–Rayet and O-type stars — pours out several million Suns of light.','Junctions like this are how a bar feeds its galaxy: a permanent traffic collision that turns funnelled gas into new suns.'] },
+
+{ id:'westerlund1', scene:'galaxy', group:'Clusters & neighbours', type:'cluster', name:'Westerlund 1',
+  kicker:'Super star cluster', sub:'The heavyweight champion of young clusters',
+  pos:s(-5200,-12600), mark:4, plate:'cluster',
+  stats:[['Distance','~13,000 ly'],['Mass','~50,000+ Suns — a record'],['Age','Just a few million yrs'],['Discovered','1961, behind heavy dust in Ara'],['Menagerie','Wolf–Rayets, hypergiants, a magnetar'],['Fate','May survive as a young globular']],
+  blurb:'The most massive young cluster known in the galaxy: tens of thousands of Suns’ worth of stars crammed into a ball a few light-years wide, so freshly made that its giants have not yet finished exploding. It reads like a bestiary of rare stars — two dozen Wolf–Rayets, a crowd of yellow hypergiants, red supergiants swollen to the size of Jupiter’s orbit — and one profound puzzle: a magnetar left behind by a star that theory says should have collapsed into a black hole.',
+  facts:['It holds more yellow hypergiants than have been found in all the rest of the galaxy combined.','Its magnetar’s parent star must have weighed over 40 Suns — heavy enough that it “should” have made a black hole. Somehow a city-sized magnet survived instead.','Clusters like this may be how globular clusters begin; Westerlund 1 is young enough to watch the process start.'] },
+
+{ id:'uy-scuti', scene:'galaxy', group:'Stars & other suns', type:'star', name:'UY Scuti',
+  kicker:'Red supergiant · a contender for largest star', sub:'A star so swollen its own size is an argument',
+  pos:s(-1700,-5600), mark:4, plate:'star:#ff9a5c',
+  stats:[['Distance','~5,900 ly (uncertain)'],['Radius','Perhaps ~1,700 Suns — error bars huge'],['If placed at the Sun','Surface out near Jupiter'],['Pulsation','Swells and shrinks over ~740 days'],['Rival claimants','Stephenson 2-18, among others']],
+  blurb:'For years this dim red point in Scutum held the unofficial title of largest known star: a supergiant so distended that, swapped in for the Sun, its surface might lie out beyond Jupiter. The honest truth is that nobody is sure — it is far away, veiled in gas it has shed, and every new measurement moves its radius by hundreds of Suns. Somewhere in the galaxy is the biggest star of all; UY Scuti is what the argument over it looks like.',
+  facts:['At its largest estimates, light needs over two hours just to cross from one side of the star to the other.','It is slowly evaporating, wrapped in a shroud of its own escaped atmosphere, and will one day collapse and explode.','Newer distance estimates may shrink it — the “largest star” crown changes heads almost every survey.'] },
+
+/* ---------- other worlds, other histories ---------- */
+{ id:'peg51', scene:'galaxy', group:'Stars & other suns', type:'exo', name:'51 Pegasi',
+  kicker:'First planet of another Sun · 1995', sub:'The wobbling star that started the exoplanet era',
+  pos:s(38,-30), mark:4, minLabelZoom:.15, plate:'exo',
+  stats:[['Distance','50 ly'],['Planet','51 Pegasi b — “Dimidium”'],['Planet mass','~half of Jupiter'],['Its year','4.2 days'],['Found by','A 50 m/s wobble of the star'],['Honoured','Nobel Prize in Physics, 2019']],
+  blurb:'In October 1995 a Swiss team announced that this unremarkable Sun-like star in Pegasus wobbles — tugged every 4.2 days by a planet half Jupiter’s mass skimming closer to its star than Mercury does to ours. It was the first planet ever found around another Sun. A “hot Jupiter” in a place theory said no giant could live, it broke planet formation as we understood it and opened the floodgates to the thousands of worlds found since.',
+  facts:['Michel Mayor and Didier Queloz shared the 2019 Nobel Prize in Physics for the discovery.','The planet was betrayed by a stellar wobble of about 50 metres per second — bicycle pace, read across 50 light-years.','Its formal name, Dimidium, is Latin for “half”, after its half-Jupiter mass.'] },
+
+{ id:'lich', scene:'galaxy', group:'Stars & other suns', type:'exo', name:'PSR B1257+12',
+  kicker:'The Lich · first exoplanets ever, 1992', sub:'Dead worlds circling a dead star',
+  pos:s(-2000,900), mark:4, plate:'pulsar',
+  stats:[['Distance','~2,300 ly'],['Star','Millisecond pulsar, 161 spins/sec'],['Planets','Draugr, Poltergeist, Phobetor'],['Found','1992 — 3 years before 51 Peg b'],['Smallest','Draugr, ~2× the Moon’s mass']],
+  blurb:'The first planets ever found beyond the Solar System orbit not a star like ours but a corpse. In 1992, radio astronomers timing this millisecond pulsar noticed its metronome ticks arriving slightly early and late: three small worlds were tugging it back and forth. Born from the wreckage of a supernova and bathed in its radiation, the system was given names from the undead — Draugr, Poltergeist and Phobetor, circling the Lich.',
+  facts:['Draugr is the least massive exoplanet known — roughly twice the mass of our Moon — detectable only because pulsar timing is absurdly precise.','These are likely second-generation planets, condensed from debris after the supernova, on worlds no life could endure.','History is unfair: the pulsar planets came first, but the Nobel went to the Sun-like discovery of 1995.'] },
+
+/* ---------- the halo & the flung-away ---------- */
+{ id:'s5-hvs1', scene:'galaxy', group:'Black holes & the extreme', type:'star', name:'S5-HVS1',
+  kicker:'Hypervelocity star · ejected by Sgr A*', sub:'A star the black hole threw out of the galaxy',
+  pos:[-17000,46500], mark:4, plate:'star:#cfe0ff',
+  stats:[['Speed','1,755 km/s — 6.3 million km/h'],['Ejected','~5 million yrs ago, by Sgr A*'],['Mechanism','Its binary twin was captured'],['Now','~29,000 ly out, and leaving'],['Fate','Intergalactic space, forever']],
+  blurb:'Around five million years ago a pair of stars strayed too close to Sagittarius A*. The black hole captured one and slung the other away at 1,755 kilometres per second — ten times faster than stars normally move. Astronomers caught it in 2019, still receding, its trajectory pointing straight back at the galactic centre like an accusation. Nothing will slow it enough: it is leaving the Milky Way forever.',
+  facts:['It is the cleanest proof of the “Hills mechanism”, proposed in 1988 — thirty years before this star was seen doing it.','Its abandoned companion presumably still orbits Sagittarius A* among the tight-circling S-stars.','It is really plunging away south of the galactic plane; this flat map can only show it fleeing through the halo.'] },
+
+{ id:'ngc2419', scene:'galaxy', group:'Clusters & neighbours', type:'cluster', name:'NGC 2419',
+  kicker:'Globular cluster · the Intergalactic Wanderer', sub:'A far-flung outpost marking the galaxy’s reach',
+  pos:[-38000,-28000], mark:4, plate:'cluster',
+  stats:[['True distance','~275,000 ly (drawn far nearer)'],['One orbit','~3 billion years'],['Stars','Close to a million'],['Discovered','1788, by William Herschel'],['Nickname','“Intergalactic Wanderer” — wrongly']],
+  blurb:'Most globular clusters huddle near the disc on this map. This one lies so far out — nearly twice the distance of the Magellanic Clouds — that early astronomers doubted it belonged to us at all and dubbed it the Intergalactic Wanderer. The name stuck; the verdict didn’t. It is bound to the Milky Way, crawling around an orbit that takes three billion years, a distant lighthouse marking how far our galaxy’s gravity reaches.',
+  facts:['It has completed at most a handful of orbits in the entire age of the universe.','Its odd chemistry makes some astronomers suspect it is the stolen core of a devoured dwarf galaxy.','It truly lies several map-widths beyond this plate’s edge — drawn here at the rim for navigation.'] },
+
+{ id:'draco-dwarf', scene:'galaxy', group:'Clusters & neighbours', type:'galaxy', name:'Draco Dwarf',
+  kicker:'Dwarf spheroidal · almost pure dark matter', sub:'A whole galaxy dimmer than a single bright star',
+  pos:[-26000,-49000], mark:4, plate:'satgal',
+  stats:[['True distance','~260,000 ly (drawn nearer)'],['Total light','~200,000 Suns — about one Deneb'],['Dark matter','Vastly outweighs its stars'],['Stars','Ancient — over 10 billion yrs'],['Discovered','1954, on Palomar survey plates']],
+  blurb:'All of this galaxy’s stars together shine with a few hundred thousand Suns — about the output of the single star Deneb. Yet those faint stars swarm far too fast for the feeble gravity of what glows: something unseen outweighs them enormously. Draco is one of the most dark-matter-dominated objects known, a ghost galaxy that is mostly the invisible stuff, held together by mass we can only infer.',
+  facts:['Dwarfs like this are prime hunting grounds for dark matter’s nature — almost nothing luminous gets in the way.','The Milky Way keeps a whole entourage of these ghosts: over fifty satellite dwarfs are now known, with more found nearly every year.'] }
+);
+
 /* ============ OTHER WORLDS · enterable exoplanet systems ============
    Two real systems rendered as mini-orreries. Orbit radii are map units
    (compressed); periods are real, so the resonant clockwork is genuine. */
@@ -2945,6 +3067,35 @@ function drawPlate(o) {
       g.fillRect(t * 330, yy, pick > .95 ? 3 : pick > .75 ? 2 : 1, 1.5);
     }
     g.globalAlpha = 1;
+  } else if (kind === 'fermi') {          // twin gamma-ray lobes towering over the edge-on disc
+    for (const dir of [1, -1]) {
+      glowBlob(g, 0, dir * 105, 95, 'rgba(179,156,255,.5)', .8);
+      glowBlob(g, 0, dir * 78, 58, 'rgba(232,143,184,.35)', .8);
+      g.strokeStyle = 'rgba(200,180,255,.45)'; g.lineWidth = 2;
+      g.beginPath(); g.ellipse(0, dir * 100, 76, 92, 0, 0, 6.283); g.stroke();
+    }
+    const rnd = mulberry(o.name.length * 11);              // the disc, seen side-on
+    for (let i = 0; i < 260; i++) {
+      const x = (rnd() * 2 - 1) * 210, y = gauss(rnd) * 7;
+      g.fillStyle = rnd() < .6 ? '#ffdfae' : '#eef4ff'; g.globalAlpha = .3 + rnd() * .5;
+      g.fillRect(x, y, rnd() > .9 ? 2 : 1, 1.5);
+    }
+    g.globalAlpha = 1;
+    glowBlob(g, 0, 0, 40, 'rgba(255,220,170,.8)', .9);     // the core that blew them
+  } else if (kind === 'shell') {          // a supernova-blown cavity with the Sun adrift inside
+    const rnd = mulberry(o.name.length * 19);
+    glowBlob(g, 0, 0, 190, 'rgba(127,149,201,.18)', 1);
+    g.strokeStyle = 'rgba(143,216,201,.4)'; g.lineWidth = 3;
+    g.beginPath(); g.ellipse(0, 4, 158, 112, -.2, 0, 6.283); g.stroke();
+    for (let i = 0; i < 46; i++) {                          // young stars strung along the wall
+      const a = rnd() * 6.283;
+      const x = Math.cos(a) * (152 + gauss(rnd) * 9), y = 4 + Math.sin(a) * (108 + gauss(rnd) * 8);
+      g.fillStyle = rnd() < .7 ? '#cfe0ff' : '#eef4ff'; g.globalAlpha = .4 + rnd() * .6;
+      g.fillRect(x, y, rnd() > .85 ? 2 : 1, 2);
+    }
+    g.globalAlpha = 1;
+    glowBlob(g, -26, -8, 26, 'rgba(255,217,142,.9)', .9);   // the Sun, mid-crossing
+    shadeBall2(g, -26, -8, 7, '#fff7e0', '#ffd98e', '#8a6a30');
   } else if (kind === 'satgal') {
     const rnd = mulberry(5);
     glowBlob(g, 0, 0, 170, 'rgba(201,169,232,.25)', 1);
@@ -4283,6 +4434,11 @@ const QUIZ = [
 { q:'Europa is a top target in the search for life because…', c:['It hides a saltwater ocean under its ice','It has oxygen air','It is warm','Plants were seen there'], a:0, ref:'jupiter', why:'Beneath the ice lies more liquid water than in all of Earth’s seas.' },
 { q:'A “planetary nebula” like the Ring Nebula is actually…', c:['A dying Sun-like star shedding its layers','A place where planets form','A planet exploding','A galaxy'], a:0, ref:'m57', why:'An 18th-century misnomer — it is a star’s gentle retirement, and our Sun’s own future.' },
 { q:'Asteroids in the main belt are, on average, spaced about…', c:['A million kilometres apart','A few metres apart','Touching each other','One kilometre apart'], a:0, ref:'belt', why:'Forget the movies — probes fly through without even aiming.' },
+{ q:'The Fermi Bubbles are…', c:['Giant lobes of hot gas blown out of the galaxy’s core','Bubbles of dark matter','Storms on Jupiter','Air pockets on the Moon'], a:0, ref:'fermi-bubbles', why:'Twin lobes towering ~25,000 ly above and below the disc — likely exhaust from an outburst of Sagittarius A*.' },
+{ q:'The first planets found outside the Solar System orbit…', c:['A dead, spinning pulsar','A Sun-like star','A black hole','A red dwarf'], a:0, ref:'lich', why:'PSR B1257+12, in 1992 — three years before the first planet of a Sun-like star was found.' },
+{ q:'The Sun is currently drifting through…', c:['A 1,000 ly cavity blown out by supernovae','A dense dust cloud','The galactic bar','A globular cluster'], a:0, ref:'local-bubble', why:'The Local Bubble — nearly all the young stars around us formed on its swept-up shell.' },
+{ q:'The star S5-HVS1 is leaving the galaxy forever because…', c:['The central black hole flung it out at 1,755 km/s','Its fuel ran out','It exploded','Dark matter pushed it'], a:0, ref:'s5-hvs1', why:'It strayed too close to Sagittarius A* as a binary; its twin was captured and it was hurled away — the Hills mechanism in action.' },
+{ q:'The gas cloud Sagittarius B2, near the galactic centre, contains…', c:['The molecule that gives raspberries their flavour','Breathable oxygen','Liquid water oceans','Gold dust'], a:0, ref:'sgr-b2', why:'Ethyl formate — raspberry flavour, rum smell — drifting through three million Suns’ worth of gas.' },
 ];
 let qRound = [], qIdx = 0, qScore = 0, qDone = false;
 function shuffle(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
