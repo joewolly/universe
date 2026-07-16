@@ -2106,7 +2106,14 @@ CAT.push(
   pos:[-26000,-49000], mark:4, plate:'satgal',
   stats:[['True distance','~260,000 ly (drawn nearer)'],['Total light','~200,000 Suns — about one Deneb'],['Dark matter','Vastly outweighs its stars'],['Stars','Ancient — over 10 billion yrs'],['Discovered','1954, on Palomar survey plates']],
   blurb:'All of this galaxy’s stars together shine with a few hundred thousand Suns — about the output of the single star Deneb. Yet those faint stars swarm far too fast for the feeble gravity of what glows: something unseen outweighs them enormously. Draco is one of the most dark-matter-dominated objects known, a ghost galaxy that is mostly the invisible stuff, held together by mass we can only infer.',
-  facts:['Dwarfs like this are prime hunting grounds for dark matter’s nature — almost nothing luminous gets in the way.','The Milky Way keeps a whole entourage of these ghosts: over fifty satellite dwarfs are now known, with more found nearly every year.'] }
+  facts:['Dwarfs like this are prime hunting grounds for dark matter’s nature — almost nothing luminous gets in the way.','The Milky Way keeps a whole entourage of these ghosts: over fifty satellite dwarfs are now known, with more found nearly every year.'] },
+
+{ id:'sgr-stream', scene:'galaxy', group:'Clusters & neighbours', type:'region', name:'Sagittarius Stream',
+  kicker:'Tidal stream · a devoured galaxy’s wake', sub:'A river of stolen stars wrapped around the whole galaxy',
+  pos:[-45900,-3200], mark:4, plate:'stream',
+  stats:[['Extent','Loops the entire Milky Way'],['Source','The Sagittarius Dwarf'],['Torn out over','Billions of years, orbit by orbit'],['Carries','Stars and kidnapped globular clusters'],['Used for','Weighing the dark-matter halo']],
+  blurb:'The faint ring of old stars you can trace looping around the rim of this map is a crime scene: the unravelling body of the Sagittarius Dwarf, pulled apart strand by strand on every orbit and left wrapped around the Milky Way like thread on a spool. Streams like this are galactic archaeology — each one is the fossil record of a meal our galaxy has eaten.',
+  facts:['Its stars wrap the galaxy more than once, in separate leading and trailing ribbons that took two decades to map.','The stream’s shape is one of the best tools we have for weighing the Milky Way’s invisible dark-matter halo — the ribbon bends to gravity we cannot otherwise see.','On this flat map it is drawn as a rim loop; in truth it arcs over and under the disc in a nearly polar ring.'] }
 );
 
 /* ============ OTHER WORLDS · enterable exoplanet systems ============
@@ -2344,6 +2351,33 @@ function buildGalaxySprite() {
     const r0 = GAL.r0 * Math.exp(GAL.b * (theta + 2 * 6.2832 - GAL.spurPhi));
     const rr = r0 + gauss(rnd) * 640;
     dot(rr * Math.cos(theta), rr * Math.sin(theta), 1, rnd() < .7 ? '#d8e6ff' : '#fff', .15 + rnd() * .4);
+  }
+  // anonymous HII regions — soft pink knots of star birth strung along the arm spines
+  for (const phi of arms) {
+    for (let i = 0; i < 80; i++) {
+      const t = Math.pow(rnd(), 1.35);
+      const r0 = 4200 + t * 40000;
+      const theta = Math.log(r0 / GAL.r0) / GAL.b - 4 * Math.PI + phi;
+      const rr = r0 + gauss(rnd) * 420;
+      const [x, y] = px(rr * Math.cos(theta), rr * Math.sin(theta));
+      const rad = 1.6 + rnd() * 3.6;
+      const pink = rnd() < .78;
+      const gl = g.createRadialGradient(x, y, 0, x, y, rad);
+      gl.addColorStop(0, pink ? 'rgba(255,150,190,.55)' : 'rgba(150,200,255,.5)');
+      gl.addColorStop(1, pink ? 'rgba(255,150,190,0)' : 'rgba(150,200,255,0)');
+      g.globalAlpha = .4 + rnd() * .5; g.fillStyle = gl;
+      g.beginPath(); g.arc(x, y, rad, 0, 6.283); g.fill();
+    }
+  }
+  g.globalAlpha = 1;
+  // the Sagittarius Stream — a faint ribbon of stolen, ancient stars looping the whole disc
+  const strA = .07, sca = Math.cos(strA), ssa = Math.sin(strA);
+  for (let i = 0; i < 3600; i++) {
+    const u = rnd() * 6.283, w = 1 + gauss(rnd) * .03;
+    const ex = Math.cos(u) * 46000 * w, ey = Math.sin(u) * 51000 * w;
+    const wx = ex * sca - ey * ssa + gauss(rnd) * 800;
+    const wy = ex * ssa + ey * sca + gauss(rnd) * 800;
+    dot(wx, wy, rnd() > .93 ? 2 : 1, rnd() < .7 ? '#d8cdbc' : '#cfc0d8', .08 + rnd() * .14);
   }
   // soft disk glow
   const [cx, cy] = px(0, 0);
@@ -3096,6 +3130,19 @@ function drawPlate(o) {
     g.globalAlpha = 1;
     glowBlob(g, -26, -8, 26, 'rgba(255,217,142,.9)', .9);   // the Sun, mid-crossing
     shadeBall2(g, -26, -8, 7, '#fff7e0', '#ffd98e', '#8a6a30');
+  } else if (kind === 'stream') {         // a thin ribbon of ancient stars arcing past
+    const rnd = mulberry(o.name.length * 29);
+    g.strokeStyle = 'rgba(216,201,184,.1)'; g.lineWidth = 40;
+    g.beginPath(); g.arc(0, 300, 360, -2.32, -0.82); g.stroke();
+    for (let i = 0; i < 380; i++) {
+      const a = -2.32 + rnd() * 1.5;
+      const r = 360 + gauss(rnd) * 14;
+      g.fillStyle = rnd() < .7 ? '#e8dcc8' : '#d8c9e0'; g.globalAlpha = .25 + rnd() * .6;
+      g.fillRect(Math.cos(a) * r, 300 + Math.sin(a) * r, rnd() > .9 ? 2 : 1, 1.5);
+    }
+    g.globalAlpha = 1;
+    const da = -1.05;                     // the dwarf itself, still shedding stars
+    glowBlob(g, Math.cos(da) * 360, 300 + Math.sin(da) * 360, 34, 'rgba(201,169,232,.55)', .85);
   } else if (kind === 'satgal') {
     const rnd = mulberry(5);
     glowBlob(g, 0, 0, 170, 'rgba(201,169,232,.25)', 1);
@@ -4439,6 +4486,7 @@ const QUIZ = [
 { q:'The Sun is currently drifting through…', c:['A 1,000 ly cavity blown out by supernovae','A dense dust cloud','The galactic bar','A globular cluster'], a:0, ref:'local-bubble', why:'The Local Bubble — nearly all the young stars around us formed on its swept-up shell.' },
 { q:'The star S5-HVS1 is leaving the galaxy forever because…', c:['The central black hole flung it out at 1,755 km/s','Its fuel ran out','It exploded','Dark matter pushed it'], a:0, ref:'s5-hvs1', why:'It strayed too close to Sagittarius A* as a binary; its twin was captured and it was hurled away — the Hills mechanism in action.' },
 { q:'The gas cloud Sagittarius B2, near the galactic centre, contains…', c:['The molecule that gives raspberries their flavour','Breathable oxygen','Liquid water oceans','Gold dust'], a:0, ref:'sgr-b2', why:'Ethyl formate — raspberry flavour, rum smell — drifting through three million Suns’ worth of gas.' },
+{ q:'The Sagittarius Stream, looping around the whole galaxy, is…', c:['Stars torn from a dwarf galaxy being devoured','A river of gas from the Sun','A ring of comets','An optical illusion'], a:0, ref:'sgr-stream', why:'The unravelled body of the Sagittarius Dwarf, wrapped around the Milky Way like thread on a spool.' },
 ];
 let qRound = [], qIdx = 0, qScore = 0, qDone = false;
 function shuffle(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
