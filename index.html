@@ -330,6 +330,41 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
 .hfChip.on{color:var(--ember-hot);border-color:rgba(240,167,92,.6);background:rgba(240,167,92,.1)}
 #hfRate{font-family:var(--mono);font-size:10px;color:var(--haze-dim);letter-spacing:.08em;min-height:13px}
 
+/* ---------- star types primer ---------- */
+#spectra{
+  position:fixed;inset:0;z-index:45;display:flex;align-items:center;justify-content:center;
+  background:rgba(4,6,12,.74);backdrop-filter:blur(5px);padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+#spectra.open{opacity:1;pointer-events:auto}
+#spBox{
+  position:relative;width:min(520px,100%);max-height:min(680px,92vh);overflow-y:auto;
+  background:var(--panel);border:var(--hairline);border-radius:5px;
+  padding:26px 28px 20px;box-shadow:0 30px 80px rgba(0,0,0,.55);scrollbar-width:thin;
+}
+#spBox .k{font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--ember);margin-bottom:8px}
+#spBox h2{font-family:var(--display);font-weight:400;font-size:22px;margin-bottom:10px}
+.spIntro{font-size:12.5px;color:var(--haze);line-height:1.55;margin-bottom:14px}
+.spIntro b{color:var(--starlight);letter-spacing:.1em}
+.spFoot{font-size:11.5px;color:var(--haze);line-height:1.55;margin-top:14px}
+.spFoot i{font-style:italic;color:var(--starlight)}
+#spClose{position:absolute;top:12px;right:12px;width:30px;height:30px;display:flex;
+  align-items:center;justify-content:center;color:var(--haze);font-size:18px;border-radius:3px}
+#spClose:hover{color:var(--starlight)}
+#spRows{display:flex;flex-direction:column}
+.spRow{display:flex;align-items:center;gap:14px;padding:7px 2px;border-top:var(--hairline)}
+.spBallWrap{width:38px;display:flex;align-items:center;justify-content:center;flex:none}
+.spBall{border-radius:50%}
+.spCls{font-family:var(--display);font-size:22px;width:26px;text-align:center;flex:none}
+.spInfo{flex:1;display:flex;flex-direction:column;gap:1px;font-family:var(--mono)}
+.spInfo b{font-size:11.5px;color:var(--starlight);font-weight:400;letter-spacing:.04em}
+.spInfo i{font-style:normal;font-size:10px;color:var(--haze);letter-spacing:.05em}
+.spVisit{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--haze);border:var(--hairline);border-radius:3px;padding:5px 9px;flex:none;
+  transition:color .15s,border-color .15s}
+.spVisit:hover{color:var(--ember-hot);border-color:rgba(240,167,92,.45)}
+
 #quiz{
   position:fixed;inset:0;z-index:46;display:flex;align-items:center;justify-content:center;
   background:rgba(4,6,12,.74);backdrop-filter:blur(5px);padding:20px;
@@ -527,7 +562,9 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   <button class="ctl" id="skyBtn" title="The constellations, as seen from Earth">&#10038; Night sky</button>
   <button class="ctl" id="scaleBtn" title="Moon to Betelgeuse at true relative scale — the one honest view">&#9678; How big?</button>
   <button class="ctl" id="farBtn" title="Watch light crawl between any two worlds — real light-travel times">&#10142; How far?</button>
+  <button class="ctl" id="spectraBtn" title="How to read starlight — the spectral classes, O B A F G K M">&#10038; Spectra</button>
   <button class="ctl" id="luckyBtn" title="Fly somewhere unexplored">&#10022; Surprise me</button>
+  <button class="ctl" id="rulerBtn" title="Measure the map — click two points for the distance in light-years">Ruler</button>
   <button class="ctl" id="gridBtn" title="Galactic coordinate grid — longitude from the Sun, distance rings from the core">Grid</button>
   <button class="ctl on" id="lblBtn" title="Toggle labels">Labels</button>
   <button class="ctl" id="zoomOut" title="Zoom out">&minus;</button>
@@ -593,6 +630,17 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   <button class="tourOpt" data-tour="deaths"><b>Deaths of stars</b><span>How suns end: gently, violently, strangely</span></button>
   <button class="tourOpt" data-tour="life"><b>Could life be there?</b><span>The ocean moons and other Earths</span></button>
   <button class="tourOpt" data-tour="bones"><b>Bones of the galaxy</b><span>The anatomy: core, bar, arms, bubbles, streams, halo</span></button>
+</div>
+
+<div id="spectra" role="dialog" aria-modal="true" aria-label="Star types: the spectral sequence">
+  <div id="spBox">
+    <button id="spClose" aria-label="Close">&times;</button>
+    <div class="k">Reading starlight</div>
+    <h2>The stellar alphabet</h2>
+    <p class="spIntro">Astronomers sort stars by surface temperature, hottest to coolest: <b>O&nbsp;B&nbsp;A&nbsp;F&nbsp;G&nbsp;K&nbsp;M</b>. Colour gives it away — blue-white runs tens of thousands of degrees, deep red barely four thousand. And hot means brief: the fiercer a star burns, the sooner it dies.</p>
+    <div id="spRows"></div>
+    <p class="spFoot">Sizes drawn follow the main sequence; giants and supergiants (Arcturus, Betelgeuse) break the rule — cool, yet enormous. The classic mnemonic: <i>Oh Be A Fine Girl/Guy, Kiss Me.</i></p>
+  </div>
 </div>
 
 <div id="hopbar">
@@ -2193,7 +2241,14 @@ CAT.push(
   pos:[27000,-33000], mark:4, plate:'satgal',
   stats:[['Merged','~10 billion yrs ago'],['Then','~A quarter the Milky Way’s size'],['Now','Most of the inner stellar halo'],['Found','2018, in Gaia’s star-motion maps'],['Brought along','Several globular clusters']],
   blurb:'The biggest thing the Milky Way ever ate. Ten billion years ago a galaxy a quarter our size fell in, and the collision was so thorough that nothing of it survives as an object — no core, no disk, only motion. In 2018 the Gaia spacecraft measured the orbits of a billion stars and found the wreck: a vast population of halo stars still swinging on the strange, plunging paths of their dead parent galaxy.',
-  facts:['This marker is a courtesy — Gaia–Enceladus is not in one place; its stars are strewn through the entire halo, all around you on this map.','The impact likely puffed up the Milky Way’s thick disk and reset the young galaxy’s structure.','It was found not by looking at stars but at how they move — galactic archaeology, done with orbits for fossils.'] }
+  facts:['This marker is a courtesy — Gaia–Enceladus is not in one place; its stars are strewn through the entire halo, all around you on this map.','The impact likely puffed up the Milky Way’s thick disk and reset the young galaxy’s structure.','It was found not by looking at stars but at how they move — galactic archaeology, done with orbits for fossils.'] },
+
+{ id:'naos', scene:'galaxy', group:'Stars & other suns', type:'star', name:'Naos',
+  kicker:'ζ Puppis · O-type supergiant', sub:'The hottest star your naked eye can find',
+  pos:s(-350,1050), mark:4, plate:'star:#9bb0ff',
+  stats:[['Distance','~1,100 ly'],['Surface','~40,000 °C — blue-violet'],['Luminosity','~500,000× the Sun, mostly ultraviolet'],['Wind','~2,200 km/s — a permanent hurricane of plasma'],['Class','O — rarest of all, about 1 star in 3 million']],
+  blurb:'The standard-bearer of class O, the hottest and rarest letter in the stellar alphabet. Its surface burns seven times hotter than the Sun’s, so fierce that most of its light is ultraviolet we cannot see — the blue-white point in Puppis is only the spill-over. It is also a runaway, kicked out of its birthplace and crossing the sky alone at tremendous speed, and like every O star it is living fast on borrowed time.',
+  facts:['Its stellar wind carries off roughly an Earth’s worth of mass each year at 2,200 km/s — the star is visibly dismantling itself.','The name is Greek for “ship”: it marks the stern of Argo, the vast dismembered constellation of the Argonauts’ vessel.','O stars are so rare and short-lived that none sits within 1,000 light-years of Earth — Naos is about as close as the class gets.'] }
 );
 
 /* ============ OTHER WORLDS · enterable exoplanet systems ============
@@ -2331,7 +2386,8 @@ const state = {
   hover: null,
   follow: null,
   labels: true,
-  grid: false,                      // galactic coordinate overlay (galaxy scene)
+  grid: false,                      // coordinate overlay (galaxy & sky scenes)
+  measure: { on: false, a: null, b: null, fixed: false },   // the ruler
   timeScale: 1,                     // solar orbit speed multiplier
   simDays: 0,
   fade: 0, fadeDir: 0, fadeCb: null,
@@ -2609,6 +2665,7 @@ function drawGalaxy() {
   ctx.restore();
 
   if (state.grid) drawGrid();
+  drawMeasure();
   for (const o of GALAXY_OBJS) drawMarker(o);
   // labels afterwards, important objects claim space first
   const placed = [];
@@ -2662,6 +2719,45 @@ function drawGrid() {
     }
   }
   ctx.restore();
+}
+
+/* ---------- the ruler · click-to-measure ---------- */
+function fmtDist(ly) {
+  const f = v => v < 100 ? (Math.round(v * 10) / 10).toLocaleString('en-US') : Math.round(v).toLocaleString('en-US');
+  return f(ly) + ' ly · ' + f(ly / 3.2616) + ' pc';
+}
+function drawMeasure() {
+  const m = state.measure;
+  if (!m.a) return;
+  const [ax, ay] = w2s(...m.a);
+  const [bx, by] = w2s(...(m.b || m.a));
+  ctx.save();
+  ctx.strokeStyle = 'rgba(240,167,92,.85)'; ctx.lineWidth = 1.2;
+  ctx.setLineDash([6, 5]);
+  ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke();
+  ctx.setLineDash([]);
+  for (const [x, y] of [[ax, ay], [bx, by]]) {
+    ctx.beginPath(); ctx.arc(x, y, 3.5, 0, 6.283); ctx.stroke();
+  }
+  if (m.b) {
+    const d = Math.hypot(m.b[0] - m.a[0], m.b[1] - m.a[1]);
+    const mx = (ax + bx) / 2, my = (ay + by) / 2;
+    const txt = fmtDist(d);
+    ctx.font = '600 11px ui-monospace, Menlo, Consolas, monospace';
+    const tw = ctx.measureText(txt).width;
+    ctx.fillStyle = 'rgba(4,7,15,.85)';
+    ctx.fillRect(mx - tw / 2 - 7, my - 24, tw + 14, 18);
+    ctx.fillStyle = '#f0a75c'; ctx.textAlign = 'center';
+    ctx.fillText(txt, mx, my - 11);
+  }
+  ctx.restore();
+}
+function toggleRuler(force) {
+  const on = force !== undefined ? force : !state.measure.on;
+  state.measure = { on, a: null, b: null, fixed: false };
+  $('rulerBtn').classList.toggle('on', on);
+  canvas.style.cursor = on ? 'crosshair' : '';
+  if (!on) tip.style.opacity = 0;
 }
 
 const MARKER_GLYPHS = { region: 'ring', galaxy: 'ring', belt: 'ring' };
@@ -3679,7 +3775,9 @@ function syncSceneUI() {
   $('tonightBtn').style.display = sky ? 'flex' : 'none';
   $('latBtn').style.display = sky ? 'flex' : 'none';
   $('hopBtn').style.display = sky ? 'flex' : 'none';
-  $('gridBtn').style.display = (solar || sky || exo) ? 'none' : 'flex';
+  $('gridBtn').style.display = (solar || exo) ? 'none' : 'flex';
+  $('rulerBtn').style.display = (solar || sky || exo) ? 'none' : 'flex';
+  if (state.scene !== 'galaxy' && state.measure.on) toggleRuler(false);
   if (!sky && $('hopbar').classList.contains('show')) endHop();
   $('crumbTxt').textContent = exo ? EXO_SYSTEMS[state.system].label
     : sky ? 'Night sky · seen from Earth'
@@ -3815,6 +3913,12 @@ function pickAt(sx, sy) {
   return best;
 }
 function clickAt(sx, sy) {
+  if (state.measure.on && state.scene === 'galaxy') {
+    const m = state.measure;
+    if (!m.a || m.fixed) { m.a = s2w(sx, sy); m.b = null; m.fixed = false; }
+    else { m.b = s2w(sx, sy); m.fixed = true; }
+    return;
+  }
   if (hop.on && state.scene === 'sky') { hopGuess(pickAt(sx, sy)); return; }
   const t = tonightPickAt(sx, sy);
   if (t) { goTo(tonightCardFor(t)); return; }
@@ -3823,6 +3927,14 @@ function clickAt(sx, sy) {
 }
 const tip = $('tip');
 function hoverAt(sx, sy) {
+  if (state.measure.on && state.scene === 'galaxy') {
+    const m = state.measure;
+    if (m.a && !m.fixed) m.b = s2w(sx, sy);
+    tip.textContent = !m.a ? 'RULER · CLICK FIRST POINT' : m.fixed ? 'CLICK TO MEASURE AGAIN' : 'CLICK SECOND POINT';
+    tip.style.left = sx + 'px'; tip.style.top = sy + 'px'; tip.style.opacity = 1;
+    state.hover = null; canvas.classList.remove('hovering');
+    return;
+  }
   const t = tonightPickAt(sx, sy);
   const o = t ? { id: 'tp-' + t.key, name: t.name } : pickAt(sx, sy);
   state.hover = o ? o.id : null;
@@ -3895,6 +4007,7 @@ $('gridBtn').onclick = () => {
   state.grid = !state.grid;
   $('gridBtn').classList.toggle('on', state.grid);
 };
+$('rulerBtn').onclick = () => toggleRuler();
 $('luckyBtn').onclick = () => {
   const pool0 = CAT.filter(o => !state.visited.has(o.id));
   const pool = pool0.length ? pool0 : CAT;
@@ -3912,7 +4025,9 @@ addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     if ($('howbig').classList.contains('open')) closeHowBig();
     else if ($('howfar').classList.contains('open')) closeHowFar();
+    else if ($('spectra').classList.contains('open')) closeSpectra();
     else if ($('quiz').classList.contains('open')) endQuiz();
+    else if (state.measure.on) toggleRuler(false);
     else if (card.classList.contains('open')) closeCard();
     else if (atlasOpen) toggleAtlas(false);
     else if (state.scene === 'solar') exitSolar();
@@ -4072,6 +4187,40 @@ function buildSkySprite() {
 
 function starR(mag) { return Math.max(1.3, 5.4 - mag * 1.05); }
 
+/* ---------- RA/Dec graticule · study overlay ----------
+   The chart is equirectangular: x = (12h − RA)·15°, y = −Dec.
+   Hour circles every 2h of right ascension; parallels every 15° of declination. */
+function drawSkyGrid() {
+  const C = 'rgba(127,149,201,';
+  ctx.save();
+  ctx.lineWidth = 1;
+  ctx.font = '9.5px ui-monospace, Menlo, Consolas, monospace';
+  ctx.textAlign = 'center';
+  for (let dec = -75; dec <= 75; dec += 15) {          // declination parallels
+    const eq = dec === 0;
+    const [x0, y0] = w2s(-180, -dec), [x1] = w2s(180, -dec);
+    ctx.strokeStyle = C + (eq ? '.42)' : '.16)');
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y0); ctx.stroke();
+    if (!eq) {
+      const [lx, ly] = w2s(0, -dec);
+      ctx.fillStyle = C + '.7)';
+      ctx.fillText((dec > 0 ? '+' : '−') + Math.abs(dec) + '°', lx + 17, ly - 3);
+    }
+  }
+  { const [lx, ly] = w2s(-148, 0);                     // the equator, named
+    ctx.fillStyle = C + '.85)';
+    ctx.fillText('celestial equator', lx, ly - 4); }
+  for (let h = 0; h < 24; h += 2) {                    // hour circles
+    const x = (12 - h) * 15;
+    const [x0, y0] = w2s(x, -88), [, y1] = w2s(x, 88);
+    ctx.strokeStyle = C + (h % 6 === 0 ? '.3)' : '.15)');
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0, y1); ctx.stroke();
+    const [tx, ty] = w2s(x, 3.4);
+    ctx.fillStyle = C + (h % 6 === 0 ? '.85)' : '.55)');
+    ctx.fillText(h + 'h', tx, ty);
+  }
+  ctx.restore();
+}
 function drawSky() {
   ctx.save();
   ctx.translate(state.W / 2, state.H / 2);
@@ -4079,6 +4228,7 @@ function drawSky() {
   ctx.translate(-state.cam.x, -state.cam.y);
   ctx.drawImage(SKY_SPRITE, -200, -100, 400, 200);
   ctx.restore();
+  if (state.grid) drawSkyGrid();
   const z = state.cam.z;
 
   for (const c of SKY_OBJS) {
@@ -4673,6 +4823,8 @@ const QUIZ = [
 { q:'The Coalsack looks like a hole in the Milky Way because…', c:['Cold dust blocks the starlight behind it','No stars ever formed there','A black hole swallowed the light','It is a camera artefact'], a:0, ref:'coalsack', why:'A dark nebula — a wall of dust, and a stellar nursery that has not switched on yet.' },
 { q:'Gaia–Enceladus is…', c:['The wreck of a galaxy ours swallowed ~10 billion years ago','A moon of Saturn','A space telescope','A comet'], a:0, ref:'gaia-enceladus', why:'Found in 2018 from stellar orbits: most of the inner halo is debris of this one ancient merger. (Saturn’s moon shares the giant’s name.)' },
 { q:'Out at its rim, the Milky Way’s disc is…', c:['Warped — bent up on one side, down on the other','Perfectly flat','A solid ring','Missing entirely'], a:0, ref:'warp', why:'Traced by Cepheid stars in 2019: the outer disc bends like a hat brim and slowly wobbles.' },
+{ q:'A star’s colour directly tells you its…', c:['Surface temperature','Distance from Earth','Age in years','Number of planets'], a:0, ref:'naos', why:'Blue-white means tens of thousands of degrees; deep red means a cool surface. The sequence runs O B A F G K M, hottest to coolest.' },
+{ q:'Which kind of star lives longest?', c:['A dim red dwarf','A blazing blue giant','A star like the Sun','They all live equally long'], a:0, ref:'barnard', why:'The fiercer a star burns, the sooner it dies: blue giants last millions of years, red dwarfs for trillions.' },
 ];
 let qRound = [], qIdx = 0, qScore = 0, qDone = false;
 function shuffle(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
@@ -5032,6 +5184,42 @@ function openTonight() {
   }, REDUCED ? 60 : 780);
 }
 $('welcomeTonight').onclick = openTonight;
+
+/* ============ STAR TYPES · the spectral primer ============
+   One card of theory: the OBAFGKM sequence, each class anchored to a
+   star already in the catalog so reading leads straight to visiting. */
+const SPECTRA = [
+  ['O', '#9bb0ff', 34, '> 30,000 °C',        'lives a few million yrs',  'naos',       'Naos'],
+  ['B', '#aabfff', 27, '10,000–30,000 °C',   'lives ~10–100 million yrs','rigel',      'Rigel'],
+  ['A', '#cad8ff', 22, '7,500–10,000 °C',    'lives ~1 billion yrs',     'sirius',     'Sirius'],
+  ['F', '#f6f2ff', 19, '6,000–7,500 °C',     'lives ~4 billion yrs',     'procyon',    'Procyon'],
+  ['G', '#fff0d4', 17, '5,200–6,000 °C',     'lives ~10 billion yrs',    'sun-system', 'The Sun'],
+  ['K', '#ffd9a8', 14, '3,700–5,200 °C',     'lives ~30 billion yrs',    'arcturus',   'Arcturus'],
+  ['M', '#ff9d6b', 11, '< 3,700 °C',         'lives for trillions of yrs','betelgeuse', 'Betelgeuse'],
+];
+(function buildSpectra() {
+  const rows = $('spRows');
+  for (const [cls, col, sz, temp, life, ref, nm] of SPECTRA) {
+    const r = document.createElement('div');
+    r.className = 'spRow';
+    r.innerHTML = `
+      <span class="spBallWrap"><span class="spBall" style="width:${sz}px;height:${sz}px;
+        background:radial-gradient(circle at 35% 32%, #fff, ${col} 55%, rgba(10,8,6,.6));
+        box-shadow:0 0 ${Math.round(sz * .8)}px ${col}"></span></span>
+      <span class="spCls" style="color:${col}">${cls}</span>
+      <span class="spInfo"><b>${temp}</b><i>${life}</i></span>
+      <button class="spVisit" data-ref="${ref}">${nm} &rarr;</button>`;
+    rows.appendChild(r);
+  }
+  rows.querySelectorAll('.spVisit').forEach(b => {
+    b.onclick = () => { closeSpectra(); goTo(CAT.find(o => o.id === b.dataset.ref)); };
+  });
+})();
+function openSpectra() { $('spectra').classList.add('open'); sfxOpen(); }
+function closeSpectra() { $('spectra').classList.remove('open'); }
+$('spectraBtn').onclick = openSpectra;
+$('spClose').onclick = closeSpectra;
+$('spectra').addEventListener('pointerdown', e => { if (e.target === $('spectra')) closeSpectra(); });
 
 /* ---------- guided tours ---------- */
 const TOURS = {
