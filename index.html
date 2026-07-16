@@ -2805,24 +2805,45 @@ function drawMarker(o) {
   }
   ctx.restore();
 }
+/* Cartographic reveal: a label must earn its place. Geography (regions,
+   companion galaxies) reads at a glance; the crowd of stars, clusters and
+   nebulae surfaces progressively as you zoom toward it. Explicit
+   minLabelZoom (the tight knots near the Sun and the core) still wins. */
+function labelZoom(o) {
+  let t;
+  if (o.mark >= 7) t = 0;
+  else if (o.type === 'region') t = 0;
+  else if (o.type === 'galaxy') t = o.mark >= 5 ? 0 : .011;
+  else t = o.mark >= 6 ? .011 : o.mark >= 5 ? .02 : .06;
+  return Math.max(t, o.minLabelZoom || 0);
+}
 function drawLabel(o, placed) {
   const sel = state.selected === o.id, hov = state.hover === o.id;
-  const showLbl = state.labels && state.cam.z >= (o.minLabelZoom || 0);
-  if (!showLbl && !hov && !sel) return;
+  const t = labelZoom(o);
+  // fade in across a zoom band instead of popping
+  const a = t === 0 ? 1 : Math.max(0, Math.min((state.cam.z - t) / (t * .7), 1));
+  if ((!state.labels || a <= 0) && !hov && !sel) return;
   const [x, y] = w2s(...objWorldPos(o));
   if (x < -60 || y < -60 || x > state.W + 60 || y > state.H + 60) return;
-  ctx.font = '10.5px ui-monospace, Menlo, Consolas, monospace';
+  const geo = o.type === 'region';       // geography reads spaced-out, like a map
+  ctx.save();
+  ctx.font = (geo ? '9.5px' : '10px') + ' ui-monospace, Menlo, Consolas, monospace';
+  ctx.letterSpacing = geo ? '3px' : '0.5px';
   const wTxt = ctx.measureText(o.name.toUpperCase()).width;
   const base = o.mark >= 7 ? 5 : o.mark >= 5 ? 4 : 3.2;
-  const box = { x: x - wTxt / 2 - 4, y: y - base - 22, w: wTxt + 8, h: 16 };
+  const box = { x: x - wTxt / 2 - 5, y: y - base - 23, w: wTxt + 10, h: 17 };
   if (!(sel || hov)) {
     for (const p of placed)
-      if (box.x < p.x + p.w && box.x + box.w > p.x && box.y < p.y + p.h && box.y + box.h > p.y) return;
+      if (box.x < p.x + p.w && box.x + box.w > p.x && box.y < p.y + p.h && box.y + box.h > p.y) { ctx.restore(); return; }
   }
   placed.push(box);
   ctx.textAlign = 'center';
-  ctx.fillStyle = sel || hov ? '#ffc98f' : 'rgba(201,211,228,.78)';
+  ctx.globalAlpha = sel || hov ? 1 : a;
+  ctx.shadowColor = 'rgba(2,4,10,.95)'; ctx.shadowBlur = 4;
+  ctx.fillStyle = sel || hov ? '#ffc98f'
+    : geo ? 'rgba(154,170,199,.55)' : 'rgba(193,204,224,.62)';
   ctx.fillText(o.name.toUpperCase(), x, y - (base + 10));
+  ctx.restore();
 }
 
 /* ---------- solar scene ---------- */
