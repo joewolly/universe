@@ -444,9 +444,11 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
 /* ---------- hover tooltip ---------- */
 #tip{
   position:fixed;z-index:29;pointer-events:none;opacity:0;transition:opacity .12s;
-  font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--starlight);
-  background:rgba(6,10,20,.9);border:var(--hairline);border-radius:3px;padding:5px 9px;
-  transform:translate(-50%,-190%);white-space:nowrap;
+  font-family:var(--mono);font-size:10px;letter-spacing:.24em;color:var(--ember-hot);
+  background:rgba(4,7,15,.72);backdrop-filter:blur(6px);border-radius:2px;
+  border-bottom:1px solid rgba(240,167,92,.45);padding:4px 9px 3px;
+  transform:translate(-50%,-200%);white-space:nowrap;
+  text-shadow:0 1px 6px rgba(2,4,10,.9);
 }
 
 /* ---------- welcome ---------- */
@@ -2674,7 +2676,8 @@ function drawGalaxy() {
   for (const o of byRank) drawLabel(o, placed);
 }
 function pri(o) {
-  return (state.selected === o.id ? 100 : 0) + (state.hover === o.id ? 50 : 0) + o.mark;
+  return (state.selected === o.id ? 100 : 0) + (state.hover === o.id ? 50 : 0) + o.mark
+    + (o.armPhi && o.type === 'region' ? 4 : 0);   // geography letters first, reserves its lane
 }
 
 /* ---------- galactic coordinate grid · study overlay ----------
@@ -2805,24 +2808,86 @@ function drawMarker(o) {
   }
   ctx.restore();
 }
-function drawLabel(o, placed) {
+/* Cartographic reveal: a label must earn its place. Geography (regions,
+   companion galaxies) reads at a glance; the crowd of stars, clusters and
+   nebulae surfaces progressively as you zoom toward it. Explicit
+   minLabelZoom (the tight knots near the Sun and the core) still wins. */
+function labelZoom(o) {
+  let t;
+  if (o.mark >= 7) t = 0;
+  else if (o.type === 'region') t = 0;
+  else if (o.type === 'galaxy') t = o.mark >= 5 ? 0 : .011;
+  else t = o.mark >= 6 ? .011 : o.mark >= 5 ? .02 : .06;
+  return Math.max(t, o.minLabelZoom || 0);
+}
+/* Arm names flow along their own spiral spine, the way rivers are
+   lettered on a paper map. Each character is placed and rotated on the
+   logarithmic curve; the walk direction is chosen to keep text upright. */
+function drawArmLabel(o, placed) {
   const sel = state.selected === o.id, hov = state.hover === o.id;
-  const showLbl = state.labels && state.cam.z >= (o.minLabelZoom || 0);
-  if (!showLbl && !hov && !sel) return;
+  if (!state.labels && !hov && !sel) return;
+  const z = state.cam.z;
+  const pt = th => {
+    const r = GAL.r0 * Math.exp(GAL.b * (th + 4 * Math.PI - o.armPhi));
+    return w2s(r * Math.cos(th), r * Math.sin(th));
+  };
+  const [cx0, cy0] = pt(o.armTheta);
+  if (cx0 < -280 || cy0 < -280 || cx0 > state.W + 280 || cy0 > state.H + 280) return;
+  const txt = o.name.toUpperCase();
+  ctx.save();
+  ctx.font = '9.5px ui-monospace, Menlo, Consolas, monospace';
+  ctx.letterSpacing = '3px';
+  const widths = [...txt].map(ch => ctx.measureText(ch).width);
+  const L = widths.reduce((s, w) => s + w, 0);
+  // screen px per radian of arm at this theta (log-spiral arc length)
+  const pxRad = th => GAL.r0 * Math.exp(GAL.b * (th + 4 * Math.PI - o.armPhi)) * Math.hypot(1, GAL.b) * z;
+  const [ax] = pt(o.armTheta - .01), [bx] = pt(o.armTheta + .01);
+  const dir = bx >= ax ? 1 : -1;
+  let th = o.armTheta - dir * (L / 2) / pxRad(o.armTheta);
+  ctx.textAlign = 'center';
+  ctx.shadowColor = 'rgba(2,4,10,.95)'; ctx.shadowBlur = 4;
+  ctx.fillStyle = sel || hov ? '#ffc98f' : 'rgba(160,176,204,.62)';
+  for (let i = 0; i < txt.length; i++) {
+    th += dir * (widths[i] / 2) / pxRad(th);
+    const [px1, py1] = pt(th), [qx, qy] = pt(th + dir * .01);
+    ctx.save();
+    ctx.translate(px1, py1);
+    ctx.rotate(Math.atan2(qy - py1, qx - px1));
+    ctx.fillText(txt[i], 0, -8);
+    ctx.restore();
+    placed.push({ x: px1 - 9, y: py1 - 20, w: 18, h: 24 });   // reserve the lane, char by char
+    th += dir * (widths[i] / 2) / pxRad(th);
+  }
+  ctx.restore();
+}
+function drawLabel(o, placed) {
+  if (o.armPhi && o.type === 'region') { drawArmLabel(o, placed); return; }
+  const sel = state.selected === o.id, hov = state.hover === o.id;
+  const t = labelZoom(o);
+  // fade in across a zoom band instead of popping
+  const a = t === 0 ? 1 : Math.max(0, Math.min((state.cam.z - t) / (t * .7), 1));
+  if ((!state.labels || a <= 0) && !hov && !sel) return;
   const [x, y] = w2s(...objWorldPos(o));
   if (x < -60 || y < -60 || x > state.W + 60 || y > state.H + 60) return;
-  ctx.font = '10.5px ui-monospace, Menlo, Consolas, monospace';
+  const geo = o.type === 'region';       // geography reads spaced-out, like a map
+  ctx.save();
+  ctx.font = (geo ? '9.5px' : '10px') + ' ui-monospace, Menlo, Consolas, monospace';
+  ctx.letterSpacing = geo ? '3px' : '0.5px';
   const wTxt = ctx.measureText(o.name.toUpperCase()).width;
   const base = o.mark >= 7 ? 5 : o.mark >= 5 ? 4 : 3.2;
-  const box = { x: x - wTxt / 2 - 4, y: y - base - 22, w: wTxt + 8, h: 16 };
+  const box = { x: x - wTxt / 2 - 5, y: y - base - 23, w: wTxt + 10, h: 17 };
   if (!(sel || hov)) {
     for (const p of placed)
-      if (box.x < p.x + p.w && box.x + box.w > p.x && box.y < p.y + p.h && box.y + box.h > p.y) return;
+      if (box.x < p.x + p.w && box.x + box.w > p.x && box.y < p.y + p.h && box.y + box.h > p.y) { ctx.restore(); return; }
   }
   placed.push(box);
   ctx.textAlign = 'center';
-  ctx.fillStyle = sel || hov ? '#ffc98f' : 'rgba(201,211,228,.78)';
+  ctx.globalAlpha = sel || hov ? 1 : a;
+  ctx.shadowColor = 'rgba(2,4,10,.95)'; ctx.shadowBlur = 4;
+  ctx.fillStyle = sel || hov ? '#ffc98f'
+    : geo ? 'rgba(154,170,199,.55)' : 'rgba(193,204,224,.62)';
   ctx.fillText(o.name.toUpperCase(), x, y - (base + 10));
+  ctx.restore();
 }
 
 /* ---------- solar scene ---------- */
@@ -4278,11 +4343,16 @@ function drawSky() {
         ctx.fillStyle = gr;
         ctx.beginPath(); ctx.arc(mx, my, 7, 0, 6.283); ctx.fill();
       }
-      if (z > 3.4) {
+      const da = Math.max(0, Math.min((z - 3) / 1.2, 1));   // deep-sky labels fade in
+      if (da > 0) {
+        ctx.save();
+        ctx.globalAlpha = da;
         ctx.font = '9.5px ui-monospace, Menlo, Consolas, monospace';
         ctx.textAlign = 'center';
-        ctx.fillStyle = m.kind === 'galaxy' ? 'rgba(201,169,232,.9)' : 'rgba(232,143,184,.85)';
+        ctx.shadowColor = 'rgba(2,4,10,.9)'; ctx.shadowBlur = 3;
+        ctx.fillStyle = m.kind === 'galaxy' ? 'rgba(201,169,232,.85)' : 'rgba(232,143,184,.8)';
         ctx.fillText(m.label, mx, m.kind === 'galaxy' ? my + 18 : my - 10);
+        ctx.restore();
       }
     }
     // member stars
@@ -4304,22 +4374,31 @@ function drawSky() {
       }
       ctx.fillStyle = p.red ? '#ffb490' : p.mag < 2 ? '#eef4ff' : '#c2d4ee';
       ctx.beginPath(); ctx.arc(sx, sy, r, 0, 6.283); ctx.fill();
-      if (p.name && (z > 5.5 || hot) && state.labels) {
+      const na = hot ? 1 : Math.max(0, Math.min((z - 5.6) / 1.8, 1));   // star names fade in past the entry view
+      if (p.name && na > 0 && state.labels) {
+        ctx.save();
+        ctx.globalAlpha = na;
         ctx.font = '9.5px ui-monospace, Menlo, Consolas, monospace';
         ctx.textAlign = 'center';
-        ctx.fillStyle = hot ? 'rgba(255,201,143,.9)' : 'rgba(148,163,184,.75)';
+        ctx.shadowColor = 'rgba(2,4,10,.9)'; ctx.shadowBlur = 3;
+        ctx.fillStyle = hot ? 'rgba(255,201,143,.9)' : 'rgba(148,163,184,.68)';
         ctx.fillText(p.name.toUpperCase(), sx, sy - r - 6);
+        ctx.restore();
       }
     }
-    // constellation name
+    // constellation name — sky geography, lettered wide like the arms
     if (state.labels || hot) {
       const [lx, ly] = w2s(c.pos[0], c.pos[1]);
-      ctx.font = '600 12.5px ui-monospace, Menlo, Consolas, monospace';
+      ctx.save();
+      ctx.font = '600 11.5px ui-monospace, Menlo, Consolas, monospace';
+      ctx.letterSpacing = '4px';
       ctx.textAlign = 'center';
       const washed = state.tonight && inGlare(c);
       const below = state.tonight && neverRises(c);
-      ctx.fillStyle = hot ? '#ffc98f' : below ? 'rgba(148,163,184,.35)' : washed ? 'rgba(240,167,92,.45)' : 'rgba(184,207,232,.6)';
+      ctx.shadowColor = 'rgba(2,4,10,.95)'; ctx.shadowBlur = 4;
+      ctx.fillStyle = hot ? '#ffc98f' : below ? 'rgba(148,163,184,.32)' : washed ? 'rgba(240,167,92,.4)' : 'rgba(184,207,232,.5)';
       ctx.fillText(c.name.toUpperCase() + (below ? ' · BELOW YOUR HORIZON' : washed ? ' · IN GLARE' : ''), lx, ly + (c.ext / 2) * z + 22);
+      ctx.restore();
     }
   }
   // meteor-shower radiants: a ring with streaks racing outward
