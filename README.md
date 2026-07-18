@@ -45,7 +45,22 @@ An interactive, hand-drawn survey of our galaxy — a single self-contained
 - **Turn on the instruments** — a fully synthesised soundscape (no audio
   files): soft clicks, discovery chimes, scene-tuned ambient drone, and
   quiz feedback tones. Off by default.
-- **Atlas index** — a grouped list of all 73 objects with a "surveyed"
+- **Ask "How old?"** — the deep-time companion to "How big?" and
+  "How far?": all 13.8 billion years on one logarithmic line, from the
+  Big Bang to tonight, with twenty pinned moments to fly between.
+- **Meet the curiosities** — 'Oumuamua tumbling out of the Solar System,
+  the Wow! signal marked at its true spot in Sagittarius, Tabby's Star,
+  and the glass-rain world HD 189733 b — plus a "Signals & mysteries"
+  guided tour connecting them.
+- **Keep a field journal** — every survey card has a notes box of your
+  own, saved locally per object.
+- **Earn your rank** — surveying plates promotes you from Groundling
+  through Surveyor and Cartographer to Atlas Laureate.
+- **Share any plate** — every card and instrument has a copyable deep
+  link (`#orion-spur`, `#howold`, …).
+- **Steer from the keys** — press `?` for the shortcut card (labels,
+  grid, ruler, night sky, zoom, pan).
+- **Atlas index** — a grouped list of all 224 objects with a "surveyed"
   progress tracker (persisted locally).
 - **Surprise me** — flies you somewhere you haven't explored yet.
 

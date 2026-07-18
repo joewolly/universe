@@ -120,6 +120,10 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   text-transform:uppercase;font-weight:400;
 }
 #atlas header .prog{font-family:var(--mono);font-size:10px;color:var(--haze);letter-spacing:.08em}
+#rankLbl{
+  flex:none;padding:7px 16px 0;font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--ember);
+}
 #atlasSearch{
   margin:10px 12px 2px;padding:7px 10px;flex:none;
   background:rgba(6,10,20,.55);border:var(--hairline);border-radius:3px;
@@ -206,10 +210,18 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   background:linear-gradient(135deg,var(--ember),transparent 70%);
   transform:rotate(45deg);
 }
-#factsHead{
+#factsHead,#notesHead{
   font-family:var(--mono);font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;
   color:var(--ember);margin:0 0 9px;font-weight:400;
 }
+#notesHead{margin-top:16px}
+#cardNotes{
+  width:100%;background:rgba(6,10,20,.72);border:var(--hairline);border-radius:3px;
+  color:var(--starlight);font-family:var(--mono);font-size:12px;line-height:1.55;
+  padding:9px 11px;resize:vertical;min-height:54px;display:block;
+}
+#cardNotes:focus{outline:none;border-color:rgba(240,167,92,.45)}
+#cardNotes::placeholder{color:var(--haze-dim)}
 .cardAction{
   width:100%;margin-top:14px;display:flex;align-items:center;justify-content:center;gap:9px;
   font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;
@@ -239,6 +251,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
 #controls{
   position:fixed;right:calc(18px + var(--sar));bottom:calc(16px + var(--sab));z-index:30;
   display:flex;align-items:center;gap:8px;
+  flex-wrap:wrap;justify-content:flex-end;max-width:min(880px,calc(100vw - 380px));
 }
 .ctl{
   display:flex;align-items:center;justify-content:center;min-width:36px;height:36px;
@@ -288,7 +301,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   font-family:var(--mono);font-size:12px;color:var(--ember-hot);letter-spacing:.05em;
   text-align:center;min-height:16px;
 }
-#hbChips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+#hbChips,#hoChips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
 .hbChip{
   font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
   color:var(--haze);background:var(--panel);border:var(--hairline);border-radius:3px;
@@ -296,7 +309,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
 }
 .hbChip:hover{color:var(--ember-hot);border-color:rgba(240,167,92,.45)}
 .hbChip.on{color:var(--ember-hot);border-color:rgba(240,167,92,.6);background:rgba(240,167,92,.1)}
-#hbSlider{width:min(520px,80vw);accent-color:var(--ember)}
+#hbSlider,#hoSlider{width:min(520px,80vw);accent-color:var(--ember)}
 #hbScaleLbl{font-family:var(--mono);font-size:10px;color:var(--haze-dim);letter-spacing:.08em}
 
 /* ---------- how far? · light-travel explorer ---------- */
@@ -329,6 +342,53 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
 .hfChip:hover{color:var(--ember-hot);border-color:rgba(240,167,92,.45)}
 .hfChip.on{color:var(--ember-hot);border-color:rgba(240,167,92,.6);background:rgba(240,167,92,.1)}
 #hfRate{font-family:var(--mono);font-size:10px;color:var(--haze-dim);letter-spacing:.08em;min-height:13px}
+
+/* ---------- how old? · logarithmic deep-time explorer ---------- */
+#howold{
+  position:fixed;inset:0;z-index:44;background:#04070f;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+#howold.open{opacity:1;pointer-events:auto}
+#hoCanvas{position:absolute;inset:0;width:100%;height:100%;cursor:grab}
+#hoCanvas.dragging{cursor:grabbing}
+
+/* ---------- toast (rank promotions & small announcements) ---------- */
+#toast{
+  position:fixed;left:50%;bottom:calc(126px + var(--sab));z-index:48;
+  transform:translate(-50%,14px);opacity:0;pointer-events:none;
+  transition:opacity .35s,transform .35s;
+  font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ember-hot);background:var(--panel);border:1px solid rgba(240,167,92,.5);
+  border-radius:3px;padding:10px 16px;backdrop-filter:blur(8px);
+  box-shadow:0 12px 40px rgba(0,0,0,.5);white-space:nowrap;
+}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- keyboard help ---------- */
+#help{
+  position:fixed;inset:0;z-index:47;display:flex;align-items:center;justify-content:center;
+  background:rgba(4,6,12,.74);backdrop-filter:blur(5px);padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+#help.open{opacity:1;pointer-events:auto}
+#helpBox{
+  position:relative;width:min(400px,100%);background:var(--panel);border:var(--hairline);
+  border-radius:5px;padding:26px 28px 22px;box-shadow:0 30px 80px rgba(0,0,0,.55);
+}
+#helpBox .k{font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--ember);margin-bottom:8px}
+#helpBox h2{font-family:var(--display);font-weight:400;font-size:22px;margin-bottom:14px}
+#helpClose{position:absolute;top:12px;right:12px;width:30px;height:30px;display:flex;
+  align-items:center;justify-content:center;color:var(--haze);font-size:18px;border-radius:3px}
+#helpClose:hover{color:var(--starlight)}
+.keyRow{display:flex;align-items:baseline;gap:14px;padding:6px 2px;border-top:var(--hairline)}
+.keyRow b{
+  font-family:var(--mono);font-size:11px;font-weight:400;color:var(--starlight);
+  background:rgba(6,10,20,.72);border:var(--hairline);border-radius:3px;
+  padding:3px 8px;flex:none;min-width:72px;text-align:center;letter-spacing:.06em;
+}
+.keyRow span{font-size:12.5px;color:var(--haze)}
+.helpFoot{font-size:11.5px;color:var(--haze-dim);margin-top:14px;line-height:1.5}
 
 /* ---------- star types primer ---------- */
 #spectra{
@@ -495,6 +555,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   #note{display:none}
   #controls{bottom:calc(12px + var(--sab));right:calc(12px + var(--sar));
     flex-wrap:wrap;justify-content:flex-end;max-width:70vw}
+  #hoChips{max-height:86px;overflow-y:auto;scrollbar-width:thin}
 }
 @media (prefers-reduced-motion:reduce){
   *{transition-duration:.01ms!important;animation:none!important}
@@ -521,6 +582,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
     <h2>Atlas Index</h2>
     <span class="prog" id="progSide">0 / 0 surveyed</span>
   </header>
+  <div id="rankLbl"></div>
   <input id="atlasSearch" type="search" placeholder="Search the atlas&hellip;" autocomplete="off" spellcheck="false" aria-label="Search the atlas">
   <div id="atlasList"></div>
 </nav>
@@ -537,6 +599,9 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
       <p id="cardBlurb"></p>
       <h3 id="factsHead">Field notes</h3>
       <ul id="cardFacts"></ul>
+      <h3 id="notesHead">Your field journal</h3>
+      <textarea id="cardNotes" rows="3" spellcheck="false"
+        placeholder="Observations of your own — kept on this device, per object"></textarea>
       <div id="cardActions"></div>
     </div>
   </div>
@@ -564,6 +629,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   <button class="ctl" id="skyBtn" title="The constellations, as seen from Earth">&#10038; Night sky</button>
   <button class="ctl" id="scaleBtn" title="Moon to Betelgeuse at true relative scale — the one honest view">&#9678; How big?</button>
   <button class="ctl" id="farBtn" title="Watch light crawl between any two worlds — real light-travel times">&#10142; How far?</button>
+  <button class="ctl" id="oldBtn" title="All 13.8 billion years on one logarithmic line — from the Big Bang to tonight">&#10711; How old?</button>
   <button class="ctl" id="spectraBtn" title="How to read starlight — the spectral classes, O B A F G K M">&#10038; Spectra</button>
   <button class="ctl" id="luckyBtn" title="Fly somewhere unexplored">&#10022; Surprise me</button>
   <button class="ctl" id="rulerBtn" title="Measure the map — click two points for the distance in light-years">Ruler</button>
@@ -572,6 +638,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   <button class="ctl" id="zoomOut" title="Zoom out">&minus;</button>
   <button class="ctl" id="zoomIn" title="Zoom in">+</button>
   <button class="ctl" id="resetBtn" title="Reset view">&#8634;</button>
+  <button class="ctl" id="helpBtn" title="Keyboard shortcuts">?</button>
 </div>
 
 <div id="howbig" role="dialog" aria-modal="true" aria-label="How big? A true-scale size comparison">
@@ -610,6 +677,24 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   </div>
 </div>
 
+<div id="howold" role="dialog" aria-modal="true" aria-label="How old? Deep time on a logarithmic line">
+  <canvas id="hoCanvas"></canvas>
+  <div id="hbTop">
+    <div>
+      <div class="k">How old?</div>
+      <h2>All of time on one line</h2>
+      <div class="sub">13.8 billion years, drawn logarithmically &middot; every step left multiplies the age by ten &middot; drag to pan, scroll to zoom</div>
+    </div>
+    <button id="hoClose" aria-label="Close deep-time explorer">&times;</button>
+  </div>
+  <div id="hbBottom">
+    <div id="hoCaption"></div>
+    <div id="hoChips"></div>
+    <input id="hoSlider" type="range" min="0" max="1000" value="0" aria-label="Zoom through time">
+    <div id="hoScaleLbl"></div>
+  </div>
+</div>
+
 <div id="quiz" role="dialog" aria-modal="true" aria-label="Field exam">
   <div id="quizBox">
     <button id="quizClose" aria-label="Close exam">&times;</button>
@@ -632,6 +717,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   <button class="tourOpt" data-tour="deaths"><b>Deaths of stars</b><span>How suns end: gently, violently, strangely</span></button>
   <button class="tourOpt" data-tour="life"><b>Could life be there?</b><span>The ocean moons and other Earths</span></button>
   <button class="tourOpt" data-tour="bones"><b>Bones of the galaxy</b><span>The anatomy: core, bar, arms, bubbles, streams, halo</span></button>
+  <button class="tourOpt" data-tour="signals"><b>Signals &amp; mysteries</b><span>Messages sent, messages heard, and things unexplained</span></button>
 </div>
 
 <div id="spectra" role="dialog" aria-modal="true" aria-label="Star types: the spectral sequence">
@@ -662,6 +748,17 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
 </div>
 
 <div id="tip" role="status"></div>
+<div id="toast" role="status"></div>
+
+<div id="help" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts">
+  <div id="helpBox">
+    <button id="helpClose" aria-label="Close">&times;</button>
+    <div class="k">Instrument panel</div>
+    <h2>Keyboard shortcuts</h2>
+    <div id="helpRows"></div>
+    <p class="helpFoot">And the mouse: drag to pan, scroll or pinch to zoom, click any marker to open its survey card.</p>
+  </div>
+</div>
 
 <div id="welcome">
   <div id="welcomeBox">
@@ -673,6 +770,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
       <div class="hint"><b>scroll / pinch</b><span>zoom</span></div>
       <div class="hint"><b>click marker</b><span>learn</span></div>
       <div class="hint"><b>esc</b><span>close</span></div>
+      <div class="hint"><b>?</b><span>shortcuts</span></div>
     </div>
     <button class="cardAction" id="beginBtn">Begin survey</button>
     <button class="cardAction ghost" id="welcomeTour" style="margin-top:10px">Or take the grand tour &rarr;</button>
@@ -2368,6 +2466,41 @@ const EXO_EXT = [
 for (const e of EXO_EXT) { e.scene = 'exo'; e.group = 'Other worlds'; e.mark = 4; if (!e.plate) e.plate = 'exoball'; }
 CAT.push(...EXO_EXT);
 
+/* ============ CURIOSITIES EXTENSION ============
+   Signals, visitors and unsolved cases — the atlas's cabinet of wonders.
+   One entry per scene type: two galaxy stars, one solar visitor, one
+   mark on the sky chart at its true coordinates. */
+CAT.push(
+
+{ id:'tabby', scene:'galaxy', group:'Stars & other suns', type:'star', name:'Tabby’s Star',
+  kicker:'KIC 8462852 · the flickering enigma', sub:'The star that briefly made the world say “alien megastructure”',
+  pos:s(1150,-950), mark:4, plate:'star:#f6f2ff',
+  stats:[['Distance','~1,470 ly'],['Type','F-class — hotter than the Sun'],['Behaviour','Dims irregularly, up to 22 %'],['Noticed by','Citizen scientists, 2015'],['Best explanation','Clouds of fine dust'],['Century puzzle','Also fading slowly since 1890']],
+  blurb:'In 2015, volunteers sifting Kepler telescope data flagged a star doing something no star should: dropping a fifth of its light at random, in ragged, un-planet-like dips. For one giddy year, "alien megastructure" was a hypothesis in serious journals. The 2017 dimming events settled it — the dips redden the starlight, as swarms of fine dust do and solid engineering would not. Where the dust comes from remains unsolved: a shredded moon, a devoured planet, or something not yet guessed.',
+  facts:['A transiting planet dims a star by about 1 %, cleanly and on schedule. Tabby’s Star drops up to 22 %, raggedly and at random.','The megastructure idea was tested honestly and failed honestly: dust dims blue light more than red, and so do the dips. A solid wall would dim all colours equally.','It is named for Tabetha Boyajian, who led the citizen-science team — the paper’s original title was simply “Where’s the flux?”.'] },
+
+{ id:'hd189733', scene:'galaxy', group:'Stars & other suns', type:'exo', name:'HD 189733 b',
+  kicker:'Exoplanet · the deep-blue furnace', sub:'A cobalt-blue world where it rains molten glass — sideways',
+  pos:s(48,-40), mark:4, minLabelZoom:.12, plate:'exo',
+  stats:[['Distance','64.5 ly'],['Colour','Deep cobalt blue — measured, not guessed'],['Type','“Hot Jupiter”, huge and close-in'],['Year','2.2 days'],['Winds','~8,700 km/h — 7× the speed of sound'],['Weather','Silicate rain: droplets of glass']],
+  blurb:'The first exoplanet whose true colour was ever measured, and from a distance it would look like home: a serene, deep ocean blue. The resemblance ends there. The blue is not water but a haze of silicate droplets — glass — in an atmosphere at 1,000 °C, blown sideways by winds seven times the speed of sound. It orbits so close to its star that its year lasts two days and its daylit face is locked in place forever.',
+  facts:['Hubble measured the colour by watching the blue light vanish as the planet slipped behind its star — a colour read from 64 light-years away.','Rain here never lands the way rain should: the glass droplets are flung horizontally through the sky before they can fall.','Because it transits a bright star, it is one of the most-studied planets beyond the Solar System — the practice target for reading alien atmospheres.'] },
+
+{ id:'oumuamua', scene:'solar', group:'The Solar System', type:'belt', name:'’Oumuamua',
+  kicker:'1I/2017 U1 · interstellar visitor', sub:'The first confirmed object from another star — already leaving',
+  fixed:[-310,-505], traj:[-372,-608], tumbler:true, size:3, mark:5, plate:'tumbler',
+  stats:[['Discovered','19 Oct 2017, Haleakalā, Hawaiʻi'],['Origin','Another star system — unknown which'],['Shape','Wildly elongated, ~8× longer than wide'],['Size','~100–400 m'],['Speed','Too fast for the Sun to keep'],['Status','Outbound forever — past Neptune’s orbit']],
+  blurb:'For as long as telescopes have existed, everything they found in the Solar System belonged to it. Then, in October 2017, a small dark object fell past the Sun on an orbit no planet or comet could have: unbound, hyperbolic, too fast to be ours. ’Oumuamua — Hawaiian for "a messenger from afar, arriving first" — is a shard of some other star’s planet-forming years, tumbling end over end, glimpsed for a few weeks on its way through. It is drawn here on its outbound leg; unlike everything else on this map, it is not coming back.',
+  facts:['Its light curve swung eight-fold as it tumbled, implying a shape like a cigar or a flattened pancake — like nothing native to the Solar System.','It accelerated slightly as it left, like a comet outgassing — yet showed no visible tail. The leading explanation is a gentle push from escaping hydrogen or nitrogen ice.','Objects like it probably drift through the Solar System constantly unseen; a second visitor, Comet Borisov, was found just two years later.'] },
+
+{ id:'wow-signal', scene:'sky', group:'The night sky', type:'craft', name:'The Wow! Signal',
+  kicker:'Radio transient · 15 Aug 1977', sub:'Seventy-two seconds of… something, never heard again',
+  radiant:[19.42,-26.95], mark:5, plate:'wow',
+  stats:[['Heard','15 Aug 1977 · Big Ear telescope, Ohio'],['Duration','72 seconds — one pass of the beam'],['Frequency','1420 MHz — the hydrogen line'],['Strength','~30× the background hiss'],['From','This patch of Sagittarius'],['Repeated','Never, despite decades of listening']],
+  blurb:'Days after the Voyagers left Earth carrying golden records, a radio telescope in Ohio recorded a narrow, powerful burst from this spot near Sagittarius — at 1420 MHz, the natural frequency of hydrogen that radio astronomers had long argued any civilisation would choose to be heard on. Astronomer Jerry Ehman circled the printout — the six characters "6EQUJ5" tracing its rise and fall — and wrote "Wow!" in the margin. The telescope could not steer back in time, and in half a century of re-listening the signal has never come again.',
+  facts:['The famous "6EQUJ5" is not a message — it is the printout’s code for the signal’s loudness, climbing to "U", the strongest the Big Ear ever logged.','Every mundane explanation — satellites, aircraft, a passing comet — has been proposed, and each fits the data badly. It remains formally unexplained.','It lasted exactly as long as the fixed telescope’s beam took to sweep any sky position: whatever it was, it was "on" the whole time we could hear it.'] }
+);
+
 /* ============ ENGINE · scene, camera, galaxy renderer ============ */
 const canvas = document.getElementById('sky');
 const ctx = canvas.getContext('2d');
@@ -3008,6 +3141,15 @@ function drawBody(o) {
     ctx.restore();
     return;
   }
+  if (o.tumbler) {  // 'Oumuamua: an elongated sliver, tumbling end over end
+    ctx.save(); ctx.translate(x, y);
+    ctx.rotate(REDUCED ? .8 : tNow * .5);
+    const L = 6.5 / Math.sqrt(state.cam.z), Wd = 1.5 / Math.sqrt(state.cam.z);
+    ctx.fillStyle = '#c08a66';
+    ctx.beginPath(); ctx.ellipse(0, 0, L, Wd, 0, 0, 6.283); ctx.fill();
+    ctx.restore();
+    return;
+  }
   if (o.type === 'craft') {
     ctx.save(); ctx.translate(x, y);
     const s = 5 / Math.sqrt(state.cam.z);
@@ -3634,6 +3776,48 @@ function drawPlate(o) {
     g.restore(); g.lineCap = 'butt';
     glowBlob(g, 0, 0, 46, 'rgba(216,240,248,.95)', 1);
     shadeBall(g, 12, '#f0f8ff', '#b8ccd8', '#485058');
+  } else if (kind === 'tumbler') {   // an elongated interstellar shard, mid-tumble
+    const rnd = mulberry(17);
+    g.strokeStyle = 'rgba(200,212,234,.28)'; g.lineWidth = 1;   // motion streaks: it is only passing through
+    for (let i = 0; i < 9; i++) {
+      const yy = -150 + rnd() * 300, ll = 60 + rnd() * 150;
+      g.globalAlpha = .12 + rnd() * .25;
+      g.beginPath(); g.moveTo(-370, yy); g.lineTo(-370 + ll, yy - ll * .18); g.stroke();
+    }
+    g.globalAlpha = 1;
+    g.save(); g.rotate(-.5);
+    g.strokeStyle = 'rgba(192,138,102,.25)'; g.setLineDash([4, 7]);   // the tumble, ghosted
+    g.beginPath(); g.ellipse(0, 0, 190, 60, 0, 0, 6.283); g.stroke(); g.setLineDash([]);
+    const bg = g.createLinearGradient(-160, -40, 160, 40);
+    bg.addColorStop(0, '#8a5f46'); bg.addColorStop(.45, '#c08a66'); bg.addColorStop(1, '#3c2b20');
+    g.fillStyle = bg;
+    g.beginPath(); g.ellipse(0, 0, 158, 34, 0, 0, 6.283); g.fill();
+    for (let i = 0; i < 26; i++) {   // pocked, reddened surface
+      const px2 = (rnd() * 2 - 1) * 140, py2 = (rnd() * 2 - 1) * 24;
+      g.fillStyle = rnd() < .5 ? 'rgba(60,43,32,.5)' : 'rgba(232,196,160,.18)';
+      g.beginPath(); g.arc(px2, py2, 2 + rnd() * 7, 0, 6.283); g.fill();
+    }
+    g.restore();
+  } else if (kind === 'wow') {       // the Big Ear printout: one loud column in a quiet sky
+    const rnd = mulberry(1977);
+    g.font = '17px ui-monospace, Menlo, monospace';
+    g.textAlign = 'center';
+    const cols = 15, rows = 8, dx = 44, dy = 34;
+    const code = '6EQUJ5';
+    for (let c2 = 0; c2 < cols; c2++) for (let r2 = 0; r2 < rows; r2++) {
+      const x2 = (c2 - (cols - 1) / 2) * dx, y2 = (r2 - (rows - 1) / 2) * dy;
+      const hot = c2 === 9 && r2 >= 1 && r2 < 7;   // the famous column
+      const ch = hot ? code[r2 - 1] : (rnd() < .62 ? ' ' : String(Math.floor(rnd() * 3) + 1));
+      g.fillStyle = hot ? '#ffc98f' : 'rgba(148,163,184,.5)';
+      if (hot) { g.save(); g.font = '600 20px ui-monospace, Menlo, monospace'; }
+      g.fillText(ch, x2, y2);
+      if (hot) g.restore();
+    }
+    glowBlob(g, (9 - (cols - 1) / 2) * dx, -14, 90, 'rgba(240,167,92,.28)', .9);
+    g.strokeStyle = 'rgba(240,167,92,.75)'; g.lineWidth = 2;   // Ehman's red circle
+    g.beginPath(); g.ellipse((9 - (cols - 1) / 2) * dx, -14, 24, 112, 0, 0, 6.283); g.stroke();
+    g.font = 'italic 26px Georgia, serif'; g.fillStyle = 'rgba(240,167,92,.9)';
+    g.fillText('Wow!', (9 - (cols - 1) / 2) * dx + 84, -80);
   } else if (kind.startsWith('p') && PLANET_PAINTERS[spec[1]]) {
     const painter = PLANET_PAINTERS[spec[1]];
     g.save(); g.scale(5.4, 5.4);
@@ -3681,6 +3865,13 @@ function openCard(o) {
   if (o.action === 'enterExo') addAct('Enter the system &rarr;', () => enterExo(o.exoSystem));
   if (o.action === 'showTonight') addAct('Show me tonight&rsquo;s best &rarr;', () => goTo(CAT.find(x => x.id === o.showId)));
   if (o.action === 'visitSolar') addAct('See it up close &rarr;', () => goTo(CAT.find(x => x.id === o.solarId)));
+  if (!o.transient) {
+    const sb = document.createElement('button');
+    sb.className = 'cardAction ghost'; sb.innerHTML = 'Copy link to this plate';
+    sb.onclick = () => copyLink(o, sb);
+    acts.appendChild(sb);
+  }
+  loadNotes(o);
   drawPlate(o);
   $('cardScroll').scrollTop = 0;
   card.classList.add('open');
@@ -3704,6 +3895,54 @@ function setHash(url) {   // replaceState keeps Back usable; some file:// setups
   try { history.replaceState(null, '', url); } catch (e) { /* live without deep links */ }
 }
 $('cardClose').onclick = closeCard;
+
+/* ---------- field journal: your own notes, kept per object ---------- */
+const journal = store.get('mwa-journal', {});
+const cardNotes = $('cardNotes');
+let notesId = null, notesTimer = 0;
+function loadNotes(o) {
+  const off = !!o.transient;
+  notesId = off ? null : o.id;
+  $('notesHead').style.display = off ? 'none' : '';
+  cardNotes.style.display = off ? 'none' : '';
+  if (!off) cardNotes.value = journal[o.id] || '';
+}
+cardNotes.addEventListener('input', () => {
+  if (!notesId) return;
+  clearTimeout(notesTimer);
+  const id = notesId;
+  notesTimer = setTimeout(() => {
+    const v = cardNotes.value.trim();
+    if (v) journal[id] = v; else delete journal[id];
+    store.set('mwa-journal', journal);
+  }, 350);
+});
+cardNotes.addEventListener('keydown', e => {
+  e.stopPropagation();
+  if (e.key === 'Escape') cardNotes.blur();
+});
+
+/* ---------- shareable links: hand a plate to someone ---------- */
+function copyLink(o, btn) {
+  const url = location.href.split('#')[0] + '#' + o.id;
+  const done = ok => {
+    btn.innerHTML = ok ? 'Link copied &check;' : 'Copy link to this plate';
+    if (!ok) prompt('Copy this link', url);
+    setTimeout(() => { btn.innerHTML = 'Copy link to this plate'; }, 2200);
+  };
+  try { navigator.clipboard.writeText(url).then(() => done(true), () => done(false)); }
+  catch (e) { done(false); }
+}
+
+/* ---------- toast: small announcements, mostly promotions ---------- */
+let toastTimer = 0;
+function showToast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3600);
+}
 
 /* ---------- atlas index ---------- */
 const GROUP_ORDER = ['Home', 'Heart of the galaxy', 'Spiral arms', 'Star nurseries & remnants',
@@ -3751,10 +3990,42 @@ function buildAtlas() {
   }
   refreshAtlas();
 }
+/* ---------- surveyor ranks: titles earned by working the atlas ---------- */
+const RANKS = [
+  [1,   'Field Novice'],
+  [10,  'Apprentice Surveyor'],
+  [25,  'Surveyor'],
+  [50,  'Senior Surveyor'],
+  [90,  'Cartographer'],
+  [140, 'Master Cartographer'],
+];
+function rankIdx(n) {
+  if (n >= CAT.length) return RANKS.length;          // every plate surveyed
+  let i = -1;
+  for (let k = 0; k < RANKS.length; k++) if (n >= RANKS[k][0]) i = k;
+  return i;
+}
+function rankName(i) {
+  return i < 0 ? 'Groundling' : i >= RANKS.length ? 'Atlas Laureate' : RANKS[i][1];
+}
+function syncRank(n) {
+  const ri = rankIdx(n);
+  const next = ri >= RANKS.length ? null : ri + 1 > RANKS.length - 1 ? CAT.length : RANKS[ri + 1][0];
+  $('rankLbl').textContent = 'Rank · ' + rankName(ri) + (next ? ` · next at ${next}` : '');
+  const prev = store.get('mwa-rank', null);
+  if (prev === null) { store.set('mwa-rank', ri); return; }
+  if (ri > prev) {
+    store.set('mwa-rank', ri);
+    showToast('Field promotion — ' + rankName(ri));
+    sfxDiscover();
+  }
+}
+
 function refreshAtlas() {
   const n = state.visited.size, total = CAT.length;
   $('progTop').textContent = `${n}/${total}`;
   $('progSide').textContent = `${n} / ${total} surveyed`;
+  syncRank(n);
   document.querySelectorAll('.atlasItem').forEach(el => {
     el.classList.toggle('visited', state.visited.has(el.dataset.id));
     el.classList.toggle('active', state.selected === el.dataset.id);
@@ -3888,7 +4159,7 @@ function targetZoom(o) {
   if (o.scene === 'solar') {
     if (o.id === 'sol') return 2.2;
     if (o.kepler) return 2.2;
-    if (o.ring || (o.type === 'craft' && o.fixed)) return Math.min(state.W, state.H) / 1500;
+    if (o.ring || o.fixed) return Math.min(state.W, state.H) / 1500;
     if (o.parent) return 6;
     return o.orbit.r > 300 ? 2.4 : 3.2;
   }
@@ -4086,10 +4357,13 @@ for (const [id, v] of speeds) {
   };
 }
 addEventListener('keydown', e => {
-  if (e.target.tagName === 'INPUT') return;   // typing in the atlas search, not steering
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;   // typing, not steering
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
   if (e.key === 'Escape') {
-    if ($('howbig').classList.contains('open')) closeHowBig();
+    if ($('help').classList.contains('open')) closeHelp();
+    else if ($('howbig').classList.contains('open')) closeHowBig();
     else if ($('howfar').classList.contains('open')) closeHowFar();
+    else if ($('howold').classList.contains('open')) closeHowOld();
     else if ($('spectra').classList.contains('open')) closeSpectra();
     else if ($('quiz').classList.contains('open')) endQuiz();
     else if (state.measure.on) toggleRuler(false);
@@ -4101,12 +4375,40 @@ addEventListener('keydown', e => {
   }
   if (e.key === '+' || e.key === '=') zoomAt(state.W / 2, state.H / 2, 1.3);
   if (e.key === '-') zoomAt(state.W / 2, state.H / 2, 1 / 1.3);
+  if (e.key === '?') toggleHelp();
+  const k = e.key.toLowerCase();
+  if (k === 'l') $('lblBtn').click();
+  if (k === 'g' && (state.scene === 'galaxy' || state.scene === 'sky')) $('gridBtn').click();
+  if (k === 'r' && state.scene === 'galaxy') toggleRuler();
+  if (k === 's') { if (state.scene === 'sky') exitSky(); else if (state.scene === 'galaxy') enterSky(); }
   const pan = 90 / state.cam.z;
   if (e.key === 'ArrowLeft') state.tgt.x -= pan;
   if (e.key === 'ArrowRight') state.tgt.x += pan;
   if (e.key === 'ArrowUp') state.tgt.y -= pan;
   if (e.key === 'ArrowDown') state.tgt.y += pan;
 });
+
+/* ---------- keyboard help card ---------- */
+(function buildHelp() {
+  const ROWS = [
+    ['drag / scroll', 'Pan the map · zoom the map'],
+    ['+ / −', 'Zoom in, zoom out'],
+    ['arrow keys', 'Pan in steps'],
+    ['L', 'Toggle labels'],
+    ['G', 'Coordinate grid — galaxy & sky charts'],
+    ['R', 'The ruler — galaxy chart only'],
+    ['S', 'Night sky ↔ galactic plane'],
+    ['?', 'This card'],
+    ['Esc', 'Close panels, step back a scene'],
+  ];
+  $('helpRows').innerHTML = ROWS.map(([kk, ds]) =>
+    `<div class="keyRow"><b>${kk}</b><span>${ds}</span></div>`).join('');
+})();
+function toggleHelp() { $('help').classList.toggle('open'); sfxOpen(); }
+function closeHelp() { $('help').classList.remove('open'); }
+$('helpBtn').onclick = toggleHelp;
+$('helpClose').onclick = closeHelp;
+$('help').addEventListener('pointerdown', e => { if (e.target === $('help')) closeHelp(); });
 
 /* ---------- scale bar ---------- */
 function updateScalebar() {
@@ -4742,7 +5044,7 @@ function bestMonth(o) {
 function statsFor(o) {
   if (o.scene !== 'sky' || o.transient) return o.stats;
   const live = [...o.stats, ['Right now', skyStatus(o)], ['Prime evening month', bestMonth(o)]];
-  if (o.radiant) live.push(['Moonlight at next peak', showerMoon(o.id)]);
+  if (o.radiant && SHOWER_PEAKS[o.id]) live.push(['Moonlight at next peak', showerMoon(o.id)]);
   return live;
 }
 function showerPeakTime(id) {
@@ -4904,6 +5206,10 @@ const QUIZ = [
 { q:'Out at its rim, the Milky Way’s disc is…', c:['Warped — bent up on one side, down on the other','Perfectly flat','A solid ring','Missing entirely'], a:0, ref:'warp', why:'Traced by Cepheid stars in 2019: the outer disc bends like a hat brim and slowly wobbles.' },
 { q:'A star’s colour directly tells you its…', c:['Surface temperature','Distance from Earth','Age in years','Number of planets'], a:0, ref:'naos', why:'Blue-white means tens of thousands of degrees; deep red means a cool surface. The sequence runs O B A F G K M, hottest to coolest.' },
 { q:'Which kind of star lives longest?', c:['A dim red dwarf','A blazing blue giant','A star like the Sun','They all live equally long'], a:0, ref:'barnard', why:'The fiercer a star burns, the sooner it dies: blue giants last millions of years, red dwarfs for trillions.' },
+{ q:'In 2017, the object ’Oumuamua made history as…', c:['The first confirmed visitor from another star','The largest comet ever seen','The first asteroid with rings','A returning spacecraft'], a:0, ref:'oumuamua', why:'It fell through the Solar System on an unbound orbit — a shard of another star’s planet-forming years, just passing through.' },
+{ q:'The famous “Wow!” signal of 1977 was…', c:['A 72-second radio burst that never repeated','The first pulsar discovered','A message from Voyager 1','A misread weather satellite'], a:0, ref:'wow-signal', why:'One loud, narrow burst at the hydrogen frequency, from Sagittarius — and half a century of re-listening has heard nothing since.' },
+{ q:'On the deep-blue exoplanet HD 189733 b, the forecast calls for…', c:['Molten-glass rain in 8,700 km/h winds','Gentle water drizzle','Nitrogen snow','Perpetual calm'], a:0, ref:'hd189733', why:'The blue is a haze of silicate droplets — glass — blown sideways at seven times the speed of sound.' },
+{ q:'The bizarre dimming of Tabby’s Star was eventually traced to…', c:['Clouds of fine dust','An alien megastructure','A passing black hole','A companion star'], a:0, ref:'tabby', why:'The dips redden the starlight, as dust does and solid engineering would not. Where the dust comes from is still unsolved.' },
 ];
 let qRound = [], qIdx = 0, qScore = 0, qDone = false;
 function shuffle(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
@@ -5308,6 +5614,8 @@ const TOURS = {
   life: { label: 'Could life be there?', ids: ['earth','mars','europa','enceladus','titan','trappist','kepler186','prox-b'] },
   bones: { label: 'Bones of the galaxy', ids: ['sgr-a','nsc','bar','arm-3kpc','fermi-bubbles','arm-scu',
     'arm-per','orion-spur','radcliffe','local-bubble','warp','sgr-stream','gaia-enceladus'] },
+  signals: { label: 'Signals & mysteries', ids: ['wow-signal','m13','voyager','lich','tabby',
+    'oumuamua','t-crb','gw150914'] },
 };
 let curTour = TOURS.grand, tourIdx = -1;
 function tourGo() {
@@ -5693,6 +6001,227 @@ $('farBtn').onclick = openHowFar;
 $('hfClose').onclick = closeHowFar;
 addEventListener('resize', () => { if (hf.open) hfResize(); });
 
+/* ============ HOW OLD? · deep time on a logarithmic line ============
+   The third honest instrument. "How big?" is true widths, "How far?" is true
+   light-time; this is true age. The axis is log10(years before tonight), so
+   each step left multiplies the past by ten — the only way 13.8 billion years
+   and last decade's discoveries fit on one line without lying. */
+const HO_EVENTS = [
+  { t:13.8e9, name:'The Big Bang',            col:'#c9a9e8', cap:'Time begins. Every particle on every plate of this atlas is already here — as heat.' },
+  { t:13.6e9, name:'First stars ignite',      col:'#c9a9e8', cap:'The cosmic dark ends. The first suns begin forging every element heavier than helium.' },
+  { t:13.2e9, name:'The Milky Way begins',    col:'#b39cff', cap:'The oldest stars still burning in our halo light up as the galaxy starts to assemble.' },
+  { t:10e9,   name:'Gaia–Enceladus falls in', col:'#b39cff', cap:'The Milky Way eats its largest meal. The wreckage still fills the halo — it has a plate on the galaxy chart.' },
+  { t:4.6e9,  name:'The Sun ignites',         col:'#ffd98e', cap:'A cloud on the Orion Spur collapses. The leftovers begin gathering into planets.' },
+  { t:4.5e9,  name:'The Moon is made',        col:'#ffd98e', cap:'A Mars-sized world strikes the infant Earth; the splash cools into our Moon.' },
+  { t:3.8e9,  name:'Life begins',             col:'#8fd8c9', cap:'Single cells appear in Earth’s young oceans — the only genesis known, anywhere.' },
+  { t:2.4e9,  name:'The air gets oxygen',     col:'#8fd8c9', cap:'Photosynthesis floods the sky with oxygen — a catastrophe for the old life, a gift to everything after.' },
+  { t:5.4e8,  name:'The Cambrian explosion',  col:'#8fd8c9', cap:'Animal life diversifies wildly: the first eyes, shells, hunters and hunted.' },
+  { t:2.3e8,  name:'One galactic year ago',   col:'#ffd98e', cap:'The Sun sat exactly here in its orbit, one full lap ago — and the first dinosaurs were appearing.' },
+  { t:6.6e7,  name:'The dinosaurs end',       col:'#8fd8c9', cap:'A ten-kilometre rock lands near Chicxulub. Three-quarters of species vanish; the mammals inherit.' },
+  { t:3e5,    name:'First Homo sapiens',      col:'#f0a75c', cap:'Humans appear in Africa. Every event to the right of this dot had a witness.' },
+  { t:1.7e4,  name:'Ice-age star watchers',   col:'#f0a75c', cap:'Painters work the caves of Lascaux by lamplight — some marks may already chart the Moon and Pleiades.' },
+  { t:972,    name:'The Crab supernova',      col:'#f0a75c', cap:'The “guest star” of 1054 blazes in daylight for 23 days. Its wreckage is plate M1 of this atlas.' },
+  { t:417,    name:'Galileo’s telescope',     col:'#f0a75c', cap:'1609: the Milky Way resolves into “a congeries of innumerable stars”. The sky stops being a ceiling.' },
+  { t:102,    name:'Other galaxies proven',   col:'#f0a75c', cap:'1924: Hubble shows Andromeda lies far beyond the Milky Way. The universe multiplies overnight.' },
+  { t:57,     name:'Footprints on the Moon',  col:'#f0a75c', cap:'1969: two humans walk on another world while one waits above and a planet listens below.' },
+  { t:49,     name:'The Voyagers leave',      col:'#f0a75c', cap:'1977: two probes depart carrying golden records. Both are still transmitting, out beyond the Sun’s bubble.' },
+  { t:11,     name:'Spacetime heard ringing', col:'#f0a75c', cap:'2015: LIGO feels two black holes merge — the first gravitational wave, a chirp a proton-width tall.' },
+  { t:4,      name:'Webb opens its eye',      col:'#f0a75c', cap:'2022: JWST returns its first deep field — galaxies shining from the far left end of this very line.' },
+];
+const HO_UMAX = Math.log10(13.8e9);
+for (const ev of HO_EVENTS) ev.u = Math.log10(ev.t);
+const ho = { open: false, s: 0, ts: 0, cu: 0, tcu: 0, focus: null, raf: 0, inited: false };
+const hoCanvas = $('hoCanvas'), hog = hoCanvas.getContext('2d');
+function hoDims() {
+  const W = innerWidth, H = innerHeight;
+  return { W, H, sMin: (W * .86) / HO_UMAX, sMax: 560 };
+}
+function hoResize() {
+  hoCanvas.width = innerWidth * DPR; hoCanvas.height = innerHeight * DPR;
+  hog.setTransform(DPR, 0, 0, DPR, 0, 0);
+}
+function fmtAgo(t) {
+  if (t >= 1e9) return +(t / 1e9).toFixed(1) + ' billion yrs';
+  if (t >= 1e6) return +(t / 1e6).toFixed(t < 1e7 ? 1 : 0) + ' million yrs';
+  if (t >= 1000) return Math.round(t).toLocaleString('en-US') + ' yrs';
+  const r = Math.round(t);
+  return r + (r === 1 ? ' yr' : ' yrs');
+}
+function hoX(u, W) { return W / 2 - (u - ho.cu) * ho.s; }
+function hoFocus(ev) {
+  const { W, sMin, sMax } = hoDims();
+  ho.focus = ev;
+  ho.tcu = ev.u;
+  ho.ts = Math.min(sMax, Math.max(sMin, (W * .7) / 2.4));
+  $('hoCaption').textContent = ev.name + ' · ' + fmtAgo(ev.t) + ' ago — ' + ev.cap;
+  document.querySelectorAll('.hoChip').forEach(el => el.classList.toggle('on', el.dataset.name === ev.name));
+}
+function hoBuildChips() {
+  for (const ev of HO_EVENTS) {
+    const b = document.createElement('button');
+    b.className = 'hbChip hoChip'; b.dataset.name = ev.name; b.textContent = ev.name;
+    b.onclick = () => hoFocus(ev);
+    $('hoChips').appendChild(b);
+  }
+}
+function hoFrame() {
+  if (!ho.open) return;
+  const { W, H, sMin, sMax } = hoDims();
+  const k = REDUCED ? 1 : .14;
+  ho.s += (ho.ts - ho.s) * k;
+  ho.cu += (ho.tcu - ho.cu) * k;
+  hog.fillStyle = '#04070f'; hog.fillRect(0, 0, W, H);
+  const rnd = mulberry(432);
+  for (let i = 0; i < 120; i++) {
+    hog.globalAlpha = .1 + rnd() * .5;
+    hog.fillStyle = rnd() < .9 ? '#c8d4ea' : '#ffe9c9';
+    hog.fillRect(rnd() * W, rnd() * H, 1, 1);
+  }
+  hog.globalAlpha = 1;
+  const y = H * .56;
+  // the wall at the left end: no "before" to draw
+  const bbx = hoX(HO_UMAX, W);
+  if (bbx > -40) {
+    const wg = hog.createLinearGradient(bbx - 90, 0, bbx, 0);
+    wg.addColorStop(0, 'rgba(201,169,232,0)'); wg.addColorStop(1, 'rgba(201,169,232,.16)');
+    hog.fillStyle = wg; hog.fillRect(bbx - 90, 0, 90, H);
+    hog.strokeStyle = 'rgba(201,169,232,.55)'; hog.lineWidth = 2;
+    hog.beginPath(); hog.moveTo(bbx, 60); hog.lineTo(bbx, H - 110); hog.stroke();
+    hog.save();
+    hog.translate(bbx - 12, y - 120); hog.rotate(-Math.PI / 2);
+    hog.font = '10px ui-monospace, Menlo, monospace'; hog.textAlign = 'center';
+    hog.fillStyle = 'rgba(201,169,232,.8)';
+    hog.fillText('THE BIG BANG · NO “BEFORE” TO DRAW', 0, 0);
+    hog.restore();
+  }
+  // baseline
+  hog.strokeStyle = 'rgba(148,163,184,.25)'; hog.lineWidth = 1;
+  hog.beginPath(); hog.moveTo(0, y + .5); hog.lineTo(W, y + .5); hog.stroke();
+  // decade ticks — labels thin out when decades crowd together
+  hog.textAlign = 'center';
+  const lblStep = ho.s > 96 ? 1 : ho.s > 48 ? 2 : 3;
+  for (let n = 1; n <= 10; n++) {
+    const x = hoX(n, W);
+    if (x < -60 || x > W + 60) continue;
+    hog.strokeStyle = 'rgba(148,163,184,.35)';
+    hog.beginPath(); hog.moveTo(x, y - 7); hog.lineTo(x, y + 7); hog.stroke();
+    if (n % lblStep) continue;
+    hog.font = '10px ui-monospace, Menlo, monospace';
+    hog.fillStyle = 'rgba(148,163,184,.65)';
+    hog.fillText(fmtAgo(Math.pow(10, n)) + ' ago', x, y + 26);
+    if (ho.s > 130) {                       // mantissa ticks once a decade is wide enough
+      hog.strokeStyle = 'rgba(148,163,184,.15)';
+      for (let m = 2; m < 10; m++) {
+        const xm = hoX(n + Math.log10(m), W);
+        if (xm < 0 || xm > W) continue;
+        hog.beginPath(); hog.moveTo(xm, y - 4); hog.lineTo(xm, y + 4); hog.stroke();
+      }
+    }
+  }
+  // tonight, at the right end of history
+  const nx = hoX(0, W);
+  if (nx < W + 120) {
+    hog.strokeStyle = 'rgba(240,167,92,.7)'; hog.lineWidth = 1.5;
+    hog.beginPath(); hog.moveTo(nx, y - 26); hog.lineTo(nx, y + 12); hog.stroke();
+    hog.beginPath(); hog.moveTo(nx, y - 26); hog.lineTo(nx - 7, y - 18); hog.moveTo(nx, y - 26); hog.lineTo(nx + 7, y - 18); hog.stroke();
+    hog.font = '600 11px ui-monospace, Menlo, monospace';
+    hog.fillStyle = '#ffc98f';
+    hog.fillText('TONIGHT', nx, y - 38);
+    hog.font = '9.5px ui-monospace, Menlo, monospace';
+    hog.fillStyle = 'rgba(240,167,92,.6)';
+    hog.fillText('the part you are living in', nx, y + 44);
+  }
+  // events: dots with tiered label stems, thinning politely when crowded
+  const tiers = [-52, -96, -140];
+  const lastX = [-1e9, -1e9, -1e9];
+  for (let i = 0; i < HO_EVENTS.length; i++) {
+    const ev = HO_EVENTS[i];
+    const x = hoX(ev.u, W);
+    if (x < -180 || x > W + 180) continue;
+    const focus = ho.focus === ev;
+    hog.fillStyle = ev.col;
+    hog.beginPath(); hog.arc(x, y, focus ? 5 : 3.5, 0, 6.283); hog.fill();
+    if (focus) {
+      hog.strokeStyle = ev.col; hog.lineWidth = 1.2; hog.setLineDash([3, 3]);
+      hog.beginPath(); hog.arc(x, y, 10, 0, 6.283); hog.stroke(); hog.setLineDash([]);
+    }
+    const tier = i % 3;
+    if (!focus && x - lastX[tier] < 165) continue;   // too crowded: keep the dot, skip the label
+    lastX[tier] = x;
+    const ty = y + tiers[tier];
+    hog.globalAlpha = focus ? .8 : .35;
+    hog.strokeStyle = ev.col; hog.lineWidth = 1;
+    hog.beginPath(); hog.moveTo(x, y - 8); hog.lineTo(x, ty + 22); hog.stroke();
+    hog.globalAlpha = 1;
+    hog.font = (focus ? '600 ' : '') + '11px ui-monospace, Menlo, monospace';
+    hog.fillStyle = focus ? '#ffe9c9' : 'rgba(207,224,255,.8)';
+    hog.fillText(ev.name.toUpperCase(), x, ty);
+    hog.font = '9.5px ui-monospace, Menlo, monospace';
+    hog.fillStyle = focus ? ev.col : 'rgba(148,163,184,.6)';
+    hog.fillText(fmtAgo(ev.t) + ' ago', x, ty + 14);
+  }
+  // visible span, spelled out
+  const uL = Math.min(HO_UMAX, ho.cu + (W / 2 - 30) / ho.s);
+  const uR = ho.cu - (W / 2 - 30) / ho.s;
+  $('hoScaleLbl').textContent = 'showing ' + fmtAgo(Math.pow(10, uL)) + ' ago  →  ' +
+    (uR <= 0.02 ? 'tonight' : fmtAgo(Math.pow(10, uR)) + ' ago');
+  $('hoSlider').value = Math.round((Math.log(ho.s) - Math.log(sMin)) / (Math.log(sMax) - Math.log(sMin)) * 1000);
+  ho.raf = requestAnimationFrame(hoFrame);
+}
+function openHowOld() {
+  const { sMin } = hoDims();
+  $('howold').classList.add('open');
+  hoResize();
+  if (!ho.inited) {
+    ho.inited = true;
+    hoBuildChips();
+    ho.s = ho.ts = sMin;
+    ho.cu = ho.tcu = HO_UMAX / 2;
+    $('hoCaption').textContent = HO_EVENTS.length + ' moments on one honest line — pick one, or wander.';
+  }
+  ho.open = true;
+  setHash('#howold');
+  sfxOpen();
+  cancelAnimationFrame(ho.raf);
+  ho.raf = requestAnimationFrame(hoFrame);
+}
+function closeHowOld() {
+  ho.open = false;
+  cancelAnimationFrame(ho.raf);
+  $('howold').classList.remove('open');
+  if (location.hash === '#howold') setHash(location.pathname + location.search);
+}
+$('oldBtn').onclick = openHowOld;
+$('hoClose').onclick = closeHowOld;
+$('hoSlider').addEventListener('input', () => {
+  const { sMin, sMax } = hoDims();
+  ho.ts = Math.exp(Math.log(sMin) + ($('hoSlider').value / 1000) * (Math.log(sMax) - Math.log(sMin)));
+  ho.focus = null;
+  document.querySelectorAll('.hoChip').forEach(el => el.classList.remove('on'));
+});
+hoCanvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  const { W, sMin, sMax } = hoDims();
+  const u = ho.cu - (e.clientX - W / 2) / ho.s;           // moment under the cursor
+  ho.ts = Math.min(sMax, Math.max(sMin, ho.ts * Math.exp(-e.deltaY * .0016)));
+  ho.tcu = u + (e.clientX - W / 2) / ho.ts;
+  ho.focus = null;
+}, { passive: false });
+let hoDrag = null;
+hoCanvas.addEventListener('pointerdown', e => {
+  hoCanvas.setPointerCapture(e.pointerId);
+  hoDrag = e.clientX; hoCanvas.classList.add('dragging');
+});
+hoCanvas.addEventListener('pointermove', e => {
+  if (hoDrag === null) return;
+  const dx = e.clientX - hoDrag; hoDrag = e.clientX;
+  ho.tcu += dx / ho.s;
+  ho.cu = ho.tcu;
+  ho.focus = null;
+});
+addEventListener('pointerup', () => { hoDrag = null; hoCanvas.classList.remove('dragging'); });
+addEventListener('resize', () => { if (ho.open) hoResize(); });
+
 /* ---------- boot ---------- */
 addEventListener('resize', resize);
 resize();
@@ -5726,6 +6255,7 @@ function hashTarget() {
 addEventListener('hashchange', () => {
   if (location.hash === '#howbig') { if (!hb.open) openHowBig(); return; }
   if (location.hash === '#howfar') { if (!hf.open) openHowFar(); return; }
+  if (location.hash === '#howold') { if (!ho.open) openHowOld(); return; }
   if (location.hash === '#sky') { if (state.scene !== 'sky') enterSky(); return; }
   if (location.hash === '#tonight') { openTonight(); return; }
   const o = hashTarget();
@@ -5741,6 +6271,9 @@ if (linked) {
 } else if (location.hash === '#howfar') {
   welcome.classList.add('hide');
   openHowFar();
+} else if (location.hash === '#howold') {
+  welcome.classList.add('hide');
+  openHowOld();
 } else if (location.hash === '#sky') {          // PWA shortcut: straight to the chart
   welcome.classList.add('hide');
   store.set('mwa-welcomed', true);
