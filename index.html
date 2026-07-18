@@ -266,6 +266,36 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
 #timeCtls.show{display:flex}
 #luckyBtn{gap:7px;display:flex}
 
+/* ---------- mobile tool sheet (small screens tuck secondary controls here) ---------- */
+#moreBtn{display:none}
+#sheetScrim{
+  position:fixed;inset:0;z-index:38;background:rgba(4,6,12,.5);
+  opacity:0;pointer-events:none;transition:opacity .25s;
+}
+#sheetScrim.show{opacity:1;pointer-events:auto}
+#toolSheet{
+  position:fixed;left:0;right:0;bottom:0;z-index:39;
+  background:var(--panel);border-top:var(--hairline);border-radius:10px 10px 0 0;
+  backdrop-filter:blur(14px);max-height:70vh;overflow-y:auto;
+  padding:12px 14px calc(16px + var(--sab));scrollbar-width:thin;
+  transform:translateY(110%);visibility:hidden;
+  transition:transform .3s cubic-bezier(.2,.8,.25,1),visibility 0s .3s;
+}
+#toolSheet.open{
+  transform:none;visibility:visible;
+  transition:transform .3s cubic-bezier(.2,.8,.25,1);
+}
+#toolSheet header{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
+#toolSheet header .k{
+  font-family:var(--mono);font-size:10px;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--ember);
+}
+#sheetClose{
+  width:30px;height:30px;display:flex;align-items:center;justify-content:center;
+  border-radius:3px;color:var(--haze);font-size:17px;border:var(--hairline);
+}
+#toolSheetBody{display:flex;flex-wrap:wrap;gap:8px}
+
 /* ---------- field exam (quiz) ---------- */
 /* ---------- how big? · true-scale comparator ---------- */
 #howbig{
@@ -544,6 +574,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
 /* ---------- responsive ---------- */
 @media (max-width:720px){
   #wordmark .t{font-size:17px}
+  #wordmark .s{display:none}
   #crumb{display:none}
   #atlas{width:min(288px,calc(100vw - 36px))}
   #card{top:auto;bottom:0;left:0;right:0;width:100%;max-height:62vh;
@@ -553,8 +584,10 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   #plate{height:150px}
   #readout{bottom:auto;top:calc(118px + var(--sat));left:calc(18px + var(--sal))}
   #note{display:none}
-  #controls{bottom:calc(12px + var(--sab));right:calc(12px + var(--sar));
-    flex-wrap:wrap;justify-content:flex-end;max-width:70vw}
+  /* bottom bar slims to essentials; everything else lives in the tool sheet */
+  #controls{bottom:calc(12px + var(--sab));right:calc(12px + var(--sar));max-width:none}
+  #moreBtn{display:flex}
+  .ctl{min-width:42px;height:42px}
   #hoChips{max-height:86px;overflow-y:auto;scrollbar-width:thin}
 }
 @media (prefers-reduced-motion:reduce){
@@ -635,10 +668,20 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ember);outline-offs
   <button class="ctl" id="rulerBtn" title="Measure the map — click two points for the distance in light-years">Ruler</button>
   <button class="ctl" id="gridBtn" title="Galactic coordinate grid — longitude from the Sun, distance rings from the core">Grid</button>
   <button class="ctl on" id="lblBtn" title="Toggle labels">Labels</button>
+  <button class="ctl" id="moreBtn" aria-expanded="false" aria-controls="toolSheet" title="All tools">&#9776; Tools</button>
   <button class="ctl" id="zoomOut" title="Zoom out">&minus;</button>
   <button class="ctl" id="zoomIn" title="Zoom in">+</button>
   <button class="ctl" id="resetBtn" title="Reset view">&#8634;</button>
   <button class="ctl" id="helpBtn" title="Keyboard shortcuts">?</button>
+</div>
+
+<div id="sheetScrim"></div>
+<div id="toolSheet" role="dialog" aria-label="All tools">
+  <header>
+    <span class="k">Instrument panel</span>
+    <button id="sheetClose" aria-label="Close tools">&times;</button>
+  </header>
+  <div id="toolSheetBody"></div>
 </div>
 
 <div id="howbig" role="dialog" aria-modal="true" aria-label="How big? A true-scale size comparison">
@@ -6283,6 +6326,68 @@ if (linked) {
   store.set('mwa-welcomed', true);
   setTimeout(() => openTonight(), REDUCED ? 80 : 300);
 }
+
+/* ============================================================
+   MOBILE TOOL SHEET
+   On small screens the bottom bar keeps only Tools / zoom /
+   reset; every other control is reparented into a slide-up
+   sheet. Moving the nodes (rather than cloning) preserves all
+   existing wiring — syncSceneUI, .on toggles, onclick handlers.
+   ============================================================ */
+(() => {
+  const mq = matchMedia('(max-width:720px)');
+  const sheet = $('toolSheet'), body = $('toolSheetBody'),
+        scrim = $('sheetScrim'), more = $('moreBtn');
+  // everything except moreBtn, zoomOut, zoomIn, resetBtn
+  const TUCK = ['timeCtls', 'soundBtn', 'tonightBtn', 'latBtn', 'hopBtn', 'quizBtn',
+    'dailyBtn', 'tourBtn', 'skyBtn', 'scaleBtn', 'farBtn', 'oldBtn', 'spectraBtn',
+    'luckyBtn', 'rulerBtn', 'gridBtn', 'lblBtn', 'helpBtn'];
+  const marks = new Map();   // id → comment node holding the bar position
+
+  function openSheet() {
+    sheet.classList.add('open'); scrim.classList.add('show');
+    more.classList.add('on'); more.setAttribute('aria-expanded', 'true');
+  }
+  function closeSheet() {
+    sheet.classList.remove('open'); scrim.classList.remove('show');
+    more.classList.remove('on'); more.setAttribute('aria-expanded', 'false');
+  }
+  function tuck() {
+    TUCK.forEach(id => {
+      const el = $(id);
+      if (!el || el.parentElement === body) return;
+      const ph = document.createComment('ph-' + id);
+      el.parentElement.insertBefore(ph, el);
+      marks.set(id, ph);
+      body.appendChild(el);
+    });
+  }
+  function untuck() {
+    closeSheet();
+    TUCK.forEach(id => {
+      const ph = marks.get(id);
+      if (!ph) return;
+      ph.parentNode.insertBefore($(id), ph);
+      ph.remove();
+      marks.delete(id);
+    });
+  }
+
+  more.onclick = () => sheet.classList.contains('open') ? closeSheet() : openSheet();
+  $('sheetClose').onclick = closeSheet;
+  scrim.onclick = closeSheet;
+  // picking any tool dismisses the sheet so its effect is visible at once
+  body.addEventListener('click', e => { if (e.target.closest('button')) closeSheet(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && sheet.classList.contains('open')) {
+      closeSheet(); e.stopPropagation();
+    }
+  }, true);
+
+  const apply = () => mq.matches ? tuck() : untuck();
+  mq.addEventListener ? mq.addEventListener('change', apply) : mq.addListener(apply);
+  apply();
+})();
 
 requestAnimationFrame(frame);
 
